@@ -86,30 +86,36 @@ class GenerateStockData(object):
             raise ChartGenerationError("adjust_price: Dates not unique")
         df = df.reset_index(drop=True)
 
-        fd_close = abs(df.at[0, "Close"])
+        # Work with float32 throughout to reduce memory; ensure OHLC are float32
+        # and cast assigned values explicitly to float32 to avoid dtype warnings.
+        res_df = df.copy()
+        for c in ["Open", "High", "Low", "Close"]:
+            if c in res_df.columns:
+                res_df[c] = res_df[c].astype("float32")
+
+        fd_close = np.float32(abs(res_df.at[0, "Close"]))
         if df.at[0, "Close"] == 0.0 or pd.isna(df.at[0, "Close"]):
             raise ChartGenerationError("adjust_price: First day close is nan or zero")
 
         pre_close = fd_close
-        res_df = df.copy()
 
-        res_df.at[0, "Close"] = 1.0
-        res_df.at[0, "Open"] = abs(res_df.at[0, "Open"]) / pre_close
-        res_df.at[0, "High"] = abs(res_df.at[0, "High"]) / pre_close
-        res_df.at[0, "Low"] = abs(res_df.at[0, "Low"]) / pre_close
+        res_df.at[0, "Close"] = np.float32(1.0)
+        res_df.at[0, "Open"] = np.float32(abs(res_df.at[0, "Open"]) / pre_close)
+        res_df.at[0, "High"] = np.float32(abs(res_df.at[0, "High"]) / pre_close)
+        res_df.at[0, "Low"] = np.float32(abs(res_df.at[0, "Low"]) / pre_close)
 
         pre_close = 1
         for i in range(1, len(res_df)):
-            today_closep = abs(res_df.at[i, "Close"])
-            today_openp = abs(res_df.at[i, "Open"])
-            today_highp = abs(res_df.at[i, "High"])
-            today_lowp = abs(res_df.at[i, "Low"])
+            today_closep = np.float32(abs(res_df.at[i, "Close"]))
+            today_openp = np.float32(abs(res_df.at[i, "Open"]))
+            today_highp = np.float32(abs(res_df.at[i, "High"]))
+            today_lowp = np.float32(abs(res_df.at[i, "Low"]))
             today_ret = np.float64(res_df.at[i, "Ret"])
 
-            res_df.at[i, "Close"] = (1 + today_ret) * pre_close
-            res_df.at[i, "Open"] = res_df.at[i, "Close"] / today_closep * today_openp
-            res_df.at[i, "High"] = res_df.at[i, "Close"] / today_closep * today_highp
-            res_df.at[i, "Low"] = res_df.at[i, "Close"] / today_closep * today_lowp
+            res_df.at[i, "Close"] = np.float32((1 + today_ret) * pre_close)
+            res_df.at[i, "Open"] = np.float32(res_df.at[i, "Close"] / today_closep * today_openp)
+            res_df.at[i, "High"] = np.float32(res_df.at[i, "Close"] / today_closep * today_highp)
+            res_df.at[i, "Low"] = np.float32(res_df.at[i, "Close"] / today_closep * today_lowp)
             res_df.at[i, "Ret"] = today_ret
 
             if not pd.isna(res_df.at[i, "Close"]):
@@ -489,6 +495,12 @@ class GenerateStockData(object):
             print("Found pregenerated file {}".format(file_name))
             return
 
+        # Ensure base data and stock list available
+        if self.df is None:
+            self.df = eqd.get_processed_US_data_by_year(self.year)
+        if self.stock_id_list is None:
+            self.stock_id_list = np.unique(self.df.index.get_level_values("StockID"))
+
         data_miss = np.zeros(6)
         data_dict = {
             feature: np.empty(len(self.stock_id_list) * 60, dtype=dtype_dict[feature])
@@ -506,8 +518,14 @@ class GenerateStockData(object):
             else self.stock_id_list
         )
         for i, stock_id in enumerate(iterator):
-            df = self.df[self.df.StockID == stock_id]
-            df = df.reset_index(drop=True)
+            # Slice by MultiIndex level and reset index so Date is a column
+            try:
+                df = self.df.xs(stock_id, level="StockID").copy()
+            except KeyError:
+                continue
+            df = df.reset_index()
+            # Ensure StockID exists as a column for downstream feature assembly
+            df["StockID"] = str(stock_id)
             dates = df[~pd.isna(df["Ret_{}".format(self.freq)])].Date
             dates = dates[dates.dt.year == self.year]
             for j, date in enumerate(dates):

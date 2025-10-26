@@ -20,7 +20,13 @@ def portfolio_performance_helper(ws: int, pw: int):
     df = signal_df.rename({f"CNN{ws}D{pw}P": "up_prob"}, axis="columns")
     df = df[["up_prob", "MarketCap"]].copy()
     portfolio_dir = PORTFOLIO / f"cnn_{freq}ly" / f"CNN{ws}D{pw}P"
-    portfolio = PortfolioManager(df, freq=freq, portfolio_dir=portfolio_dir)
+    portfolio = PortfolioManager(
+        df,
+        freq=freq,
+        portfolio_dir=portfolio_dir,
+        start_year=OOS_YEARS[0],
+        end_year=OOS_YEARS[-1],
+    )
     portfolio.generate_portfolio()
 
 
@@ -120,23 +126,27 @@ def cnn_vs_linear_table_ols(pw):
     return df
 
 
-def load_international_portfolio_returns(horizon, country, weight_type, transfer=True):
-    assert horizon in [5, 20]
-    assert country in INTERNATIONAL_COUNTRIES + ["global"]
-    assert weight_type in ["ew", "vw"]
-    if transfer:
-        portfolio_path = (
-            CACHE_DIR
-            / f"international_portfolio_decile_returns/{country}_I{horizon}R{horizon}_us_transfer_{weight_type}.csv"
-        )
-    else:
-        portfolio_path = (
-            CACHE_DIR
-            / f"international_portfolio_decile_returns/{country}_I{horizon}R{horizon}_{weight_type}.csv"
-        )
-    pf = pd.read_csv(portfolio_path, index_col=0)
-    return pf
+# ============================================================================
+# INTERNATIONAL DATA FUNCTIONS - COMMENTED OUT
+# ============================================================================
+# All functions below are commented out because international data is not being used
 
+# def load_international_portfolio_returns(horizon, country, weight_type, transfer=True):
+#     assert horizon in [5, 20]
+#     assert country in INTERNATIONAL_COUNTRIES + ["global"]
+#     assert weight_type in ["ew", "vw"]
+#     if transfer:
+#         portfolio_path = (
+#             CACHE_DIR
+#             / f"international_portfolio_decile_returns/{country}_I{horizon}R{horizon}_us_transfer_{weight_type}.csv"
+#         )
+#     else:
+#         portfolio_path = (
+#             CACHE_DIR
+#             / f"international_portfolio_decile_returns/{country}_I{horizon}R{horizon}_{weight_type}.csv"
+#         )
+#     pf = pd.read_csv(portfolio_path, index_col=0)
+#     return pf
 
 def calculate_portfolio_sr(portfolio_ret, horizon):
     assert horizon in [5, 20, 60]
@@ -146,125 +156,129 @@ def calculate_portfolio_sr(portfolio_ret, horizon):
     return (avg * horizons_per_year) / (std * np.sqrt(horizons_per_year))
 
 
-def glb_ctry_stock_number():
-    stock_num_save_path = CACHE_DIR / f"glb_stocks_num.csv"
-    df = pd.read_csv(stock_num_save_path, index_col=0)
-    df["Average"] = df.mean(axis=1)
-    df: pd.DataFrame = df.fillna(0).astype(int)
-    df.sort_values(by="Average", ascending=False, inplace=True)
-    return df
+# def glb_ctry_stock_number():
+#     stock_num_save_path = CACHE_DIR / f"glb_stocks_num.csv"
+#     df = pd.read_csv(stock_num_save_path, index_col=0)
+#     df["Average"] = df.mean(axis=1)
+#     df: pd.DataFrame = df.fillna(0).astype(int)
+#     df.sort_values(by="Average", ascending=False, inplace=True)
+#     return df
 
 
-def international_sr_table(horizon):
-    col_index = [("del2", "Stock Count")]
-    for i, wt in enumerate(["ew", "vw"]):
-        col_index += [
-            (f"del{i}", f"del{i}"),
-            (wt, "Re-train"),
-            (wt, "Direct Transfer"),
-            (wt, "Transfer-Re-train"),
-        ]
-    col_index = pd.MultiIndex.from_tuples(col_index)
-    GLOBAL = "global"
-    countries = INTERNATIONAL_COUNTRIES + [GLOBAL]
-    df = pd.DataFrame(columns=col_index, index=countries)
-    df[("del2", "Stock Count")] = (
-        glb_ctry_stock_number()[[str(i) for i in range(1993, 2001)]]
-        .mean(axis=1)
-        .astype(int)
-    )
-    df.loc[GLOBAL, ("del2", "Stock Count")] = df[("del2", "Stock Count")].sum()
-    df[("del2", "Stock Count")] = df[("del2", "Stock Count")].astype(int)
-    for ctry in countries:
-        for wt in ["ew", "vw"]:
-            rt_df = load_international_portfolio_returns(
-                horizon, ctry, wt, transfer=False
-            )
-            dt_df = load_international_portfolio_returns(
-                horizon, ctry, wt, transfer=True
-            )
+# def international_sr_table(horizon):
+#     col_index = [("del2", "Stock Count")]
+#     for i, wt in enumerate(["ew", "vw"]):
+#         col_index += [
+#             (f"del{i}", f"del{i}"),
+#             (wt, "Re-train"),
+#             (wt, "Direct Transfer"),
+#             (wt, "Transfer-Re-train"),
+#         ]
+#     col_index = pd.MultiIndex.from_tuples(col_index)
+#     GLOBAL = "global"
+#     countries = INTERNATIONAL_COUNTRIES + [GLOBAL]
+#     df = pd.DataFrame(columns=col_index, index=countries)
+#     df[("del2", "Stock Count")] = (
+#         glb_ctry_stock_number()[[str(i) for i in range(1993, 2001)]]
+#         .mean(axis=1)
+#         .astype(int)
+#     )
+#     df.loc[GLOBAL, ("del2", "Stock Count")] = df[("del2", "Stock Count")].sum()
+#     df[("del2", "Stock Count")] = df[("del2", "Stock Count")].astype(int)
+#     for ctry in countries:
+#         for wt in ["ew", "vw"]:
+#             rt_df = load_international_portfolio_returns(
+#                 horizon, ctry, wt, transfer=False
+#             )
+#             dt_df = load_international_portfolio_returns(
+#                 horizon, ctry, wt, transfer=True
+#             )
 
-            df.loc[ctry, (wt, "Re-train")] = calculate_portfolio_sr(
-                rt_df, horizon=horizon
-            )
-            df.loc[ctry, (wt, "Direct Transfer")] = calculate_portfolio_sr(
-                dt_df, horizon=horizon
-            )
+#             df.loc[ctry, (wt, "Re-train")] = calculate_portfolio_sr(
+#                 rt_df, horizon=horizon
+#             )
+#             df.loc[ctry, (wt, "Direct Transfer")] = calculate_portfolio_sr(
+#                 dt_df, horizon=horizon
+#             )
 
-            df.loc[ctry, (wt, "Transfer-Re-train")] = float(
-                df.loc[ctry, (wt, "Direct Transfer")]
-            ) - float(df.loc[ctry, (wt, "Re-train")])
-    df = df.sort_values(by=("del2", "Stock Count"), ascending=False)
-    df.loc["Average"] = df.mean()
-    df.loc["Average (excluding Global)"] = df.loc[INTERNATIONAL_COUNTRIES].mean()
-    for ctry in countries:
-        for wt in ["ew", "vw"]:
-            df.loc[ctry, (wt, "Transfer-Re-train Value")] = float(
-                df.loc[ctry, (wt, "Direct Transfer")]
-            ) - float(df.loc[ctry, (wt, "Re-train")])
-            df.loc[
-                ctry, (wt, "Transfer-Re-train")
-            ] = ut.star_significant_value_by_sample_num(
-                float(df.loc[ctry, (wt, "Direct Transfer")])
-                - float(df.loc[ctry, (wt, "Re-train")]),
-                sample_num=len(OOS_YEARS),
-                one_sided=True,
-            )
+#             df.loc[ctry, (wt, "Transfer-Re-train")] = float(
+#                 df.loc[ctry, (wt, "Direct Transfer")]
+#             ) - float(df.loc[ctry, (wt, "Re-train")])
+#     df = df.sort_values(by=("del2", "Stock Count"), ascending=False)
+#     df.loc["Average"] = df.mean()
+#     df.loc["Average (excluding Global)"] = df.loc[INTERNATIONAL_COUNTRIES].mean()
+#     for ctry in countries:
+#         for wt in ["ew", "vw"]:
+#             df.loc[ctry, (wt, "Transfer-Re-train Value")] = float(
+#                 df.loc[ctry, (wt, "Direct Transfer")]
+#             ) - float(df.loc[ctry, (wt, "Re-train")])
+#             df.loc[
+#                 ctry, (wt, "Transfer-Re-train")
+#             ] = ut.star_significant_value_by_sample_num(
+#                 float(df.loc[ctry, (wt, "Direct Transfer")])
+#                 - float(df.loc[ctry, (wt, "Re-train")]),
+#                 sample_num=len(OOS_YEARS),
+#                 one_sided=True,
+#             )
 
-    pd.options.display.float_format = "{:.2f}".format
+#     pd.options.display.float_format = "{:.2f}".format
 
-    df[("del2", "Stock Count")] = df[("del2", "Stock Count")].astype(int)
+#     df[("del2", "Stock Count")] = df[("del2", "Stock Count")].astype(int)
 
-    tl_columns = ["Re-train", "Direct Transfer", "Transfer-Re-train"]
-    ndf = df[
-        [("del2", "Stock Count"), ("del0", "del0")]
-        + [("ew", c) for c in tl_columns]
-        + [("del1", "del1")]
-        + [("vw", c) for c in tl_columns]
-    ]
-    latex = ndf.to_latex(
-        escape=False,
-        column_format="l" + "c" * len(col_index),
-        multicolumn_format="c",
-        multirow=True,
-        na_rep="",
-    )
-    for i in range(3):
-        latex = latex.replace(f"del{i}", "")
-    print(latex)
-    return df
+#     tl_columns = ["Re-train", "Direct Transfer", "Transfer-Re-train"]
+#     ndf = df[
+#         [("del2", "Stock Count"), ("del0", "del0")]
+#         + [("ew", c) for c in tl_columns]
+#         + [("del1", "del1")]
+#         + [("vw", c) for c in tl_columns]
+#     ]
+#     latex = ndf.to_latex(
+#         escape=False,
+#         column_format="l" + "c" * len(col_index),
+#         multicolumn_format="c",
+#         multirow=True,
+#         na_rep="",
+#     )
+#     for i in range(3):
+#         latex = latex.replace(f"del{i}", "")
+#     print(latex)
+#     return df
 
 
-def glb_plot_sr_gain_vs_stocks_num(horizon):
-    sr_df = international_sr_table(horizon)
-    sr_df = sr_df[sr_df.index.isin(INTERNATIONAL_COUNTRIES)]
-    for i, weight_type in enumerate(["ew", "vw"]):
-        fig, ax = plt.subplots()
-        stock_number, sr_gain = (
-            sr_df[("del2", "Stock Count")],
-            sr_df[(weight_type, "Transfer-Re-train Value")],
-        )
-        ax.scatter(stock_number, sr_gain)
-        texts = []
-        for ctry in INTERNATIONAL_COUNTRIES:
-            texts.append(ax.text(stock_number[ctry], sr_gain[ctry], ctry))
-        stock_number_np, sr_gain_np = stock_number.to_numpy(
-            dtype="float"
-        ), sr_gain.to_numpy(dtype="float")
-        b, m = polyfit(stock_number_np, sr_gain_np, 1)
-        plt.plot(stock_number_np, b + m * stock_number_np, "-")
-        plt.xlabel("Stock Count", fontsize=16)
-        plt.ylabel("Sharpe Ratio Gain", fontsize=16)
-        plt.grid()
-        adjust_text(texts, arrowprops=dict(arrowstyle="->", color="r", lw=0.5))
-        plt.subplots_adjust(
-            top=0.99, bottom=0.13, right=0.99, left=0.13, hspace=0, wspace=0
-        )
-        plt.savefig(
-            f"./{horizon}d{horizon}p_sr_gain_Direct-Retrain_{weight_type}_ensem5.eps"
-        )
-        plt.show()
-        plt.clf()
+# def glb_plot_sr_gain_vs_stocks_num(horizon):
+#     sr_df = international_sr_table(horizon)
+#     sr_df = sr_df[sr_df.index.isin(INTERNATIONAL_COUNTRIES)]
+#     for i, weight_type in enumerate(["ew", "vw"]):
+#         fig, ax = plt.subplots()
+#         stock_number, sr_gain = (
+#             sr_df[("del2", "Stock Count")],
+#             sr_df[(weight_type, "Transfer-Re-train Value")],
+#         )
+#         ax.scatter(stock_number, sr_gain)
+#         texts = []
+#         for ctry in INTERNATIONAL_COUNTRIES:
+#             texts.append(ax.text(stock_number[ctry], sr_gain[ctry], ctry))
+#         stock_number_np, sr_gain_np = stock_number.to_numpy(
+#             dtype="float"
+#         ), sr_gain.to_numpy(dtype="float")
+#         b, m = polyfit(stock_number_np, sr_gain_np, 1)
+#         plt.plot(stock_number_np, b + m * stock_number_np, "-")
+#         plt.xlabel("Stock Count", fontsize=16)
+#         plt.ylabel("Sharpe Ratio Gain", fontsize=16)
+#         plt.grid()
+#         adjust_text(texts, arrowprops=dict(arrowstyle="->", color="r", lw=0.5))
+#         plt.subplots_adjust(
+#             top=0.99, bottom=0.13, right=0.99, left=0.13, hspace=0, wspace=0
+#         )
+#         plt.savefig(
+#             f"./{horizon}d{horizon}p_sr_gain_Direct-Retrain_{weight_type}_ensem5.eps"
+#         )
+#         plt.show()
+#         plt.clf()
+
+# ============================================================================
+# END OF COMMENTED OUT INTERNATIONAL DATA FUNCTIONS
+# ============================================================================
 
 
 def time_scale_transfer_portfolio_helper(scale_size: int):
@@ -275,7 +289,11 @@ def time_scale_transfer_portfolio_helper(scale_size: int):
     scaleDT_df = scaleDT_df.set_index(["Date", "StockID"])
     portfolio_dir = PORTFOLIO / "cnn_timescale" / f"CNN{scale_size}D{scale_size}P"
     portfolio = PortfolioManager(
-        scaleDT_df, freq=FREQ_DICT[scale_size], portfolio_dir=portfolio_dir
+        scaleDT_df,
+        freq=FREQ_DICT[scale_size],
+        portfolio_dir=portfolio_dir,
+        start_year=OOS_YEARS[0],
+        end_year=OOS_YEARS[-1],
     )
     portfolio.generate_portfolio()
 

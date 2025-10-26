@@ -1,12 +1,15 @@
 import os
+import os.path as op
 
 
-def get_dir(dir):
-    if not os.path.exists(dir):
-        os.makedirs(dir, exist_ok=True)
-    return dir
-
-WORK_DIR = get_dir("../WORK_SPACE")
+def get_dir(dir_path):
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path, exist_ok=True)
+    return dir_path
+# Resolve repo base directory relative to this file, so paths work regardless
+# of current working directory.
+BASE_DIR = op.abspath(op.join(op.dirname(__file__), "..", ".."))
+WORK_DIR = get_dir(op.join(BASE_DIR, "WORK_SPACE"))
 
 EXP_DIR = get_dir(os.path.join(WORK_DIR, "new_model_res"))
 PORTFOLIO_DIR = get_dir(os.path.join(EXP_DIR, "portfolio"))
@@ -40,7 +43,7 @@ EMP_CNN1d_BL_SETTING = {
     60: ([3] * 3, [1] * 3, [1] * 3, [2] * 3),
 }
 
-NUM_WORKERS = 1
+NUM_WORKERS = 4
 
 
 START_YEAR_DICT = {
@@ -50,8 +53,11 @@ START_YEAR_DICT = {
     "Ireland": 1999,
     "Sweden": 1999,
 }
+# Training/evaluation year ranges
+# Adjusted to support data from 1993 through 2024.
+# IS: 1993–2000, OOS: 2001–2024
 IS_YEARS = list(range(1993, 2001))
-OOS_YEARS = list(range(2001, 2020))
+OOS_YEARS = list(range(2001, 2025))
 
 BENCHMARK_MODEL_NAME_DICT = {
     5: "D5L2F53S1F53S1C64MP11",

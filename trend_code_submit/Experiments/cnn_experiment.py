@@ -635,7 +635,13 @@ class Experiment(object):
         df_columns = ["StockID", "ending_date", "up_prob", "ret_val", "MarketCap"]
         df_dtypes = [object, "datetime64[ns]", np.float, np.float, np.float]
         df_list = []
-        for batch in dataloader:
+        data_iter = tqdm(
+            dataloader,
+            desc="Ensemble inference",
+            total=len(dataloader),
+            leave=False,
+        )
+        for batch in data_iter:
             image = batch["image"].to(self.device, dtype=torch.float)
             if self.model_obj.regression_label is None:
                 total_prob = torch.zeros(len(image), 2, device=self.device)
@@ -778,6 +784,8 @@ class Experiment(object):
             whole_ensemble_res,
             self.pf_freq,
             self.pf_dir,
+            start_year=self.oos_years[0],
+            end_year=self.oos_years[-1],
             country=self.country,
             delay_list=delay_list,
             load_signal=load_signal,

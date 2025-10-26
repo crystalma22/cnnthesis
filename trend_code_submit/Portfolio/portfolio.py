@@ -38,8 +38,36 @@ class PortfolioManager(object):
             assert "up_prob" in signal_df.columns
             self.signal_df = self.get_up_prob_with_period_ret(signal_df)
 
+    def _load_period_returns_with_fallback(self):
+        """Load period returns for the configured frequency.
+
+        Tries the cached parquet (CACHE_DIR/us_{freq}_ret.pq). If missing,
+        falls back to computing from processed US data, using the precomputed
+        Ret_{freq} columns and MarketCap. Ensures required delay columns exist.
+        """
+        try:
+            period_ret = eqd.get_period_ret(self.freq, country=self.country)
+        except (FileNotFoundError, OSError):
+            df = eqd.processed_US_data()
+            col = f"Ret_{self.freq}"
+            # Build a minimal frame with required columns
+            period_ret = df[["MarketCap"]].copy()
+            period_ret[f"next_{self.freq}_ret_0delay"] = df[col]
+            period_ret[f"next_{self.freq}_ret"] = period_ret[
+                f"next_{self.freq}_ret_0delay"
+            ]
+        # Ensure all requested delay columns exist
+        for dl in self.delay_list:
+            name = f"next_{self.freq}_ret_{dl}delay"
+            if name not in period_ret.columns:
+                if dl == 0 and f"next_{self.freq}_ret_0delay" in period_ret.columns:
+                    period_ret[name] = period_ret[f"next_{self.freq}_ret_0delay"]
+                else:
+                    period_ret[name] = float("nan")
+        return period_ret
+
     def __add_period_ret_to_us_res_df_w_delays(self, signal_df):
-        period_ret = eqd.get_period_ret(self.freq, country=self.country)
+        period_ret = self._load_period_returns_with_fallback()
         columns = ["MarketCap"] + [
             f"next_{self.freq}_ret_{dl}delay" for dl in self.delay_list
         ]

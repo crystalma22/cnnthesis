@@ -10,10 +10,13 @@ torch.set_num_threads(1)
 
 if __name__ == "__main__":
     # Generate Image Data
-    year_list = list(range(1993, 2020))
+    #year_list = [1993]
+    year_list = list(range(1993, 2025)) 
     chart_type = "bar"
     ws = 20
-    freq = "month"
+    freq = "week"
+   # freq = "month"
+   # freq = "quarter"
     ma_lags = [ws]
     vb = True
     for year in year_list:
@@ -33,7 +36,7 @@ if __name__ == "__main__":
         # generate CNN2D Data
         dgp_obj.save_annual_data()
         # generate CNN1D Data
-        dgp_obj.save_annual_ts_data()
+        #dgp_obj.save_annual_ts_data()
 
     # Train CNN Models for US
     # CNN2D

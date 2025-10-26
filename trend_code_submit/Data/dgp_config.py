@@ -10,13 +10,16 @@ def get_dir(dir):
     return dir
 
 
+# All paths resolved from absolute WORK_DIR (set in Misc.config)
 DATA_DIR = get_dir(op.join(WORK_DIR, "data"))
 PROCESSED_DATA_DIR = get_dir(op.join(DATA_DIR, "processed_data"))
 STOCKS_SAVEPATH = os.path.join(DATA_DIR, "stocks_dataset")
 RAW_DATA_DIR = op.join(STOCKS_SAVEPATH, "raw_data")
 
-CACHE_DIR = Path("../CACHE_DIR")
-PORTFOLIO = Path("../CACHE_DIR/PORTFOLIO")
+# Resolve CACHE_DIR relative to repo base (two levels up from this file)
+BASE_DIR = op.abspath(op.join(op.dirname(__file__), "..", ".."))
+CACHE_DIR = Path(op.join(BASE_DIR, "CACHE_DIR"))
+PORTFOLIO = Path(op.join(BASE_DIR, "CACHE_DIR", "PORTFOLIO"))
 if not os.path.isdir(PORTFOLIO):
     os.makedirs(PORTFOLIO, exist_ok=True)
 
