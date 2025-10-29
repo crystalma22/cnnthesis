@@ -13,7 +13,14 @@ import sys
 
 # Setup paths
 repo_dir = os.path.dirname(__file__)
-code_dir = os.path.join(repo_dir, "trend_code_submit")
+# Handle both cases: script in thesis_scripts/ or root
+if "thesis_scripts" in repo_dir:
+    # Running from thesis_scripts/
+    base_dir = os.path.dirname(repo_dir)  # Go up to cnnthesis root
+    code_dir = os.path.join(base_dir, "trend_code_submit")
+else:
+    # Running from root
+    code_dir = os.path.join(repo_dir, "trend_code_submit")
 os.chdir(code_dir)
 sys.path.insert(0, code_dir)
 
