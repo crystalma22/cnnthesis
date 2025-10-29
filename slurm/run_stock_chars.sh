@@ -8,5 +8,5 @@
 #SBATCH --time=4:00:00
 
 cd ~/cnnthesis
-PYTHONPATH="$(pwd)/trend_code_submit" ~/cnnthesis/cnn_env/bin/python generate_stock_chars_with_cnn.py
+PYTHONPATH="$(pwd)/trend_code_submit" ~/cnnthesis/cnn_env/bin/python thesis_scripts/generate_stock_chars_with_cnn.py
 
