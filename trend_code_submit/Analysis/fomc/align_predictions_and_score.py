@@ -74,29 +74,64 @@ def load_fomc_windows() -> pd.DataFrame:
     path = op.join(cache_dir(), "fomc_window_returns.csv")
     if not op.isfile(path):
         raise SystemExit(f"Missing {path}. Run build_windows.py first.")
-    df = pd.read_csv(path, parse_dates=["announcement_date"])  # StockID as str by default
-    df["StockID"] = df["StockID"].astype(str)
+    df = pd.read_csv(path, parse_dates=["announcement_date"])
+    # Drop rows with NaN StockID first
+    df = df[df["StockID"].notna()].copy()
+    # Convert float to int to string: 10001.0 -> 10001 -> "10001"
+    df["StockID"] = df["StockID"].astype(float).astype(int).astype(str)
     return df
 
 
 def merge_asof_by_stock(pred: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame:
-    # For each stock, align the last prediction <= announcement_date
+    # Align predictions to events using merge_asof on (StockID, Date)
+    print(f"Starting merge_asof for {pred['StockID'].nunique()} stocks in predictions")
+    print(f"Events cover {events['StockID'].nunique()} stocks")
+    
+    # Drop MarketCap from events to avoid conflict (use prediction's MarketCap)
+    ev_cols = [c for c in events.columns if c != "MarketCap"]
+    events_clean = events[ev_cols].copy()
+    
+    # Rename for merge
+    events_clean = events_clean.rename(columns={"announcement_date": "Date"})
+    
+    # Use manual groupby approach (more reliable than by= parameter)
+    print("Merging by stock (this may take a few minutes)...")
     res_list = []
-    for sid, g in pred.groupby("StockID", sort=False):
-        ev = events[events["StockID"] == sid].copy()
+    stock_count = 0
+    total_stocks = pred["StockID"].nunique()
+    
+    for sid in pred["StockID"].unique():
+        stock_count += 1
+        if stock_count % 1000 == 0:
+            print(f"  Processed {stock_count}/{total_stocks} stocks...")
+        
+        g = pred[pred["StockID"] == sid].sort_values("Date")
+        ev = events_clean[events_clean["StockID"] == sid].sort_values("Date")
+        
         if ev.empty:
             continue
-        aligned = pd.merge_asof(
-            ev.sort_values("announcement_date").rename(columns={"announcement_date": "Date"}),
-            g.sort_values("Date"),
+        
+        # Merge for this stock
+        aligned_stock = pd.merge_asof(
+            ev,
+            g[["Date", "up_prob", "MarketCap"]],
             on="Date",
             direction="backward",
+            suffixes=("", "_pred")
         )
-        aligned = aligned.rename(columns={"Date": "announcement_date"})
-        res_list.append(aligned)
-    if not res_list:
-        return events.copy()
-    return pd.concat(res_list, ignore_index=True)
+        res_list.append(aligned_stock)
+    
+    print(f"Completed merging {len(res_list)} stocks")
+    aligned = pd.concat(res_list, ignore_index=True) if res_list else events_clean.copy()
+    
+    # Rename back
+    aligned = aligned.rename(columns={"Date": "announcement_date"})
+    
+    print(f"Final merged data: {len(aligned)} rows, columns: {aligned.columns.tolist()}")
+    print(f"Has up_prob: {'up_prob' in aligned.columns}")
+    print(f"Non-null up_prob: {aligned['up_prob'].notna().sum():,} / {len(aligned):,}")
+    
+    return aligned
 
 
 def decile_scores(df: pd.DataFrame, ret_col: str) -> Tuple[pd.Series, pd.Series]:
@@ -163,6 +198,11 @@ def main() -> None:
     # Compute event-level decile scores for each window
     rows = []
     for adate, g in aligned.groupby("announcement_date"):
+        # Skip events without predictions (NaN up_prob from pre-2001 dates)
+        g = g[g["up_prob"].notna()].copy()
+        if g.empty:
+            print(f"Skipping {adate} - no valid predictions")
+            continue
         ew_pre, vw_pre = decile_scores(g, "pre_ret")
         ew_rea, vw_rea = decile_scores(g, "react_ret")
         ew_int, vw_int = decile_scores(g, "intermediate_ret")

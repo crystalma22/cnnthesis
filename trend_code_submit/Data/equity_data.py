@@ -43,7 +43,7 @@ def processed_US_data():
         print(f"Finish loading processed data in {(time.time() - since) / 60:.2f} min")
         return df.copy()
 
-    raw_us_data_path = op.join(dcf.RAW_DATA_DIR, "us_920101-241231.csv.gv")
+    raw_us_data_path = op.join(dcf.RAW_DATA_DIR, "us_920101-241231.csv.gz")
     print("Reading raw data from {}".format(raw_us_data_path))
     since = time.time()
     df = pd.read_csv(
