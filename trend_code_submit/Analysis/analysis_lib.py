@@ -14,7 +14,8 @@ def portfolio_performance_helper(ws: int, pw: int):
     assert ws in [5, 20, 60] and pw in [5, 20, 60]
     freq = FREQ_DICT[pw]
     signal_df = pd.read_csv(CACHE_DIR / f"{freq}ly_prediction_with_rets.csv")
-    signal_df["Date"] = pd.to_datetime(signal_df["Date"], dayfirst=True)
+    # Date format is ISO8601 (YYYY-MM-DD), don't use dayfirst
+    signal_df["Date"] = pd.to_datetime(signal_df["Date"])
     signal_df["StockID"] = signal_df["StockID"].astype(str)
     signal_df = signal_df.set_index(["Date", "StockID"])
     df = signal_df.rename({f"CNN{ws}D{pw}P": "up_prob"}, axis="columns")
