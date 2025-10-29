@@ -52,23 +52,30 @@ tail -f logs/fomc_*.out
 **What it does:**
 Combines monthly stock characteristics with CNN predictions for regression analysis. This file is used to test whether CNN predictions add value beyond traditional stock characteristics.
 
-**Script:** `generate_stock_chars_with_cnn.py`
+**Script:** `thesis_scripts/generate_stock_chars_with_cnn.py`
 
 **Key operations:**
-1. Loads all daily stock data (3.9GB, 63M observations)
-2. Computes stock characteristics at month-ends:
-   - **MOM**: Momentum (260-day return, skip-month adjusted)
-   - **STR**: Short-term reversal (20-day return)
-   - **TREND**: Trend (60-day return)
-   - **Volatility**: EWMA of squared returns
-   - **Size**: Log of market cap
-   - **Dollar Volume**: Log of volume × price
-   - Plus placeholders for Beta, 52WH, Bid-Ask, etc.
-3. Loads CNN predictions (I20/R5, 8.9M weekly predictions)
-4. Aligns CNN predictions to month-ends using `merge_asof`
-   - For each month-end, finds most recent prediction ≤ that date
-5. Adds future returns (5-day forward return from month-end)
-6. Splits into IS (1993-2000) and OOS (2001-2024) datasets
+1. Loads CNN predictions (I20/R5, 8.9M weekly predictions) - **these are anchor dates (τ)**
+2. Loads all daily stock data (3.9GB, 63M observations)
+3. For each prediction date τ:
+   - Computes stock characteristics **available as of τ**:
+     - **MOM**: Momentum (260-day return from ~20 days before τ)
+     - **STR**: Short-term reversal (20-day return from 1 day before τ)
+     - **TREND**: Trend (60-day return from 1 day before τ)
+     - **Volatility**: EWMA from 1 day before τ
+     - **Size**: Log of market cap at τ
+     - **Dollar Volume**: Log of volume × price at τ
+     - Plus placeholders for Beta, 52WH, Bid-Ask, etc.
+   - Adds future returns: **τ → τ+5** (5-day forward return from prediction date)
+4. Optional: Filter to last prediction of each month (for monthly summary)
+5. Splits into IS (1993-2000) and OOS (2001-2024) datasets
+
+**Key Fix (Proper Temporal Alignment):**
+- **OLD (WRONG):** Anchored on month-ends, computed 5-day returns from month-end
+- **NEW (CORRECT):** Anchored on CNN prediction date τ, compute returns from τ→τ+5
+- Ensures forecast-return window alignment for the I20/R5 model
+- Each observation uses only information available at prediction time τ
+
 
 **Why you need it:**
 - Required for regression analysis in `regression_tables.py`
@@ -84,8 +91,8 @@ Combines monthly stock characteristics with CNN predictions for regression analy
 # On Laguna (after FOMC analysis completes)
 cd ~/cnnthesis
 
-# Copy scripts if not already there
-# (do this once, then skip this step)
+# Pull latest changes (includes updated script)
+git pull origin replication-edited
 
 # Submit batch job
 sbatch slurm/run_stock_chars.sh
@@ -94,6 +101,8 @@ sbatch slurm/run_stock_chars.sh
 squeue -u $USER
 tail -f logs/stock_chars_*.out
 ```
+
+**Note:** The script has been updated to fix temporal alignment. All observations are now anchored on CNN prediction dates (τ), ensuring proper forecast-return window matching for the I20/R5 model.
 
 **Expected duration:** 2-3 hours  
 **Resource requirements:** 128GB RAM, 8 CPUs
