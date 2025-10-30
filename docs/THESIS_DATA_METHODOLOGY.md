@@ -198,36 +198,49 @@ Ret[τ → τ+5] = exp(cum_log_ret[τ+5] - cum_log_ret[τ]) - 1
 **CNN Architecture for I20/R5 Model:**
 
 ```
-Input: 1 × 64 × 60 (grayscale image)
+Input: Grayscale image (Batch × 1 × 64 × 60)
   ↓
 Conv1: 64 filters, kernel (5, 3), stride 1, padding 0
-  ↓ (1 × 60 × 56)
+  ↓ Batch Normalization + ReLU
+  ↓ Output shape: (Batch, 64, 60, 56)
 MaxPool1: kernel (2, 1), stride (2, 1)
-  ↓ (1 × 30 × 56)
+  ↓ Output shape: (Batch, 64, 30, 56)
 Conv2: 64 filters, kernel (3, 1), stride 1, padding 0
-  ↓ (1 × 28 × 56)
+  ↓ Batch Normalization + ReLU
+  ↓ Output shape: (Batch, 64, 28, 56)
 MaxPool2: kernel (2, 1), stride (2, 1)
-  ↓ (1 × 14 × 56)
+  ↓ Output shape: (Batch, 64, 14, 56)
 Conv3: 64 filters, kernel (2, 1), stride 1, padding 0
-  ↓ (1 × 13 × 56)
+  ↓ Batch Normalization + ReLU
+  ↓ Output shape: (Batch, 64, 13, 56)
 MaxPool3: kernel (2, 1), stride (2, 1)
-  ↓ (1 × 6 × 56)
+  ↓ Output shape: (Batch, 64, 6, 56)
 Flatten
-  ↓ (336 features)
+  ↓ Output: 64 × 6 × 56 = 21,504 features
+  ↓ Reshape to (Batch, 336)  [Note: Appears to use only 336 features]
 Fully Connected: 336 → 1
+  ↓ Dropout (0.50 during training)
+  ↓ Sigmoid Activation
   ↓
-Sigmoid Activation
-  ↓
-Output: Probability stock return > 0 in next 5 days
+Output: Probability P(stock return > 0 in next 5 days)
 ```
 
 **Architecture Details:**
 - **Total Parameters:** ~1.2 million trainable parameters
 - **Activation Function:** ReLU for hidden layers, Sigmoid for output
-- **Dropout:** 0.50 probability (during training only)
+- **Dropout:** 0.50 probability (during training only, same as JKX et al. 2024)
 - **Batch Normalization:** Applied after each convolutional layer
+- **Architecture source:** `Model/cnn_model.py` (CNNModel class)
+- **No modifications from original JKX architecture**
 
 ### 2.2 Training Procedure
+
+**Training Infrastructure:**
+- **Training script:** `Experiments/cnn_experiment.py`
+- **Main function:** `train_us_model()`
+- **Model architecture:** Defined in `Model/cnn_model.py`
+- **Data loading:** `Data/chart_dataset.py` (PyTorch Dataset)
+- **Chart generation:** `Data/chart_library.py` (image rendering)
 
 **Objective Function:**
 - Loss: Binary Cross-Entropy
@@ -243,17 +256,25 @@ Output: Probability stock return > 0 in next 5 days
 - Early Stopping: Monitor validation loss, stop if no improvement for 5 epochs
 
 **Regularization:**
-- Dropout: 0.50 on all layers
+- Dropout: 0.50 on all layers (same as JKX et al. 2024)
 - Weight Decay: 0
 - Data Augmentation: None
+- Batch Normalization: Applied after each convolutional layer
 
 **Ensemble Method:**
 - Train 5 independent models from different random initializations
+- Each model trained separately on NVIDIA GPU (Laguna cluster)
+- Checkpoints saved: `new_model_res/D20L3F53S31D21MP21F53S11D11MP21F53S11D11MP21C64/model_*.tar`
 - Final prediction: Average of 5 model outputs
 - Reduces variance and improves generalization
 - Formula: `ŷ_ensemble = (1/5) × Σ ŷ_i`
 
 ### 2.3 Prediction Generation
+
+**Prediction Script:**
+- **Script:** `make_prediction_with_rets.py` (located in repo root)
+- **Entry point:** Calls `train_us_model()` with `from_ensem_res=True` to load saved checkpoints
+- **Output file:** `CACHE_DIR/weekly_prediction_with_rets.csv`
 
 **Frequency:**
 - Predictions generated weekly (every ~5 trading days)
@@ -263,15 +284,16 @@ Output: Probability stock return > 0 in next 5 days
 1. Load 20-day price window ending at date τ
 2. Normalize prices to base = 1.0
 3. Generate candlestick image (60×64 pixels)
-4. Forward pass through trained CNN → probability P(return > 0)
-5. Store: Date, StockID, up_probability, MarketCap
-6. Output: `weekly_prediction_with_rets.csv` (8.9M rows, 2001-2024)
+4. Forward pass through trained CNN ensemble → probability P(return > 0)
+5. Store: Date, StockID, CNN20D5P (up_probability), MarketCap, next_week_ret_0delay
+6. Output: `weekly_prediction_with_rets.csv` (8.9M rows, 322 MB)
 
 **Out-of-Sample Coverage:**
 - Dates: 2001-01-05 to 2024-12-31
 - Stocks: ~22,480 unique stocks
 - Predictions: ~8.9 million (Date × StockID pairs)
 - Average predictions per week: ~700 per stock
+- File size: 322 MB
 
 ### 2.4 Performance Evaluation
 
@@ -296,8 +318,35 @@ Output: Probability stock return > 0 in next 5 days
 - Windows:
   - Pre-announcement: Day t-1 to t
   - Reaction: Day t to t+1
-  - Post-announcement: Day t+5 to t+20
-- Method: Align predictions to event dates using merge_asof (backward)
+  - Intermediate: Day t+4 to t+20 (delayed information incorporation)
+- Method: Align predictions to event dates using `pandas.merge_asof` with `direction="backward"`
+
+**FOMC Pipeline Steps:**
+1. **Schedule ingestion:** `FOMC_Dates_1936.csv` → `fomc_schedule_with_offsets.csv` (via `ingest_manual_schedule.py`)
+2. **Build windows:** Compute per-stock returns for each FOMC event window (via `build_windows.py`)
+3. **Align predictions:** Merge predictions to events using backward-looking merge (via `align_predictions_and_score.py`)
+4. **Compute deciles:** Rank stocks by up_probability, calculate H-L spreads for each window
+5. **Summarize:** Aggregate H-L spreads across all events (via `run_fomc_pipeline.py`)
+
+**Alignment Details:**
+- Script: `trend_code_submit/Analysis/fomc/align_predictions_and_score.py`
+- Function: `merge_asof_by_stock()` (lines 85-134)
+- Algorithm: For each stock and FOMC event, find most recent prediction ≤ announcement date
+- Example: FOMC on June 15 → Uses prediction from June 12 (if that's the most recent prediction ≤ June 15)
+- Rationale: Weekly predictions (every ~5 days) vs. arbitrary FOMC announcement dates
+- Bias prevention: Backward direction ensures no look-ahead (only uses information available before announcement)
+
+**Code Implementation:**
+```python
+# From align_predictions_and_score.py, lines 115-121
+aligned_stock = pd.merge_asof(
+    ev,  # FOMC events (left)
+    g[["Date", "up_prob", "MarketCap"]],  # Predictions (right)
+    on="Date",
+    direction="backward",  # Most recent pred ≤ event date
+    suffixes=("", "_pred")
+)
+```
 
 ### 2.5 Statistical Testing
 
@@ -336,7 +385,10 @@ Output: Probability stock return > 0 in next 5 days
 
 **FOMC Event Study:**
 - For FOMC announcement on day t, use most recent prediction ≤ t
-- Typically uses prediction from t-2 or t-3 days (previous week)
+- Typically uses prediction from t-2 or t-3 days (previous Friday's prediction)
+- Implementation: `pd.merge_asof(..., direction="backward")` per stock
+- No forward-looking bias: Only uses predictions that existed before the announcement
+- Output: Decile H-L spreads for pre-announcement, reaction, and intermediate windows
 
 ---
 
@@ -366,7 +418,25 @@ BATCH_SIZE = 128
 
 ### Computational Resources
 - Training: NVIDIA GPUs (Laguna cluster)
-- Training time per ensemble: ~2-7 hours
+- Training time per ensemble member: ~2-7 hours (varies by data availability)
 - Prediction generation: ~30 minutes (5 ensembles)
 - Total compute time: ~40-50 GPU-hours
+- SLURM scripts: `slurm/run_member.sh` (array job for 5 ensembles), `slurm/run_portfolios.sh`
+
+### Scripts Pipeline Summary
+
+**Training & Prediction:**
+1. **Training:** `cnn_experiment.py::train_us_model()` → saves checkpoints
+2. **Prediction generation:** `make_prediction_with_rets.py` → `weekly_prediction_with_rets.csv`
+3. **Portfolio generation:** `generate_cnn_portfolios.py` → portfolio CSV files
+
+**FOMC Analysis:**
+4. **FOMC schedule:** `ingest_manual_schedule.py` → `fomc_schedule.csv`
+5. **FOMC windows:** `build_windows.py` → `fomc_window_returns.csv`
+6. **FOMC alignment:** `align_predictions_and_score.py` → `fomc_decile_performance.csv`
+7. **FOMC summary:** `run_fomc_pipeline.py` → `fomc_summary.csv` and `.png`
+
+**Event Study Extensions:**
+8. **Event portfolios:** `event_study_portfolios.py` → `event_study_portfolio_table.csv`
+9. **Conditional horizon:** `horizon_eval_conditional.py` → `horizon_eval_conditional.csv` and `.png`
 

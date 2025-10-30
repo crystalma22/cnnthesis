@@ -323,8 +323,8 @@ PYTHONPATH="$(pwd)/trend_code_submit" ~/cnnthesis/cnn_env/bin/python make_predic
 - [x] FOMC schedule updated to 2024
 - [x] FOMC windows built
 - [ ] **FOMC analysis complete** (currently running)
-- [ ] Stock characteristics + CNN generated
-- [ ] CNN portfolio returns generated
+- [ ] Stock characteristics + CNN generated 
+- [ ] CNN portfolio returns generated (currently running)
 - [ ] Results copied to local machine
 - [ ] Analysis tables generated (optional)
 - [ ] Thesis data inventory updated

@@ -556,3 +556,4 @@ The sample includes 209 events with available predictions (2001-2024) and approx
 - Bernanke, B. S., & Kuttner, K. N. (2005). What explains the stock market's reaction to Federal Reserve policy? *Journal of Finance*, 60(3), 1221-1257.
 
 
+

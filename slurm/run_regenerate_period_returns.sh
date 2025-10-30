@@ -32,3 +32,4 @@ echo ""
 echo "Generated files:"
 ls -lh CACHE_DIR/us_*_ret.pq 2>/dev/null || echo "No period return files found"
 
+

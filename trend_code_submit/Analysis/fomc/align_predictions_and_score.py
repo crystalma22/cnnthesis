@@ -83,6 +83,9 @@ def load_fomc_windows() -> pd.DataFrame:
 
 
 def merge_asof_by_stock(pred: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame:
+    print("\n" + "="*80)
+    print("Starting merge_asof_by_stock")
+    print("="*80)
     # Align predictions to events using merge_asof on (StockID, Date)
     print(f"Starting merge_asof for {pred['StockID'].nunique()} stocks in predictions")
     print(f"Events cover {events['StockID'].nunique()} stocks")
@@ -94,42 +97,62 @@ def merge_asof_by_stock(pred: pd.DataFrame, events: pd.DataFrame) -> pd.DataFram
     # Rename for merge
     events_clean = events_clean.rename(columns={"announcement_date": "Date"})
     
-    # Use manual groupby approach (more reliable than by= parameter)
-    print("Merging by stock (this may take a few minutes)...")
+    # Sort both dataframes for merge_asof
+    print("Sorting dataframes for merge_asof...")
+    # merge_asof with 'by' requires sorting: StockID first, then Date
+    events_clean = events_clean.sort_values(["StockID", "Date"]).reset_index(drop=True)
+    pred_sorted = pred.sort_values(["StockID", "Date"]).reset_index(drop=True)
+    
+    print(f"Events: {len(events_clean)} rows")
+    print(f"Predictions: {len(pred_sorted)} rows")
+    
+    # merge_asof with 'by' parameter has issues with pandas 1.x
+    # Workaround: loop by stock but use vectorized operations within each stock
+    print("Merging predictions with events (grouped approach)...")
+    
     res_list = []
     stock_count = 0
-    total_stocks = pred["StockID"].nunique()
+    unique_stocks = events_clean["StockID"].unique()
+    total_stocks = len(unique_stocks)
     
-    for sid in pred["StockID"].unique():
+    for sid in unique_stocks:
         stock_count += 1
         if stock_count % 1000 == 0:
             print(f"  Processed {stock_count}/{total_stocks} stocks...")
         
-        g = pred[pred["StockID"] == sid].sort_values("Date")
-        ev = events_clean[events_clean["StockID"] == sid].sort_values("Date")
+        ev_subset = events_clean[events_clean["StockID"] == sid]
+        pred_subset = pred_sorted[pred_sorted["StockID"] == sid]
         
-        if ev.empty:
+        if ev_subset.empty or pred_subset.empty:
             continue
         
         # Merge for this stock
         aligned_stock = pd.merge_asof(
-            ev,
-            g[["Date", "up_prob", "MarketCap"]],
+            ev_subset,
+            pred_subset[["Date", "up_prob", "MarketCap"]],
             on="Date",
             direction="backward",
             suffixes=("", "_pred")
         )
         res_list.append(aligned_stock)
     
-    print(f"Completed merging {len(res_list)} stocks")
+    print(f"\nCompleted merging {len(res_list)} stocks")
     aligned = pd.concat(res_list, ignore_index=True) if res_list else events_clean.copy()
     
     # Rename back
     aligned = aligned.rename(columns={"Date": "announcement_date"})
+    print(f"Merge complete! Result: {len(aligned)} rows")
     
-    print(f"Final merged data: {len(aligned)} rows, columns: {aligned.columns.tolist()}")
-    print(f"Has up_prob: {'up_prob' in aligned.columns}")
-    print(f"Non-null up_prob: {aligned['up_prob'].notna().sum():,} / {len(aligned):,}")
+    print(f"\nFinal merged data:")
+    print(f"  Rows: {len(aligned):,}")
+    print(f"  Columns: {aligned.columns.tolist()}")
+    print(f"  Has up_prob: {'up_prob' in aligned.columns}")
+    if 'up_prob' in aligned.columns:
+        print(f"  Non-null up_prob: {aligned['up_prob'].notna().sum():,} / {len(aligned):,}")
+    
+    # Show first few rows for debugging
+    print(f"\nFirst 3 rows of merged data:")
+    print(aligned.head(3))
     
     return aligned
 
