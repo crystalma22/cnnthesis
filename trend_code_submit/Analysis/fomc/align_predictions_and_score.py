@@ -79,6 +79,12 @@ def load_fomc_windows() -> pd.DataFrame:
     df = df[df["StockID"].notna()].copy()
     # Convert float to int to string: 10001.0 -> 10001 -> "10001"
     df["StockID"] = df["StockID"].astype(float).astype(int).astype(str)
+    
+    # Filter to prediction period only (2001-2024) - no CNN predictions before 2001
+    print(f"Before filtering: {len(df):,} rows")
+    df = df[df["announcement_date"] >= "2001-01-01"].copy()
+    print(f"After filtering to 2001+: {len(df):,} rows")
+    
     return df
 
 
