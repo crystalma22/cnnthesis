@@ -1,0 +1,32 @@
+# QUICK COPY COMMANDS - Copy-Paste These!
+
+## Option 1: Use the automated script (EASIEST)
+cd "/Users/crystallion22/Desktop/Thesis Materials/cnnthesis"
+chmod +x copy_to_laguna.sh
+./copy_to_laguna.sh
+
+## Option 2: Copy just the essentials (FASTEST)
+cd "/Users/crystallion22/Desktop/Thesis Materials/cnnthesis"
+scp trend_code_submit/Analysis/fomc/statistical_significance.py laguna:~/cnnthesis/trend_code_submit/Analysis/fomc/
+scp trend_code_submit/Analysis/fomc/create_thesis_figures.py laguna:~/cnnthesis/trend_code_submit/Analysis/fomc/
+scp slurm/run_fomc_significance.sh laguna:~/cnnthesis/slurm/
+scp slurm/run_fomc_horizon_conditional.sh laguna:~/cnnthesis/slurm/
+ssh laguna "chmod +x ~/cnnthesis/slurm/run_fomc_significance.sh ~/cnnthesis/slurm/run_fomc_horizon_conditional.sh"
+
+## Option 3: Use Git (if you have a repo)
+git add -A
+git commit -m "Add statistical significance and visualization scripts"
+git push origin replication-edited
+ssh laguna "cd ~/cnnthesis && git pull origin replication-edited"
+
+## After copying, run on Laguna:
+ssh laguna
+cd ~/cnnthesis
+sbatch slurm/run_fomc_horizon_conditional.sh
+# Wait ~2 hours, then:
+sbatch slurm/run_fomc_significance.sh
+# Wait ~10 minutes, then:
+source cnn_env/bin/activate
+export PYTHONPATH="$(pwd)/trend_code_submit:$PYTHONPATH"
+python trend_code_submit/Analysis/fomc/create_thesis_figures.py
+

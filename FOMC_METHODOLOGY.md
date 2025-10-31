@@ -23,6 +23,12 @@ This analysis examines whether CNN-generated stock return predictions exhibit en
 - End: December 17, 2024
 - Frequency: ~8 meetings per year
 
+**IMPORTANT - Window Definitions (Following Lucca & Moench 2015):**
+- **Pre-FOMC:** Day t-1 ONLY (24-hour window before announcement)
+- **Announcement:** Day t (announcement day)
+- **Reaction:** Day t+1 (next-day response)
+- **Intermediate:** Days t+4 to t+20 (delayed response)
+
 ### 2. Stock Return Data
 **Source:** CRSP daily stock file via processed_US_data()
 
@@ -87,13 +93,18 @@ This analysis examines whether CNN-generated stock return predictions exhibit en
 
 For each of 316 FOMC announcements and ~29,000 stocks:
 
-1. **Pre-announcement return** (`pre_ret`):
-   - Return on announcement day (t=0)
-   - Captures market positioning before the announcement
+1. **Pre-FOMC return** (`pre_fomc_ret`):
+   - Cumulative return from t-5 to t-1 (5 days BEFORE announcement)
+   - EXCLUDES announcement day (matches Lucca & Moench 2015 definition)
+   - Captures anticipation and positioning before Fed decision
 
-2. **Reaction return** (`react_ret`):
+2. **Announcement day return** (`announcement_day_ret`):
+   - Return ON day t (announcement day only)
+   - Captures immediate impact of FOMC announcement
+
+3. **Reaction return** (`react_ret`):
    - Return on t+1 (first trading day after announcement)
-   - Captures immediate market reaction to FOMC decision
+   - Captures overnight digestion of FOMC information
 
 3. **Cumulative log returns:**
    - `cum_t4`: Cumulative log return at t+4
@@ -254,21 +265,27 @@ for each announcement_date:
 
 ---
 
-## Event Windows Defined
+## Event Windows Defined (Following Lucca & Moench 2015)
 
-### Pre-Announcement Window
-**Definition:** Day t-1 to day t (announcement day)  
-**Captures:** Market positioning and information leakage  
-**Hypothesis:** If CNN detects pre-announcement trends, H-L should be positive
+### Pre-FOMC Window
+**Definition:** Day t-1 ONLY (single day before announcement)  
+**Captures:** The famous "pre-FOMC drift" - anticipatory positioning in 24 hours before Fed decision  
+**Hypothesis:** If CNN detects anticipation patterns, H-L should be positive on t-1  
+**Literature:** Lucca & Moench (2015) show most drift occurs in final 24 hours (not spread over multiple days)
+
+### Announcement Day Window
+**Definition:** Day t (announcement day)  
+**Captures:** Immediate impact when FOMC statement is released  
+**Hypothesis:** CNN predicts which stocks react to monetary policy changes
 
 ### Reaction Window  
-**Definition:** Day t to day t+1  
-**Captures:** Immediate market reaction to FOMC decision  
-**Hypothesis:** If CNN predictions align with FOMC surprises, H-L should be strong
+**Definition:** Day t+1 (next trading day)  
+**Captures:** Overnight digestion and next-day response  
+**Hypothesis:** CNN predictions align with continued market response
 
 ### Intermediate Window
-**Definition:** Day t+4 to day t+20  
-**Captures:** Delayed price discovery and gradual information incorporation  
+**Definition:** Days t+4 to t+20 (2-4 weeks after)  
+**Captures:** Gradual information diffusion and delayed price discovery  
 **Hypothesis:** If markets slowly digest FOMC implications, H-L persists
 
 ### Non-Event Days

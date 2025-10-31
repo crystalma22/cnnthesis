@@ -88,9 +88,9 @@ def build_summary() -> None:
         get = lambda p, w: mdf[f"{p}_{w}_H-L"].astype(float).mean() if f"{p}_{w}_H-L" in mdf else np.nan
 
     summary = pd.DataFrame({
-        "window": ["pre", "react", "inter"],
-        "EW_HL": [get("pre", "ew"), get("react", "ew"), get("inter", "ew")],
-        "VW_HL": [get("pre", "vw"), get("react", "vw"), get("inter", "vw")],
+        "window": ["pre_fomc", "announcement", "react", "inter"],
+        "EW_HL": [get("pre_fomc", "ew"), get("announcement", "ew"), get("react", "ew"), get("inter", "ew")],
+        "VW_HL": [get("pre_fomc", "vw"), get("announcement", "vw"), get("react", "vw"), get("inter", "vw")],
     })
     sum_path = op.join(out_dir, "fomc_summary.csv")
     summary.to_csv(sum_path, index=False)

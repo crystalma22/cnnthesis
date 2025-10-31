@@ -232,13 +232,33 @@ def main() -> None:
         if g.empty:
             print(f"Skipping {adate} - no valid predictions")
             continue
-        ew_pre, vw_pre = decile_scores(g, "pre_ret")
-        ew_rea, vw_rea = decile_scores(g, "react_ret")
-        ew_int, vw_int = decile_scores(g, "intermediate_ret")
-        row = {
-            "announcement_date": adate,
-        }
-        for prefix, ew_s, vw_s in [("pre", ew_pre, vw_pre), ("react", ew_rea, vw_rea), ("inter", ew_int, vw_int)]:
+        
+        # Compute deciles for all 4 windows
+        # Check which columns exist (backward compatibility)
+        if "pre_fomc_ret" in g.columns:
+            ew_pre, vw_pre = decile_scores(g, "pre_fomc_ret")
+        elif "pre_ret" in g.columns:
+            ew_pre, vw_pre = decile_scores(g, "pre_ret")
+        else:
+            ew_pre = vw_pre = pd.Series()
+        
+        if "announcement_day_ret" in g.columns:
+            ew_ann, vw_ann = decile_scores(g, "announcement_day_ret")
+        else:
+            ew_ann = vw_ann = pd.Series()
+        
+        ew_rea, vw_rea = decile_scores(g, "react_ret") if "react_ret" in g.columns else (pd.Series(), pd.Series())
+        ew_int, vw_int = decile_scores(g, "intermediate_ret") if "intermediate_ret" in g.columns else (pd.Series(), pd.Series())
+        
+        row = {"announcement_date": adate}
+        
+        # Store all windows
+        for prefix, ew_s, vw_s in [
+            ("pre_fomc", ew_pre, vw_pre),
+            ("announcement", ew_ann, vw_ann),
+            ("react", ew_rea, vw_rea),
+            ("inter", ew_int, vw_int)
+        ]:
             for k, v in ew_s.items():
                 row[f"{prefix}_ew_{k}"] = v
             for k, v in vw_s.items():

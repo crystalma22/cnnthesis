@@ -1,0 +1,37 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local environments & caches
+cnn_env/
+.env/
+.venv/
+venv/
+ENV/
+env/
+CACHE_DIR/
+logs/
+
+# Data files (DO NOT commit to git - too large!)
+*.feather
+*.dat
+*.npz
+*.pth
+*.tar
+*.parquet
+*.pq
+*.csv.gz
+*.csv.bz2
+WORK_SPACE/data/
+WORK_SPACE/new_model_res/
+trend_code_submit/CACHE_DIR/
+
+# Office files
+*.docx
+*.pptx
+*.xlsx

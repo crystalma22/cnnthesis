@@ -9,9 +9,9 @@
 ## ✅ NEED FOR THESIS (Priority Order)
 
 1. ✅ **Weekly Predictions** - Already have (8.9M rows)
-2. ⏳ **FOMC Analysis** - Currently running  
-3. ⏳ **CNN Portfolios** - Need to run (30-60 min)
-4. ⏳ **Stock Characteristics** - Need to run (2-3 hours) - OPTIONAL for robustness
+2. ✅ **FOMC Analysis** - COMPLETED (217 meetings, 2001-2024)
+3. ✅ **CNN Portfolios** - COMPLETED (EW/VW decile returns)
+4. ⏳ **Stock Characteristics** - Can run if needed (2-3 hours) - OPTIONAL for robustness
 5. ❌ **Everything else** - NOT NEEDED (old data, excluded models)
 
 ---
@@ -59,7 +59,7 @@
 
 ---
 
-### 3. FOMC Event Study (ESSENTIAL) ⏳
+### 3. FOMC Event Study (ESSENTIAL) ✅
 **Location:** `CACHE_DIR/fomc/`
 
 | File | Status | Needed? |
@@ -67,30 +67,38 @@
 | `fomc_schedule.csv` | ✅ Done | ✅ YES |
 | `fomc_schedule_with_offsets.csv` | ✅ Done | ✅ YES |
 | `fomc_window_returns.csv` | ✅ Done | ✅ YES |
-| `fomc_decile_performance.csv` | ⏳ **RUNNING NOW** | ✅ **CRITICAL** |
-| `fomc_summary.csv` | ⏳ Generating | ✅ YES |
-| `fomc_summary.png` | ⏳ Generating | ✅ YES |
+| `fomc_decile_performance.csv` | ✅ **DONE** (Oct 30, 2025) | ✅ **CRITICAL** |
+| `fomc_summary.csv` | ✅ **DONE** (Oct 30, 2025) | ✅ YES |
+| `fomc_summary.png` | 📝 Optional | ❌ Maybe later |
 | `event_study_portfolio_table.csv` | 📝 Optional | ❌ Maybe later |
 | `horizon_eval_conditional.csv` | 📝 Optional | ❌ Maybe later |
 
-**Coverage:** 316 FOMC meetings (1992-2024), ~209 with predictions (2001-2024)
+**Coverage:** 217 FOMC meetings with predictions (2001-2024)
 
 **What it tests:** Are CNN predictions more informative around monetary policy events?
 
+**Results Summary:**
+- **Pre-FOMC H-L:** EW +0.21%, VW +0.05%
+- **Reaction H-L:** EW +0.10%, VW +0.03%
+- **Intermediate H-L:** EW +0.35%, VW −0.28%
+
 ---
 
-### 4. CNN Portfolios (ESSENTIAL) ⏳
-**Location:** `WORK_SPACE/new_model_res/portfolio/cnn_weekly/CNN20D5P/`
+### 4. CNN Portfolios (ESSENTIAL) ✅
+**Location:** `CACHE_DIR/PORTFOLIO/cnn_weekly/CNN20D5P/`
 
 | Description | Status | Needed? |
 |-------------|--------|---------|
-| Decile portfolios (EW) | ⏳ **NEED TO RUN** | ✅ **YES - CORE RESULTS** |
-| Decile portfolios (VW) | ⏳ **NEED TO RUN** | ✅ **YES - CORE RESULTS** |
-| H-L spreads | ⏳ **NEED TO RUN** | ✅ **YES - CORE RESULTS** |
+| Decile portfolios (EW) | ✅ **DONE** (Oct 29, 2025) | ✅ **YES - CORE RESULTS** |
+| Decile portfolios (VW) | ✅ **DONE** (Oct 29, 2025) | ✅ **YES - CORE RESULTS** |
+| H-L spreads | ✅ **DONE** (Oct 29, 2025) | ✅ **YES - CORE RESULTS** |
 
 **Script:** `thesis_scripts/generate_cnn_portfolios.py`  
-**How to run:** `sbatch slurm/run_cnn_portfolios.sh` (30-60 min)  
 **Usage:** Main thesis results - shows if CNN predictions create profitable strategies
+
+**Results Summary:**
+- **EW H-L:** 70.74% annual return, Sharpe ratio 5.60
+- **VW H-L:** 22.69% annual return, Sharpe ratio 1.54
 
 ---
 

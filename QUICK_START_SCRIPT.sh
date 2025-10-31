@@ -101,3 +101,4 @@ echo "  Stock chars: ls -lh CACHE_DIR/cnn_and_monthly_stock_char_*.parquet"
 echo "  Portfolios: ls -lh WORK_SPACE/new_model_res/portfolio/cnn_weekly/CNN20D5P/"
 echo ""
 
+

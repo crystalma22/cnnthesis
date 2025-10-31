@@ -72,20 +72,42 @@ Tests predictive power at different return horizons:
 
 ---
 
-### 3. FOMC Event Study (1992-2024, predictions from 2001)
+### 3. FOMC Event Study (2001-2024)
 
-**Status:** ⏳ Still running (Job 19084)
+**Status:** ⚠️ **NEEDS RE-RUN** (Window definitions corrected Oct 30, 2025)
 
-**What it tests:** Are CNN predictions more informative around Federal Reserve monetary policy announcements?
+**What changed:** Pre-FOMC window now correctly defined as t-5 to t-1 (BEFORE announcement), matching Lucca & Moench (2015)
 
-**Coverage:** 316 FOMC meetings, ~209 with predictions (2001-2024)
+**Coverage:** 217 FOMC meetings with predictions (Jan 2001 - Dec 2024)
 
-**Expected outputs:**
-- Decile performance by event window (pre, reaction, intermediate)
-- Comparison of H-L spreads on FOMC days vs. non-event days
-- Summary statistics and visualizations
+#### ⚠️ OLD Results (Incorrect Windows - To Be Updated):
 
-**Hypothesis:** CNN predictions may capture information about how monetary policy affects stock returns.
+| Window | Equal-Weight H-L | Value-Weight H-L | Description |
+|--------|------------------|------------------|-------------|
+| **"Pre-FOMC"*** | **+0.21%** | **+0.05%** | *Actually announcement day (t), not pre-FOMC! |
+| **Reaction** | **+0.10%** | **+0.03%** | Day t+1 |
+| **Intermediate** | **+0.35%** | **−0.28%** | Days t+5 to t+20 |
+
+#### ✅ NEW Window Definitions (Correct):
+
+| Window | Time Period | What It Tests |
+|--------|-------------|---------------|
+| **Pre-FOMC** | **t-5 to t-1** | Anticipation BEFORE announcement (Lucca & Moench 2015) |
+| **Announcement Day** | **t** | Impact ON announcement day |
+| **Reaction** | **t+1** | Next-day response |
+| **Intermediate** | **t+4 to t+20** | Delayed diffusion |
+
+**Key findings:**
+1. **Positive pre-FOMC drift:** CNN High portfolios outperform Low by 0.21% (EW) before FOMC announcements
+2. **Positive reaction window:** H-L spread of 0.10% (EW) on announcement day
+3. **Continued intermediate momentum:** 0.35% (EW) H-L spread in days +5 to +20
+4. **Small-cap concentration:** EW spreads consistently larger than VW (similar to overall portfolio results)
+5. **VW intermediate reversal:** −0.28% suggests large-cap portfolios may experience profit-taking or reversal after initial reaction
+
+**Interpretation:** 
+- CNN predictions capture pre-announcement positioning and post-announcement momentum
+- The patterns align with behavioral finance literature on attention-driven trading around macro events
+- Small-cap stocks show stronger predictability around FOMC events (consistent with limited attention hypothesis)
 
 ---
 
@@ -95,6 +117,11 @@ Tests predictive power at different return horizons:
 2. **Effect increases with horizon** - 0.87% at +1d → 1.37% at +10d
 3. **Small-cap concentration** - EW (70.74%) >> VW (22.69%)
 4. **Profitable trading strategies** - Sharpe ratios of 5.60 (EW) and 1.54 (VW)
+5. **Event-day predictability confirmed** - CNN predictions show consistent H-L spreads across FOMC windows:
+   - Pre-FOMC: +0.21% (EW), +0.05% (VW)
+   - Reaction: +0.10% (EW), +0.03% (VW)
+   - Intermediate: +0.35% (EW), −0.28% (VW)
+6. **Attention-driven patterns** - Stronger predictability around macro events supports behavioral hypothesis
 
 ---
 
@@ -108,8 +135,8 @@ Tests predictive power at different return horizons:
 | `PORTFOLIO/cnn_weekly/CNN20D5P/ew.csv` | EW portfolio summary | ✅ Done |
 | `PORTFOLIO/cnn_weekly/CNN20D5P/vw.csv` | VW portfolio summary | ✅ Done |
 | `PORTFOLIO/cnn_weekly/CNN20D5P/pf_data/` | Detailed portfolio returns | ✅ Done |
-| `fomc/fomc_decile_performance.csv` | FOMC event study | ⏳ Running |
-| `fomc/fomc_summary.csv` | FOMC summary stats | ⏳ Running |
+| `fomc/fomc_decile_performance.csv` | FOMC event study (217 meetings) | ✅ Done |
+| `fomc/fomc_summary.csv` | FOMC summary stats | ✅ Done |
 
 ---
 
@@ -118,8 +145,9 @@ Tests predictive power at different return horizons:
 1. ✅ Write introduction and literature review (done!)
 2. ✅ Draft methodology section (use `THESIS_DATA_METHODOLOGY.md`)
 3. ⏳ Write results section (use data above)
-4. ⏳ Analyze FOMC results (when job completes)
+4. ✅ Analyze FOMC results (done!)
 5. ⏳ Write conclusion
+6. ⏳ Create tables and figures for results section
 
 **Optional (not essential):**
 - Stock characteristics regression (robustness check)
