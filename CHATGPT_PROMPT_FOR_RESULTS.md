@@ -18,7 +18,7 @@ I need you to help me write the **Results section** of my undergraduate finance 
 
 ## CONTEXT: What You Already Wrote
 
-You previously wrote my Data & Methodology sections. Now you're continuing with Results.
+You previously wrote my **Introduction/Literature Review** and **Data & Methodology sections**. Now you're continuing with **Results**.
 
 **My thesis has THREE main contributions:**
 1. **CNN Replication** (Jiang et al. 2023) - Confirms model works
@@ -27,16 +27,45 @@ You previously wrote my Data & Methodology sections. Now you're continuing with 
 
 ---
 
-## REQUIRED READING (From my GitHub repo)
+## REQUIRED READING (Do this in order)
 
-**Before writing, read these files:**
+### STEP 1: Review Your Previous Writing
+
+**I'm attaching my Introduction/Literature Review that you wrote earlier.** 
+
+Please read it carefully and **match that writing style**. I really like how you:
+- Explained concepts clearly for a finance audience
+- Balanced technical precision with readability
+- Structured arguments logically
+- Used appropriate citations
+- Made smooth transitions between topics
+
+**Use the same tone, style, and level of detail for the Results section.**
+
+### STEP 2: Learn from Literature Papers
+
+**Read ALL papers in my "Thesis Lit Review Sources" folder**, especially:
+- Jiang, Kelly & Xiu (2023) - How they present CNN results
+- Lucca & Moench (2015) - How they present event study results
+- Any other empirical asset pricing papers - For statistical reporting style
+
+**Pay attention to:**
+- How they structure results sections
+- How they report statistics (t-stats, p-values, tables)
+- How they interpret findings
+- Paragraph flow and transitions
+- Balance of numbers vs interpretation
+
+### STEP 3: Read My Documentation
+
+**After understanding the style, read these files from my GitHub repo:**
 
 1. **COMPLETE_STATISTICAL_RESULTS_EXPLAINED.md** - Detailed explanation of ALL statistics
 2. **FINAL_RESULTS_SUMMARY.md** - Clean results table
 3. **docs/THESIS_RESULTS_SUMMARY.md** - Results with context
 4. **OVERLAP_CONCERN_RESOLVED.md** - How to address temporal ordering
 
-**Also review the literature papers** in "Thesis Lit Review Sources" folder to match writing style.
+**Now you're ready to write Results in the same style as my Introduction/Lit Review!**
 
 ---
 
