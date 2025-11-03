@@ -16,9 +16,25 @@ I need you to help me write the **Data & Methodology sections** of my undergradu
 
 ---
 
-## REQUIRED READING (Pull from my GitHub repo first)
+## REQUIRED READING (Do this in order)
 
-**Before writing anything, read these files from my repo in order:**
+### STEP 1: Read Research Papers for Style and Structure
+
+**First, read ALL papers in the "Thesis Lit Review Sources" folder to learn:**
+- Academic writing style for finance
+- How to structure data and methodology sections
+- How similar papers describe their methods
+- Appropriate level of technical detail
+- Citation practices
+
+**Pay special attention to:**
+- Jiang, Kelly & Xiu (2023) - This is what I'm replicating
+- Lucca & Moench (2015) - Pre-FOMC drift literature
+- Any other event study papers - For FOMC methodology structure
+
+### STEP 2: Read My Documentation
+
+**After understanding the academic style, read these files from my repo:**
 
 1. **docs/COMPLETE_THESIS_GUIDE_FOR_WRITING.md** - Comprehensive guide (READ THIS FIRST)
    - Section 3: "CNN Model Explained (For Finance Audience)"
@@ -32,6 +48,8 @@ I need you to help me write the **Data & Methodology sections** of my undergradu
 4. **docs/METHODOLOGY_GUIDE_FOR_GPT.md** - Code structure reference
 
 5. **FINAL_RESULTS_SUMMARY.md** - Final results for context
+
+6. **OVERLAP_CONCERN_RESOLVED.md** - How to address temporal overlap concerns
 
 ---
 
@@ -218,7 +236,13 @@ Please write TWO sections in standard academic format:
 - 4.3 Horizon Evaluation
 - 4.4 FOMC Event Study (Novel Contribution)
 
-Use academic tone with subheadings, citations where appropriate (cite Jiang et al. 2023, Lucca & Moench 2015), and clear transitions between subsections.
+**Style Guidelines:**
+- Match the writing style and structure of the papers in "Thesis Lit Review Sources"
+- Use academic tone similar to Journal of Finance, Journal of Financial Economics
+- Include citations where appropriate (Jiang et al. 2023, Lucca & Moench 2015, etc.)
+- Use clear transitions between subsections
+- Balance technical precision with readability (like the papers you read)
+- For event study methodology, follow the structure you saw in similar papers
 
 ---
 
