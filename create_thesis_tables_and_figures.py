@@ -420,7 +420,7 @@ print(f"  ✅ Saved: {FIGURES_DIR}/figure3_horizon_evaluation.png/.pdf")
 # ============================================================================
 print("\nCreating Figure 4: FOMC Event Study Results...")
 
-fig, ax = plt.subplots(figsize=(10, 6))
+fig, ax = plt.subplots(figsize=(11, 6))
 
 windows = ['Announcement\nDay (t)', 'Reaction\n(t+1)', 'Intermediate\n(t+5 to t+20)']
 x = np.arange(len(windows))
@@ -439,26 +439,51 @@ bars2 = ax.bar(x + width/2, vw_fomc, width, label='Value-Weight', alpha=0.8, col
 ax.set_xlabel('Event Window', fontweight='bold', fontsize=12)
 ax.set_ylabel('H-L Spread (%)', fontweight='bold', fontsize=12)
 ax.set_title('CNN Performance Around FOMC Announcements (217 Events, 2001-2024)',
-             fontweight='bold', fontsize=13)
+             fontweight='bold', fontsize=13, pad=20)
 ax.set_xticks(x)
 ax.set_xticklabels(windows)
 ax.axhline(y=0, color='black', linestyle='-', linewidth=1)
-ax.legend(fontsize=11)
+
+# Set y-axis limits to prevent overflow
+ax.set_ylim(-0.35, 0.50)
+
+# Legend outside plot area
+ax.legend(fontsize=11, loc='upper left', bbox_to_anchor=(0, 1), framealpha=0.9)
+
 ax.grid(axis='y', alpha=0.3)
 
-# Add significance stars
+# Add significance stars (position BELOW bars to avoid title overlap)
 for i, (ew, sig) in enumerate(zip(ew_fomc, ew_sig)):
     if sig:
-        y_pos = ew + 0.03 if ew > 0 else ew - 0.03
-        ax.text(i - width/2, y_pos, sig, ha='center', fontsize=14, fontweight='bold')
+        if ew > 0:
+            # For positive bars, put stars above bar but below limit
+            y_pos = min(ew + 0.04, 0.42)
+        else:
+            y_pos = ew - 0.03
+        ax.text(i - width/2, y_pos, sig, ha='center', fontsize=13, fontweight='bold', color='darkblue')
 
-# Add value labels
+# Add value labels inside or just above/below bars
 for i, (ew, vw) in enumerate(zip(ew_fomc, vw_fomc)):
-    ax.text(i - width/2, ew + 0.02, f'{ew:.2f}%', ha='center', fontsize=9, fontweight='bold')
-    ax.text(i + width/2, vw + 0.02, f'{vw:.2f}%', ha='center', fontsize=9, fontweight='bold')
+    # EW labels
+    if ew > 0.15:
+        # Inside bar for tall bars
+        ax.text(i - width/2, ew/2, f'{ew:.2f}%', ha='center', va='center',
+                fontsize=9, fontweight='bold', color='white')
+    else:
+        # Above bar for short bars
+        ax.text(i - width/2, ew - 0.04, f'{ew:.2f}%', ha='center', va='top',
+                fontsize=9, fontweight='bold')
+    
+    # VW labels
+    if vw > 0:
+        ax.text(i + width/2, vw - 0.04, f'{vw:.2f}%', ha='center', va='top',
+                fontsize=9, fontweight='bold')
+    else:
+        ax.text(i + width/2, vw - 0.04, f'{vw:.2f}%', ha='center', va='bottom',
+                fontsize=9, fontweight='bold')
 
-# Add note
-ax.text(0.5, -0.35, '*** p<0.01, ** p<0.05, * p<0.10',
+# Add note at bottom
+ax.text(0.5, -0.12, '*** p<0.01, ** p<0.05, * p<0.10',
         ha='center', transform=ax.transAxes, fontsize=9, style='italic')
 
 plt.tight_layout()
@@ -473,7 +498,7 @@ print(f"  ✅ Saved: {FIGURES_DIR}/figure4_fomc_results.png/.pdf")
 # ============================================================================
 print("\nCreating Figure 5: EW vs VW Comparison...")
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6.5))
 
 # Panel A: Overall Portfolio (Annual Returns) - Separate scale
 width = 0.35
@@ -486,19 +511,23 @@ ax1.bar(x_annual - width/2, ew_annual, width, label='Equal-Weight', alpha=0.8, c
 ax1.bar(x_annual + width/2, vw_annual, width, label='Value-Weight', alpha=0.8, color='coral')
 
 ax1.set_ylabel('H-L Spread (%)', fontweight='bold', fontsize=12)
-ax1.set_title('Panel A: Overall Portfolio (Annual)', fontweight='bold', fontsize=12)
+ax1.set_title('Panel A: Overall Portfolio (Annual)', fontweight='bold', fontsize=12, pad=15)
 ax1.set_xticks(x_annual)
 ax1.set_xticklabels(['Portfolio\nStrategy'])
-ax1.legend(fontsize=10)
+ax1.set_ylim(0, 85)  # Set limit to prevent label overflow
+# Legend outside
+ax1.legend(fontsize=10, loc='upper left', bbox_to_anchor=(0, 1), framealpha=0.9)
 ax1.grid(axis='y', alpha=0.3)
 
-# Add values on bars
+# Add values inside bars (white text)
 for i, (ew, vw) in enumerate(zip(ew_annual, vw_annual)):
-    ax1.text(i - width/2, ew + 2, f'{ew:.1f}%', ha='center', fontweight='bold', fontsize=10)
-    ax1.text(i + width/2, vw + 1, f'{vw:.1f}%', ha='center', fontweight='bold', fontsize=10)
+    ax1.text(i - width/2, ew/2, f'{ew:.1f}%', ha='center', va='center',
+            fontweight='bold', fontsize=11, color='white')
+    ax1.text(i + width/2, vw/2, f'{vw:.1f}%', ha='center', va='center',
+            fontweight='bold', fontsize=11, color='white')
 
-# Add ratio annotation
-ax1.text(0, 75, '3.1x', ha='center', fontsize=11, fontweight='bold', color='darkgreen')
+# Add ratio annotation (lower position)
+ax1.text(0, 78, '3.1x', ha='center', fontsize=11, fontweight='bold', color='darkgreen')
 
 # Panel B: Short-Term Results (Better scaling for small numbers)
 tests = ['1-day', '3-day', '10-day', 'FOMC:\nAnnounce', 'FOMC:\nReact', 'FOMC:\nInter']
@@ -511,23 +540,27 @@ bars1 = ax2.bar(x - width/2, ew_short, width, label='Equal-Weight', alpha=0.8, c
 bars2 = ax2.bar(x + width/2, vw_short, width, label='Value-Weight', alpha=0.8, color='coral')
 
 ax2.set_ylabel('H-L Spread (%)', fontweight='bold', fontsize=12)
-ax2.set_title('Panel B: Horizon & FOMC Results', fontweight='bold', fontsize=12)
+ax2.set_title('Panel B: Horizon & FOMC Results', fontweight='bold', fontsize=12, pad=15)
 ax2.set_xticks(x)
 ax2.set_xticklabels(tests, fontsize=9)
+ax2.set_ylim(-0.35, 1.65)  # Set limit to prevent ratio label overflow
 ax2.axhline(y=0, color='black', linestyle='-', linewidth=1)
-ax2.legend(fontsize=10)
+# Legend outside
+ax2.legend(fontsize=10, loc='upper left', bbox_to_anchor=(0, 1), framealpha=0.9)
 ax2.grid(axis='y', alpha=0.3)
 
-# Add ratio annotations
+# Add ratio annotations (controlled position)
 ratios = [9.7, 5.6, 5.7, 4.2, 3.3, None]
 for i, ratio in enumerate(ratios):
     if ratio is not None:
         y_max = max(ew_short[i], vw_short[i])
-        ax2.text(i, y_max + 0.08, f'{ratio:.1f}x', ha='center', fontsize=8,
+        # Position below upper limit
+        y_pos = min(y_max + 0.10, 1.55)
+        ax2.text(i, y_pos, f'{ratio:.1f}x', ha='center', fontsize=8,
                 fontweight='bold', color='darkgreen')
 
 plt.suptitle('Small-Cap Concentration: EW Consistently Outperforms VW', 
-             fontsize=14, fontweight='bold', y=1.00)
+             fontsize=14, fontweight='bold', y=0.98)
 plt.tight_layout()
 plt.savefig(FIGURES_DIR / "figure5_ew_vw_comparison.png", bbox_inches='tight', dpi=300)
 plt.savefig(FIGURES_DIR / "figure5_ew_vw_comparison.pdf", bbox_inches='tight')
