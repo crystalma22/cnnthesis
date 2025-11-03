@@ -104,3 +104,5 @@ scp -r laguna:~/cnnthesis/CACHE_DIR/fomc ~/Desktop/Thesis_Results/
 
 **Copy those 4 files and run the job. That's it!** 🚀
 
+
+

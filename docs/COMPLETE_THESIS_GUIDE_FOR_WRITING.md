@@ -450,31 +450,52 @@ Average across 217 events → Mean H-L for each window
 
 ---
 
-### Window Definitions (Addressing Professor's Overlap Concern):
+### Window Definitions (FINAL - Addressing All Concerns):
 
-**Pre-FOMC (t-1):**
-- **What:** Return on day t-1 (day before announcement)
-- **Why:** Tests if CNN predicts pre-announcement positioning (Lucca & Moench drift)
-- **Overlap concern:** Day t-1 is last day in CNN's 20-day lookback
-  - CNN prediction on t-1 uses prices through t-1 close
-  - Pre-FOMC return is t-1's open-to-close return
-  - **Mild overlap, but represents realistic market timing**
-- **Defense:** "This represents realistic trading conditions where investors use closing prices to make next-day decisions. The prediction is made after market close on t-1, using information available to all market participants at that time."
+**Timeline Visualization:**
+```
+Prediction    FOMC Announcement    Returns Measured
+June 12       June 15             June 15, 16, 19-July 13
+(or earlier)  (day t)             (t, t+1, t+5 to t+20)
+    ↓            ↓                      ↓
+  PAST        EVENT               FUTURE (what we measure)
+```
 
-**Announcement (t):**
-- **What:** Return on day t (announcement day)
-- **Why:** Tests if CNN predicts announcement-day impact
-- **Clean:** No overlap (occurs AFTER prediction date)
+**Window 1: Announcement Day (t)**
+- **What:** Return on day t (the day Fed announces decision)
+- **Measured:** Open to close on announcement day
+- **Why:** Tests if CNN predicts which stocks react to monetary policy news
+- **Overlap Status:** ✅ **NO OVERLAP** - Announcement day (e.g., June 15) occurs AFTER prediction date (e.g., June 12)
+- **Data:** 217 complete events
 
-**Reaction (t+1):**
-- **What:** Return on day t+1 (next day)
-- **Why:** Tests if effects persist overnight
-- **Clean:** No overlap (purely forward-looking)
+**Window 2: Reaction (t+1)**
+- **What:** Return on day t+1 (next trading day)
+- **Measured:** Open to close on day after announcement
+- **Why:** Tests if CNN predictions persist overnight
+- **Overlap Status:** ✅ **NO OVERLAP** - Day t+1 is 2-6 days after prediction
+- **Data:** 217 complete events
 
-**Intermediate (t+4 to t+20):**
-- **What:** Cumulative return 5-20 days after announcement
-- **Why:** Tests gradual information diffusion
-- **Clean:** No overlap (weeks after prediction)
+**Window 3: Intermediate (t+5 to t+20)**
+- **What:** Cumulative return from 5 to 20 days after announcement
+- **Measured:** Using cumulative log returns: exp(cum[t+20] - cum[t+4]) - 1
+- **Why:** Tests gradual information diffusion (under-reaction hypothesis)
+- **Overlap Status:** ✅ **NO OVERLAP** - Measured weeks after prediction
+- **Data:** 208 events (9 missing due to end-of-sample)
+
+### Why No Pre-FOMC Window:
+
+**Professor's Concern Addressed:**
+Testing pre-announcement drift (Lucca & Moench 2015, days before t) would require predictions made at least 2 days before the announcement. Given our weekly prediction frequency, this would:
+1. Limit sample size significantly
+2. Create potential information overlap concerns
+3. Add complexity without clear benefit
+
+**Our choice:** Focus on announcement-day forward windows where:
+- Temporal ordering is unambiguous (predictions clearly precede measured returns)
+- Full sample available (217 events)
+- Tests whether CNN predicts FOMC-related returns (our main hypothesis)
+
+**This is more conservative and cleaner methodologically.** ✅
 
 ---
 
@@ -657,4 +678,6 @@ Will contain:
 - [ ] Write thesis!
 
 **Everything is ready. Just run the job!** 🚀
+
+
 

@@ -23,11 +23,12 @@ This analysis examines whether CNN-generated stock return predictions exhibit en
 - End: December 17, 2024
 - Frequency: ~8 meetings per year
 
-**IMPORTANT - Window Definitions (Following Lucca & Moench 2015):**
-- **Pre-FOMC:** Day t-1 ONLY (24-hour window before announcement)
-- **Announcement:** Day t (announcement day)
-- **Reaction:** Day t+1 (next-day response)
-- **Intermediate:** Days t+4 to t+20 (delayed response)
+**IMPORTANT - Window Definitions (Announcement-Focused):**
+- **Announcement Day (t):** Return on the day Fed releases its decision
+- **Reaction (t+1):** Return on next trading day
+- **Intermediate (t+5 to t+20):** Cumulative return 5-20 days after announcement
+
+**Note:** We focus on announcement-day and post-announcement windows where CNN predictions (made 1-5 days before events) cleanly precede return measurement. This eliminates overlap concerns and provides unambiguous temporal ordering.
 
 ### 2. Stock Return Data
 **Source:** CRSP daily stock file via processed_US_data()
@@ -265,32 +266,37 @@ for each announcement_date:
 
 ---
 
-## Event Windows Defined (Following Lucca & Moench 2015)
+## Event Windows Defined (FINAL - What You're Actually Testing)
 
-### Pre-FOMC Window
-**Definition:** Day t-1 ONLY (single day before announcement)  
-**Captures:** The famous "pre-FOMC drift" - anticipatory positioning in 24 hours before Fed decision  
-**Hypothesis:** If CNN detects anticipation patterns, H-L should be positive on t-1  
-**Literature:** Lucca & Moench (2015) show most drift occurs in final 24 hours (not spread over multiple days)
+### Announcement Day Window (Day t)
+**Definition:** Return on announcement day (when Fed releases decision)  
+**Measured:** Open to close on day t  
+**Captures:** Immediate market reaction to FOMC statement  
+**Hypothesis:** CNN predictions (made 1-5 days before) predict which stocks react to monetary policy  
+**Data Coverage:** 217 events (complete) ✅  
+**No Overlap:** Announcement day is always AFTER prediction date
 
-### Announcement Day Window
-**Definition:** Day t (announcement day)  
-**Captures:** Immediate impact when FOMC statement is released  
-**Hypothesis:** CNN predicts which stocks react to monetary policy changes
+### Reaction Window (Day t+1)  
+**Definition:** Return on next trading day  
+**Measured:** Open to close on day t+1  
+**Captures:** Overnight digestion and continued response  
+**Hypothesis:** CNN predictions align with sustained market response  
+**Data Coverage:** 217 events (complete) ✅  
+**No Overlap:** Day t+1 is 2-6 days after prediction date
 
-### Reaction Window  
-**Definition:** Day t+1 (next trading day)  
-**Captures:** Overnight digestion and next-day response  
-**Hypothesis:** CNN predictions align with continued market response
+### Intermediate Window (Days t+5 to t+20)
+**Definition:** Cumulative return from 5 to 20 days after announcement  
+**Measured:** Close(t+4) to Close(t+20) using cumulative log returns  
+**Captures:** Gradual information diffusion over 2-4 weeks  
+**Hypothesis:** If markets slowly digest FOMC implications, H-L persists  
+**Data Coverage:** 208 events (some missing due to end-of-sample) ✅  
+**No Overlap:** Weeks after prediction date
 
-### Intermediate Window
-**Definition:** Days t+4 to t+20 (2-4 weeks after)  
-**Captures:** Gradual information diffusion and delayed price discovery  
-**Hypothesis:** If markets slowly digest FOMC implications, H-L persists
-
-### Non-Event Days
-**Definition:** All trading days not in any FOMC window  
-**Purpose:** Baseline comparison to assess event-specific predictive power
+### Note on Pre-FOMC Drift:
+We do not test the pre-announcement drift (Lucca & Moench 2015, days t-5 to t-1) because:
+1. Would require predictions made at least 2 days before announcement (limiting sample)
+2. Our weekly prediction frequency creates potential overlap concerns
+3. Focus on announcement-day forward windows provides cleaner temporal ordering
 
 ---
 

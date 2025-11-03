@@ -150,3 +150,5 @@ scp -r laguna:~/cnnthesis/CACHE_DIR/fomc ~/Desktop/Thesis_Results/
 
 **Submit the job and finish your thesis!** 🚀
 
+
+
