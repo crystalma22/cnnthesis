@@ -76,7 +76,7 @@ def main() -> None:
         res.rename(columns={"Ret": out_col}, inplace=True)
         print(f"  Merged {len(res)} rows for {out_col}")
         return res
-    
+
     def merge_cum(on_col: str, suffix: str) -> pd.DataFrame:
         if on_col == "announcement_date":
             m = sch[["announcement_date"]].copy()
@@ -134,7 +134,7 @@ def main() -> None:
     
     # Rename Date column
     if "Date" in base.columns and "announcement_date" not in base.columns:
-        base = base.rename(columns={"Date": "announcement_date"})
+    base = base.rename(columns={"Date": "announcement_date"})
     elif "Date" in base.columns:
         base = base.drop(columns=["Date"])
     

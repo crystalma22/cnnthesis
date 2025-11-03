@@ -238,7 +238,7 @@ def main() -> None:
         if "pre_fomc_ret" in g.columns:
             ew_pre, vw_pre = decile_scores(g, "pre_fomc_ret")
         elif "pre_ret" in g.columns:
-            ew_pre, vw_pre = decile_scores(g, "pre_ret")
+        ew_pre, vw_pre = decile_scores(g, "pre_ret")
         else:
             ew_pre = vw_pre = pd.Series()
         
