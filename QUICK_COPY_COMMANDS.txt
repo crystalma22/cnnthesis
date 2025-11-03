@@ -30,3 +30,5 @@ source cnn_env/bin/activate
 export PYTHONPATH="$(pwd)/trend_code_submit:$PYTHONPATH"
 python trend_code_submit/Analysis/fomc/create_thesis_figures.py
 
+
+
