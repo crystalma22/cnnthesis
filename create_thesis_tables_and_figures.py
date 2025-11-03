@@ -501,19 +501,22 @@ print("\nCreating Figure 5: EW vs VW Comparison...")
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6.5))
 
 # Panel A: Overall Portfolio (Annual Returns) - Separate scale
-width = 0.35
+width = 0.25  # Narrower bars for less crowding
 x_annual = np.array([0])
 
 ew_annual = [70.74]
 vw_annual = [22.69]
 
-ax1.bar(x_annual - width/2, ew_annual, width, label='Equal-Weight', alpha=0.8, color='steelblue')
-ax1.bar(x_annual + width/2, vw_annual, width, label='Value-Weight', alpha=0.8, color='coral')
+# Increase spacing between bars
+spacing = 0.3
+ax1.bar(x_annual - spacing, ew_annual, width, label='Equal-Weight', alpha=0.8, color='steelblue')
+ax1.bar(x_annual + spacing, vw_annual, width, label='Value-Weight', alpha=0.8, color='coral')
 
 ax1.set_ylabel('H-L Spread (%)', fontweight='bold', fontsize=12)
 ax1.set_title('Panel A: Overall Portfolio (Annual)', fontweight='bold', fontsize=12, pad=15)
 ax1.set_xticks(x_annual)
 ax1.set_xticklabels(['Portfolio\nStrategy'])
+ax1.set_xlim(-0.8, 0.8)  # Add horizontal space
 ax1.set_ylim(0, 85)  # Set limit to prevent label overflow
 # Legend outside
 ax1.legend(fontsize=10, loc='upper left', bbox_to_anchor=(0, 1), framealpha=0.9)
@@ -521,9 +524,9 @@ ax1.grid(axis='y', alpha=0.3)
 
 # Add values inside bars (white text)
 for i, (ew, vw) in enumerate(zip(ew_annual, vw_annual)):
-    ax1.text(i - width/2, ew/2, f'{ew:.1f}%', ha='center', va='center',
+    ax1.text(i - spacing, ew/2, f'{ew:.1f}%', ha='center', va='center',
             fontweight='bold', fontsize=11, color='white')
-    ax1.text(i + width/2, vw/2, f'{vw:.1f}%', ha='center', va='center',
+    ax1.text(i + spacing, vw/2, f'{vw:.1f}%', ha='center', va='center',
             fontweight='bold', fontsize=11, color='white')
 
 # Add ratio annotation (lower position)
