@@ -1,8 +1,30 @@
 # Thesis Results Summary
 
-**Generated:** October 29, 2025  
+**Last Updated:** November 3, 2025  
+**Status:** ✅ All analysis complete, ready for thesis writing  
 **Model:** CNN I20/R5 (20-day lookback, 5-day prediction horizon)  
 **Sample:** US stocks, 2001-2024 (out-of-sample)
+
+---
+
+## 🎯 Three Main Contributions
+
+This thesis makes three primary contributions to the literature on machine learning in asset pricing:
+
+### 1. CNN Replication (Jiang et al. 2023) ✅
+- Successfully replicate image-based CNN for US stocks (2001-2024)
+- **Result:** 71% EW annual return (Sharpe 5.60), 23% VW (Sharpe 1.54)
+- Confirms CNN can detect visual price patterns that predict returns
+
+### 2. Event-Conditioned Performance Analysis ✅
+- Extend CNN to Federal Reserve FOMC meetings (217 events, 2001-2024)
+- **Result:** Significant H-L spreads on announcement days (0.21%, t=2.95***)
+- Shows CNN predictions are particularly informative during macro events
+
+### 3. Behavioral Interpretation ✅
+- Test small-cap (EW) vs large-cap (VW) patterns
+- **Result:** EW effects 3-10x larger than VW across all tests
+- Consistent with limited attention hypothesis (patterns persist where arbitrage is limited)
 
 ---
 
@@ -115,10 +137,10 @@ We focus on announcement-day and post-announcement windows. Pre-announcement dri
 2. **Effect increases with horizon** - 0.87% at +1d → 1.37% at +10d
 3. **Small-cap concentration** - EW (70.74%) >> VW (22.69%)
 4. **Profitable trading strategies** - Sharpe ratios of 5.60 (EW) and 1.54 (VW)
-5. **Event-day predictability confirmed** - CNN predictions show consistent H-L spreads across FOMC windows:
-   - Pre-FOMC: +0.21% (EW), +0.05% (VW)
-   - Reaction: +0.10% (EW), +0.03% (VW)
-   - Intermediate: +0.35% (EW), −0.28% (VW)
+5. **Event-day predictability confirmed** - CNN predictions show significant H-L spreads across FOMC windows:
+   - Announcement Day (t): +0.21% (EW, t=2.95***), +0.05% (VW, n.s.)
+   - Reaction (t+1): +0.10% (EW, t=1.76*), +0.03% (VW, n.s.)
+   - Intermediate (t+5→t+20): +0.35% (EW, t=2.24**), −0.28% (VW, n.s.)
 6. **Attention-driven patterns** - Stronger predictability around macro events supports behavioral hypothesis
 
 ---
@@ -138,17 +160,36 @@ We focus on announcement-day and post-announcement windows. Pre-announcement dri
 
 ---
 
-## 🎯 Next Steps for Thesis
+## 🎯 Current Status & Next Steps
 
-1. ✅ Write introduction and literature review (done!)
-2. ✅ Draft methodology section (use `THESIS_DATA_METHODOLOGY.md`)
-3. ⏳ Write results section (use data above)
-4. ✅ Analyze FOMC results (done!)
-5. ⏳ Write conclusion
-6. ⏳ Create tables and figures for results section
+### ✅ ANALYSIS COMPLETE:
+1. ✅ CNN model trained and validated (2001-2024)
+2. ✅ Horizon evaluation complete (1d, 3d, 10d)
+3. ✅ Portfolio performance computed (EW/VW deciles)
+4. ✅ FOMC event study complete (217 meetings)
+5. ✅ Statistical significance tests complete (t-stats, p-values)
+6. ✅ All results files generated and saved
 
-**Optional (not essential):**
-- Stock characteristics regression (robustness check)
-- Additional robustness tests
+### 📝 THESIS WRITING (Use ChatGPT Agent):
+1. ⏳ **Data & Methodology sections** - In progress with ChatGPT
+   - See: `CHATGPT_PROMPT_FOR_METHODOLOGY.md`
+2. ⏳ **Results section** - Next step
+   - Use: This file + `COMPLETE_STATISTICAL_RESULTS_EXPLAINED.md`
+3. ⏳ **Discussion section** - After results
+   - Use: `docs/COMPLETE_THESIS_GUIDE_FOR_WRITING.md`
+4. ⏳ **Tables and figures** - As needed
+5. ⏳ **Conclusion** - Final step
+
+### 📥 DOWNLOAD RESULTS (If Needed):
+```bash
+# All FOMC results
+scp -r laguna:~/cnnthesis/CACHE_DIR/fomc ~/Desktop/Thesis_Results/
+
+# Portfolio results  
+scp -r laguna:~/cnnthesis/CACHE_DIR/PORTFOLIO ~/Desktop/Thesis_Results/
+
+# Horizon evaluation
+scp laguna:~/cnnthesis/CACHE_DIR/horizon_eval.csv ~/Desktop/Thesis_Results/
+```
 
 
