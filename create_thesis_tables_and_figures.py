@@ -469,40 +469,65 @@ plt.close()
 print(f"  ✅ Saved: {FIGURES_DIR}/figure4_fomc_results.png/.pdf")
 
 # ============================================================================
-# FIGURE 5: EW vs VW COMPARISON ACROSS ALL TESTS
+# FIGURE 5: EW vs VW COMPARISON ACROSS ALL TESTS (TWO PANELS)
 # ============================================================================
 print("\nCreating Figure 5: EW vs VW Comparison...")
 
-fig, ax = plt.subplots(figsize=(12, 6))
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
 
-tests = ['Overall\n(Annual)', '1-day', '3-day', '10-day',
-         'FOMC:\nAnnounce', 'FOMC:\nReact', 'FOMC:\nInter']
-x = np.arange(len(tests))
+# Panel A: Overall Portfolio (Annual Returns) - Separate scale
 width = 0.35
+x_annual = np.array([0])
 
-ew_all = [70.74, 0.87, 1.11, 1.37, 0.21, 0.10, 0.35]
-vw_all = [22.69, 0.09, 0.20, 0.24, 0.05, 0.03, -0.28]
+ew_annual = [70.74]
+vw_annual = [22.69]
 
-bars1 = ax.bar(x - width/2, ew_all, width, label='Equal-Weight (Small Caps)', alpha=0.8, color='steelblue')
-bars2 = ax.bar(x + width/2, vw_all, width, label='Value-Weight (Large Caps)', alpha=0.8, color='coral')
+ax1.bar(x_annual - width/2, ew_annual, width, label='Equal-Weight', alpha=0.8, color='steelblue')
+ax1.bar(x_annual + width/2, vw_annual, width, label='Value-Weight', alpha=0.8, color='coral')
 
-ax.set_xlabel('Test', fontweight='bold', fontsize=12)
-ax.set_ylabel('H-L Spread (%)', fontweight='bold', fontsize=12)
-ax.set_title('Small-Cap Concentration: EW Consistently Outperforms VW Across All Tests',
-             fontweight='bold', fontsize=13)
-ax.set_xticks(x)
-ax.set_xticklabels(tests)
-ax.axhline(y=0, color='black', linestyle='-', linewidth=1)
-ax.legend(fontsize=11, loc='upper left')
-ax.grid(axis='y', alpha=0.3)
+ax1.set_ylabel('H-L Spread (%)', fontweight='bold', fontsize=12)
+ax1.set_title('Panel A: Overall Portfolio (Annual)', fontweight='bold', fontsize=12)
+ax1.set_xticks(x_annual)
+ax1.set_xticklabels(['Portfolio\nStrategy'])
+ax1.legend(fontsize=10)
+ax1.grid(axis='y', alpha=0.3)
 
-# Add ratio annotations for first 4 bars
-ratios = [3.12, 9.67, 5.55, 5.71]
+# Add values on bars
+for i, (ew, vw) in enumerate(zip(ew_annual, vw_annual)):
+    ax1.text(i - width/2, ew + 2, f'{ew:.1f}%', ha='center', fontweight='bold', fontsize=10)
+    ax1.text(i + width/2, vw + 1, f'{vw:.1f}%', ha='center', fontweight='bold', fontsize=10)
+
+# Add ratio annotation
+ax1.text(0, 75, '3.1x', ha='center', fontsize=11, fontweight='bold', color='darkgreen')
+
+# Panel B: Short-Term Results (Better scaling for small numbers)
+tests = ['1-day', '3-day', '10-day', 'FOMC:\nAnnounce', 'FOMC:\nReact', 'FOMC:\nInter']
+x = np.arange(len(tests))
+
+ew_short = [0.87, 1.11, 1.37, 0.21, 0.10, 0.35]
+vw_short = [0.09, 0.20, 0.24, 0.05, 0.03, -0.28]
+
+bars1 = ax2.bar(x - width/2, ew_short, width, label='Equal-Weight', alpha=0.8, color='steelblue')
+bars2 = ax2.bar(x + width/2, vw_short, width, label='Value-Weight', alpha=0.8, color='coral')
+
+ax2.set_ylabel('H-L Spread (%)', fontweight='bold', fontsize=12)
+ax2.set_title('Panel B: Horizon & FOMC Results', fontweight='bold', fontsize=12)
+ax2.set_xticks(x)
+ax2.set_xticklabels(tests, fontsize=9)
+ax2.axhline(y=0, color='black', linestyle='-', linewidth=1)
+ax2.legend(fontsize=10)
+ax2.grid(axis='y', alpha=0.3)
+
+# Add ratio annotations
+ratios = [9.7, 5.6, 5.7, 4.2, 3.3, None]
 for i, ratio in enumerate(ratios):
-    y_max = max(ew_all[i], vw_all[i])
-    ax.text(i, y_max + 2, f'{ratio:.1f}x', ha='center', fontsize=9,
-            fontweight='bold', color='darkgreen')
+    if ratio is not None:
+        y_max = max(ew_short[i], vw_short[i])
+        ax2.text(i, y_max + 0.08, f'{ratio:.1f}x', ha='center', fontsize=8,
+                fontweight='bold', color='darkgreen')
 
+plt.suptitle('Small-Cap Concentration: EW Consistently Outperforms VW', 
+             fontsize=14, fontweight='bold', y=1.00)
 plt.tight_layout()
 plt.savefig(FIGURES_DIR / "figure5_ew_vw_comparison.png", bbox_inches='tight', dpi=300)
 plt.savefig(FIGURES_DIR / "figure5_ew_vw_comparison.pdf", bbox_inches='tight')
