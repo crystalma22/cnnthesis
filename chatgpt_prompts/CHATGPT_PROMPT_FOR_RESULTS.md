@@ -60,10 +60,19 @@ Please read it carefully and **match that writing style**. I really like how you
 
 **After understanding the style, read these files from my GitHub repo:**
 
-1. **COMPLETE_STATISTICAL_RESULTS_EXPLAINED.md** - Detailed explanation of ALL statistics
-2. **FINAL_RESULTS_SUMMARY.md** - Clean results table
-3. **docs/THESIS_RESULTS_SUMMARY.md** - Results with context
-4. **OVERLAP_CONCERN_RESOLVED.md** - How to address temporal ordering
+1. **COMPLETE_STATISTICAL_RESULTS_EXPLAINED.md** ⭐ **READ THIS FIRST**
+   - Comprehensive explanation of ALL statistics
+   - Section 3: Detailed FOMC analysis (window-by-window breakdown)
+   - Defense Q&A for FOMC results
+   - Thesis-ready paragraphs you can adapt
+
+2. **FINAL_RESULTS_SUMMARY.md** - Clean results table for quick reference
+
+3. **FIGURE_EXPLANATIONS.md** - What each figure shows (Panel A vs Panel B)
+
+4. **WHAT_YOU_ACTUALLY_DID_EXPLAINED.md** - Plain English explanation of entire thesis
+
+5. **OVERLAP_CONCERN_RESOLVED.md** - How to address temporal ordering
 
 **Now you're ready to write Results in the same style as my Introduction/Lit Review!**
 
@@ -83,6 +92,9 @@ Write the Results section with the following structure:
 - Report H-L spreads: 71% EW (Sharpe 5.60), 23% VW (Sharpe 1.54)
 - Emphasize this confirms Jiang et al. (2023) findings
 - Note the 3x difference between EW and VW (foreshadows behavioral interpretation)
+- **NEW:** Reference Table 7 (Transaction Costs) to show net returns after costs
+- **NEW:** Reference Figure 7 (Cumulative Returns) to show consistency over 24 years
+- **NEW:** Reference Figure 8 (Prediction Distribution) to explain low correlation but high Sharpe
 
 **Key numbers to report:**
 ```
@@ -97,6 +109,11 @@ Value-Weight:
 - H-L spread: +22.69% (Sharpe 1.54)
 
 EW/VW ratio: 3.12x
+
+Transaction Costs (Table 7):
+- EW: 71% gross → 58% net (after 13% costs from 654% turnover)
+- VW: 23% gross → 8% net (after 15% costs from 728% turnover)
+- Assumes 2% round-trip transaction costs
 ```
 
 **How to write it:**
@@ -104,7 +121,16 @@ EW/VW ratio: 3.12x
 >
 > Table 4 presents value-weighted results. While the pattern remains monotonic, the H-L spread is substantially smaller at 22.69% (Sharpe 1.54), roughly one-third the equal-weighted magnitude. This 3-fold difference suggests the CNN's predictive power is concentrated in smaller-capitalization stocks, consistent with market efficiency theory: patterns are more exploitable where institutional arbitrage is limited."
 
-**Reference:** Figure 2 (Decile Performance comparison)
+**Also mention:**
+> "Table 7 reports transaction cost analysis. With 654% annual turnover and estimated 2% round-trip costs, equal-weighted net returns decline to 58% annually (Sharpe 4.56), while value-weighted net returns fall to 8% (Sharpe 0.55). While these estimates suggest transaction costs substantially reduce implementable profits, the net returns remain positive and economically meaningful, particularly for the equal-weighted strategy.
+>
+> Figure 7 displays cumulative H-L returns from 2001 to 2024, demonstrating the strategy generates consistent positive returns across various market regimes, including the 2008-2009 financial crisis. Figure 8 shows the distribution of CNN predictions across a typical week: most predictions cluster around 0.5 (neutral), while extreme predictions in the tails contain the signal. This distribution explains why average correlations are modest (0.07) despite strong decile spreads—predictive power is concentrated in high-confidence predictions rather than uniform across all stocks."
+
+**Reference:** 
+- Figure 2 (Decile Performance comparison - two panels)
+- Figure 7 (Cumulative Returns - consistency)
+- Figure 8 (Distribution - mechanism)
+- Table 7 (Transaction Costs - implementability)
 
 ---
 
@@ -293,20 +319,23 @@ Please write **Section 5: Results** with subsections:
 Make sure to reference these (you created them):
 
 **Tables:**
-- Table 1: Sample Statistics
+- Table 1: Sample Statistics (in Methodology)
 - Table 2: Horizon Evaluation
 - Table 3: Equal-Weight Portfolio Performance
 - Table 4: Value-Weight Portfolio Performance
-- Table 5: FOMC Event Study Results (MAIN)
+- Table 5: FOMC Event Study Results (MAIN CONTRIBUTION) ⭐
 - Table 6: EW vs VW Comparison
+- Table 7: Transaction Costs & Net Returns (NEW - shows implementability)
 
 **Figures:**
-- Figure 1: FOMC Timeline (no overlap)
-- Figure 2: Decile Performance Comparison
+- Figure 1: FOMC Timeline (no overlap - reference in 5.3)
+- Figure 2: Decile Performance Comparison (two panels)
 - Figure 3: Horizon Evaluation
-- Figure 4: FOMC Results (MAIN)
-- Figure 5: EW vs VW Comparison
+- Figure 4: FOMC Results (MAIN CONTRIBUTION) ⭐
+- Figure 5: EW vs VW Comparison (two panels)
 - Figure 6: CNN Architecture (already used in Methodology)
+- Figure 7: Cumulative Returns Over Time (NEW - shows consistency)
+- Figure 8: Prediction Distribution (NEW - explains mechanism)
 
 ---
 
