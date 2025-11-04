@@ -18,12 +18,17 @@ I need you to help me write the **Conclusion section** of my undergraduate finan
 
 ## CONTEXT: Your Thesis Journey
 
-You've written my entire thesis so far. The Conclusion is the final section where we:
+You've written my entire thesis so far. The Conclusion is the final section where I:
 - Summarize the research question and approach
 - Highlight the three main contributions
 - Emphasize key findings with specific numbers
 - Discuss broader implications
 - End with future research directions
+
+**IMPORTANT: Use first-person singular "I" throughout (not "we").**
+- This is a single-author undergraduate thesis
+- Use: "I investigate", "I find", "I demonstrate"
+- NOT: "We investigate", "We find", "We demonstrate"
 
 ---
 
@@ -56,20 +61,20 @@ Write a cohesive Conclusion section (NOT broken into subsections) that flows thr
 - Preview of findings
 
 **Example opening:**
-> "This thesis investigates whether convolutional neural networks can detect visual price patterns that predict stock returns, particularly during high-information events such as FOMC announcements. By replicating and extending the work of Jiang et al. (2023) to scheduled macro events, we provide evidence that machine learning models can exploit behavioral patterns in financial markets, especially where investor attention is limited."
+> "This thesis investigates whether convolutional neural networks can detect visual price patterns that predict stock returns, particularly during high-information events such as FOMC announcements. By replicating and extending the work of Jiang et al. (2023) to scheduled macro events, I provide evidence that machine learning models can exploit behavioral patterns in financial markets, especially where investor attention is limited."
 
 ---
 
 ### **Paragraph 2-3: Three Main Contributions (With Numbers)**
 
 **Contribution 1: CNN Replication**
-> "First, we successfully replicate the image-based CNN approach of Jiang et al. (2023) on U.S. stocks from 2001 to 2024. Equal-weighted portfolios sorted by CNN predictions achieve 71% annual returns (Sharpe 5.60), while value-weighted portfolios generate 23% (Sharpe 1.54). The monotonic relationship between predicted probabilities and realized returns confirms that CNNs can detect visual patterns with substantial out-of-sample predictive power."
+> "First, I successfully replicate the image-based CNN approach of Jiang et al. (2023) on U.S. stocks from 2001 to 2024. Equal-weighted portfolios sorted by CNN predictions achieve 71% annual returns (Sharpe 5.60), while value-weighted portfolios generate 23% (Sharpe 1.54). The monotonic relationship between predicted probabilities and realized returns confirms that CNNs can detect visual patterns with substantial out-of-sample predictive power."
 
 **Contribution 2: Event-Conditional Performance (Your Main Contribution)**
-> "Second, we extend the CNN framework to 217 Federal Reserve FOMC meetings and find statistically significant high-minus-low spreads on announcement days (0.21%, t=2.95, p<0.01) that strengthen over subsequent weeks (0.35%, t=2.24, p=0.03). This represents the first test of CNN-based predictions around scheduled macro events and demonstrates that visual price patterns are particularly informative when market attention is focused on policy news."
+> "Second, I extend the CNN framework to 217 Federal Reserve FOMC meetings and find statistically significant high-minus-low spreads on announcement days (0.21%, t=2.95, p<0.01) that strengthen over subsequent weeks (0.35%, t=2.24, p=0.03). This represents the first test of CNN-based predictions around scheduled macro events and demonstrates that visual price patterns are particularly informative when market attention is focused on policy news."
 
 **Contribution 3: Behavioral Interpretation**
-> "Third, we provide evidence for a behavioral mechanism. The consistent 3-to-10-fold advantage of equal-weighted over value-weighted portfolios across all tests—overall performance, horizon evaluation, and FOMC windows—indicates CNN patterns are concentrated in smaller-capitalization stocks where attention is limited and arbitrage is constrained. This heterogeneity by firm size supports theories of limited attention and gradual information diffusion rather than fundamental mispricing."
+> "Third, I provide evidence for a behavioral mechanism. The consistent 3-to-10-fold advantage of equal-weighted over value-weighted portfolios across all tests—overall performance, horizon evaluation, and FOMC windows—indicates CNN patterns are concentrated in smaller-capitalization stocks where attention is limited and arbitrage is constrained. This heterogeneity by firm size supports theories of limited attention and gradual information diffusion rather than fundamental mispricing."
 
 ---
 
@@ -81,9 +86,9 @@ Write a cohesive Conclusion section (NOT broken into subsections) that flows thr
 - Policy relevance
 
 **Example:**
-> "Our findings have implications for both practitioners and academics. For investors, the results suggest visual price patterns contain exploitable information, particularly in less-followed stocks around scheduled macro events. However, the 654% turnover and estimated 13% annual transaction costs imply direct replication would be challenging. More practically, investors might adjust existing positions around FOMC meetings to capture enhanced predictability during these windows.
+> "My findings have implications for both practitioners and academics. For investors, the results suggest visual price patterns contain exploitable information, particularly in less-followed stocks around scheduled macro events. However, the 654% turnover and estimated 13% annual transaction costs imply direct replication would be challenging. More practically, investors might adjust existing positions around FOMC meetings to capture enhanced predictability during these windows.
 >
-> For market efficiency, our results reveal heterogeneity: large-cap stocks exhibit little predictability (consistent with strong-form efficiency), while small caps show persistent patterns. This challenges the notion of uniform market efficiency and supports theories of rational limits to arbitrage."
+> For market efficiency, my results reveal heterogeneity: large-cap stocks exhibit little predictability (consistent with strong-form efficiency), while small caps show persistent patterns. This challenges the notion of uniform market efficiency and supports theories of rational limits to arbitrage."
 
 ---
 
@@ -95,7 +100,7 @@ Write a cohesive Conclusion section (NOT broken into subsections) that flows thr
 - Behavioral finance insights
 
 **Example:**
-> "More broadly, this thesis contributes to the growing intersection of machine learning and behavioral finance. By demonstrating that CNNs trained on visual data can predict returns around macro events, we provide evidence that behavioral biases create detectable patterns even in modern, electronically-traded markets. The concentration in small caps and the time profile of effects (strengthening over weeks) suggest these patterns reflect limited investor attention rather than computational constraints, as information processing has become nearly instantaneous."
+> "More broadly, this thesis contributes to the growing intersection of machine learning and behavioral finance. By demonstrating that CNNs trained on visual data can predict returns around macro events, I provide evidence that behavioral biases create detectable patterns even in modern, electronically-traded markets. The concentration in small caps and the time profile of effects (strengthening over weeks) suggest these patterns reflect limited investor attention rather than computational constraints, as information processing has become nearly instantaneous."
 
 ---
 
@@ -106,7 +111,7 @@ Write a cohesive Conclusion section (NOT broken into subsections) that flows thr
 - Keep brief and forward-looking
 
 **Example:**
-> "Several limitations warrant mention. Our transaction cost estimates are approximate, and real-world implementation would face additional frictions. We focus on announcement-day forward windows; testing pre-announcement drift would require higher-frequency predictions. Finally, our sample period includes the rise of algorithmic trading, raising questions about future persistence of these patterns."
+> "Several limitations warrant mention. My transaction cost estimates are approximate, and real-world implementation would face additional frictions. I focus on announcement-day forward windows; testing pre-announcement drift would require higher-frequency predictions. Finally, my sample period includes the rise of algorithmic trading, raising questions about future persistence of these patterns."
 
 ---
 
@@ -130,7 +135,7 @@ Write a cohesive Conclusion section (NOT broken into subsections) that flows thr
 - End on contribution to knowledge
 
 **Example:**
-> "In conclusion, this thesis demonstrates that visual price patterns detected by convolutional neural networks are particularly informative during high-information events, with effects concentrated in markets where attention is limited. By connecting machine learning predictions to behavioral finance mechanisms and scheduled macro events, we provide new evidence that visual information processing by algorithms can reveal persistent patterns in modern financial markets—not because markets are fundamentally inefficient, but because human attention remains bounded even as computational power grows."
+> "In conclusion, this thesis demonstrates that visual price patterns detected by convolutional neural networks are particularly informative during high-information events, with effects concentrated in markets where attention is limited. By connecting machine learning predictions to behavioral finance mechanisms and scheduled macro events, I provide new evidence that visual information processing by algorithms can reveal persistent patterns in modern financial markets—not because markets are fundamentally inefficient, but because human attention remains bounded even as computational power grows."
 
 ---
 

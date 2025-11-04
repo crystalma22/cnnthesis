@@ -14,7 +14,12 @@ I need you to help me write the **Abstract** for my undergraduate finance thesis
 
 **Length:** 150-250 words (typically one paragraph)
 
-**Important:** Write the Abstract LAST (after you've written everything else)
+**Important:** 
+- Write the Abstract LAST (after you've written everything else)
+- **Use first-person singular "I" throughout (not "we")**
+- This is a single-author undergraduate thesis
+- Use: "I investigate", "I find", "I document"
+- NOT: "We investigate", "We find", "We document"
 
 ---
 
@@ -63,11 +68,13 @@ Contribution to knowledge
 
 ---
 
-## EXAMPLE ABSTRACT (Adapt This Style)
+## EXAMPLE ABSTRACT (Adapt This Style - Uses "I")
 
 > "I investigate whether convolutional neural networks (CNNs) trained on stock price charts exhibit enhanced predictive power around Federal Reserve FOMC announcements. Replicating Jiang et al. (2023) on U.S. equities from 2001 to 2024, I find equal-weighted portfolios sorted by CNN predictions achieve 71% annual returns (Sharpe 5.60), while value-weighted portfolios generate 23% (Sharpe 1.54). Extending this framework to 217 FOMC meetings, I document statistically significant high-minus-low spreads on announcement days (0.21%, t=2.95, p<0.01) that strengthen over subsequent weeks (0.35%, t=2.24, p=0.03). The consistent 3-to-10-fold advantage of equal-weighted over value-weighted portfolios across all tests indicates CNN patterns are concentrated in smaller-capitalization stocks where investor attention is limited. These findings provide the first evidence that visual price patterns are particularly informative during scheduled macro events and support behavioral theories of limited attention and gradual information diffusion. The results contribute to understanding how machine learning can exploit behavioral patterns in markets with heterogeneous efficiency."
 
 **Word count:** 172 words ✅
+
+**Note:** Uses "I investigate", "I find", "I document" throughout (single author)
 
 ---
 
