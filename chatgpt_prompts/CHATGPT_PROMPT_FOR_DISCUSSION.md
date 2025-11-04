@@ -27,26 +27,68 @@ You previously wrote my Introduction/Lit Review, Methodology, and Results sectio
 
 ---
 
-## REQUIRED READING
+## REQUIRED READING (Do this in order)
 
-**Before writing, read these from my GitHub repo:**
+### **STEP 1: Read ALL Literature Papers**
 
-1. **Your previous sections:**
-   - Introduction/Lit Review (that you wrote)
-   - Methodology (that you wrote)
-   - Results (that you just wrote)
+**IMPORTANT:** Before writing anything, read ALL the papers in my "Thesis Lit Review Sources" folder on Box. This is critical for making proper comparisons and citations in the Discussion.
 
-2. **My documentation:**
-   - **COMPLETE_STATISTICAL_RESULTS_EXPLAINED.md** - All findings explained
-   - **WHAT_YOU_ACTUALLY_DID_EXPLAINED.md** - Plain English interpretation
-   - **OVERLAP_CONCERN_RESOLVED.md** - Addressing methodological concerns
-   - **FINAL_RESULTS_SUMMARY.md** - Summary of key findings
+**Look for papers about:**
+- Machine learning / CNNs in finance
+- FOMC announcements and market reactions
+- Event studies around scheduled news
+- Technical analysis and price patterns
+- Behavioral finance (limited attention, under-reaction)
+- Small-cap anomalies and market efficiency
+- Gradual information diffusion
 
-3. **Literature papers** in "Thesis Lit Review Sources":
-   - Jiang, Kelly & Xiu (2023) - For CNN discussion
-   - Lucca & Moench (2015) - For FOMC interpretation
-   - Tan, Zhang & Zhou (2023) - For behavioral mechanisms
-   - Hong & Stein (1999) - For gradual diffusion theory
+**While reading, note:**
+- Findings that align with yours (to support your interpretation)
+- Findings that differ from yours (to highlight your contribution)
+- Behavioral mechanisms they propose (to connect to your results)
+- How they structure their Discussion sections (to match their style)
+
+### **STEP 2: Read Your Previous Work**
+
+**Your previous sections:**
+- Introduction/Lit Review (that you wrote)
+- Methodology (that you wrote)
+- Results (that you just wrote)
+
+### **STEP 3: Read My Documentation**
+
+**From my GitHub repo:**
+- **COMPLETE_STATISTICAL_RESULTS_EXPLAINED.md** - All findings explained
+- **WHAT_YOU_ACTUALLY_DID_EXPLAINED.md** - Plain English interpretation
+- **OVERLAP_CONCERN_RESOLVED.md** - Addressing methodological concerns
+- **FINAL_RESULTS_SUMMARY.md** - Summary of key findings
+
+### **STEP 4: Key Papers to Cite**
+
+**From "Thesis Lit Review Sources" folder, these are ESSENTIAL to cite:**
+   
+   **REQUIRED (cite these specifically):**
+   - Jiang, Kelly & Xiu (2023) - CNN approach you replicated
+   - Lucca & Moench (2015) - Pre-FOMC drift
+   - Tan, Zhang & Zhou (2023) - Anomalies on FOMC days
+   - Hong & Stein (1999) - Gradual information diffusion
+   
+   **ALSO READ (for context and additional comparisons):**
+   - Read ALL other papers in the folder
+   - Look for papers on:
+     * Technical analysis and price patterns
+     * Event studies around macro announcements
+     * Limited attention and behavioral biases
+     * Machine learning in asset pricing
+     * Market efficiency and arbitrage
+     * Small-cap vs large-cap anomalies
+   
+   **Use these papers to:**
+   - Support your interpretations
+   - Compare your findings to theirs
+   - Cite relevant findings that align with yours
+   - Show how your work fits into the literature
+   - Find additional behavioral mechanisms to discuss
 
 ---
 
@@ -105,10 +147,36 @@ Write the Discussion section with the following structure:
 > "The strengthening effect from announcement day (0.21%) to the intermediate window (0.35%) is consistent with gradual information diffusion. While large-cap stocks react quickly (or even reverse, -0.28% VW intermediate), small-cap stocks continue to incorporate the macro implications over weeks, creating the largest spreads in the intermediate window."
 
 **3. Comparison to Literature:**
+
+**Use papers from "Thesis Lit Review Sources" folder to make comparisons like:**
 - Lucca & Moench (2015): Pre-FOMC drift in market-wide returns
-- Your contribution: Cross-sectional patterns (CNN H-L) persist AFTER announcement
+  → Your contribution: Cross-sectional patterns (CNN H-L) persist AFTER announcement
+  
 - Tan et al. (2023): Anomalies unchanged on FOMC days
-- Your contribution: CNN patterns STRONGER on FOMC days (especially weeks after)
+  → Your contribution: CNN patterns STRONGER on FOMC days (especially weeks after)
+  
+- Hong & Stein (1999): Gradual information diffusion
+  → Your results: Effects BUILD over time (0.21% → 0.35%)
+  
+**Also compare to papers in the "Thesis Lit Review Sources" folder that relate to:**
+- Event studies around macro news (any FOMC, Fed, monetary policy papers)
+- Technical analysis or price patterns (any chart-based prediction papers)
+- Limited attention and behavioral biases (any attention, under-reaction papers)
+- Small-cap vs large-cap anomalies (any size effect papers)
+- Machine learning in asset pricing (any ML/AI finance papers)
+- Gradual information diffusion (any slow information processing papers)
+- Retail vs institutional trading (any investor composition papers)
+
+**For each relevant paper you find in the folder:**
+1. Note what they found
+2. Explain how your results align OR differ
+3. Use their findings to support or contextualize yours
+4. Cite them properly in text
+
+**Example:**
+> "Our finding that small-cap stocks exhibit stronger CNN predictability aligns with [Author et al., Year]'s evidence that size-related anomalies persist due to limited arbitrage. Similarly, [Other Author, Year] documents that retail-dominated stocks show delayed responses to information, consistent with our intermediate-window results where effects strengthen over weeks."
+
+**The more papers you cite appropriately, the stronger your Discussion!**
 
 ---
 
