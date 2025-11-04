@@ -4,51 +4,88 @@ This folder contains all prompts and templates for writing your thesis with Chat
 
 ---
 
-## 📝 FILES IN THIS FOLDER
+## 📝 FILES IN THIS FOLDER (All Thesis Writing Prompts)
 
 ### **1. CHATGPT_PROMPT_FOR_METHODOLOGY.md**
-**Purpose:** Prompt for writing Data & Methodology sections  
-**Status:** ✅ Used - Methodology section complete  
-**Contains:**
-- Instructions for Data section (4 subsections)
-- Instructions for Methodology section (4 subsections)
-- How to explain CNN for finance audience
-- FOMC window definitions
-- Style guidelines
+**Purpose:** Data & Methodology sections  
+**Status:** ✅ **USED** - Methodology complete  
+**Output:** ~3,000-4,000 words  
 
 ---
 
-### **2. CHATGPT_PROMPT_FOR_RESULTS.md** ⭐ **USE THIS NEXT**
-**Purpose:** Prompt for writing Results section  
-**Status:** ⏳ Ready to use  
-**Contains:**
-- Instructions for 4 results subsections
-- Complete statistical reporting guidelines
-- What to say about each table/figure
-- How to interpret findings
-- Addresses common questions
+### **2. CHATGPT_PROMPT_FOR_RESULTS.md** ⭐ **USE NOW**
+**Purpose:** Results section (4 subsections)  
+**Status:** ⏳ **READY TO USE**  
+**Output:** ~2,500-3,500 words  
+**References:** All 7 tables + 8 figures  
 
 **How to use:**
 1. Tell ChatGPT you finished Methodology
-2. Attach your Introduction/Lit Review (that ChatGPT wrote earlier)
-3. Paste the entire prompt from this file
-4. ChatGPT writes Results section (~2,500-3,500 words)
+2. Give it files to read (COMPLETE_STATISTICAL_RESULTS_EXPLAINED.md, etc.)
+3. Paste entire prompt
+4. ChatGPT writes with [INSERT X] markers
+5. You insert tables/figures
 
 ---
 
 ### **3. RESULTS_SECTION_TEMPLATE_WITH_FIGURES.md**
-**Purpose:** Shows exactly where to place each table and figure  
-**Status:** ⏳ Use alongside prompt #2  
-**Contains:**
-- Template structure with [INSERT X] markers
-- File paths for all tables and figures
-- Pre-written captions
-- Instructions for Word and LaTeX
+**Purpose:** Shows where to place tables/figures  
+**Status:** ⏳ Use with prompt #2  
+**Contains:** Template with [INSERT X] markers, file paths, captions
 
-**How to use:**
-- Reference this while ChatGPT writes Results
-- ChatGPT will include [INSERT TABLE X] markers
-- You insert the actual files from `~/Desktop/Thesis_Results/thesis_output/`
+---
+
+### **4. CHATGPT_PROMPT_FOR_DISCUSSION.md** ⭐ **USE AFTER RESULTS**
+**Purpose:** Discussion section  
+**Status:** ✅ **READY**  
+**Output:** ~2,000-3,000 words  
+
+**What ChatGPT will write:**
+- 6.1 Interpretation of Main Findings
+- 6.2 Why FOMC Events Matter
+- 6.3 Practical Implications  
+- 6.4 Limitations and Future Research
+
+**When:** After Results section complete
+
+---
+
+### **5. CHATGPT_PROMPT_FOR_CONCLUSION.md** ⭐ **USE AFTER DISCUSSION**
+**Purpose:** Conclusion section  
+**Status:** ✅ **READY**  
+**Output:** ~800-1,200 words (one cohesive section)
+
+**What ChatGPT will write:**
+- Restate research question
+- Summarize three contributions (with numbers)
+- Practical implications
+- Future research
+- Strong closing statement
+
+**When:** After Discussion section complete
+
+---
+
+### **6. CHATGPT_PROMPT_FOR_ABSTRACT.md** ⭐ **USE LAST**
+**Purpose:** Abstract  
+**Status:** ✅ **READY**  
+**Output:** 150-250 words (one paragraph)
+
+**What ChatGPT will write:**
+- Research question
+- Method
+- Key findings (with numbers)
+- Interpretation
+- Contribution
+
+**When:** After ENTIRE thesis complete (write Abstract last!)
+
+---
+
+### **7. QUICK_START_RESULTS.md**
+**Purpose:** Detailed step-by-step for Results section  
+**Status:** Reference guide  
+**Contains:** Checklist, expected output, verification steps
 
 ---
 
