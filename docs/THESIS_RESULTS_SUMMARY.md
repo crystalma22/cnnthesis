@@ -11,21 +11,28 @@
 
 This thesis makes three primary contributions to the literature on machine learning in asset pricing:
 
-### 1. CNN Replication (Jiang et al. 2023) ✅
+### 1. CNN Replication (Jiang et al. 2023) 
 - Successfully replicate image-based CNN for US stocks (2001-2024)
 - **Result:** 71% EW annual return (Sharpe 5.60), 23% VW (Sharpe 1.54)
 - Confirms CNN can detect visual price patterns that predict returns
+- what is the holding period of the portfolio and is it stagnant or have a lot of movement
+- are the weekly returns based on an actually implmeneted portfolio or how is it calculated?
+- 
 
-### 2. Event-Conditioned Performance Analysis ✅
+### 2. Event-Conditioned Performance Analysis 
 - Extend CNN to Federal Reserve FOMC meetings (217 events, 2001-2024)
 - **Result:** Significant H-L spreads on announcement days (0.21%, t=2.95***)
-- Shows CNN predictions are particularly informative during macro events
+- **FOMC vs Non-FOMC Comparison:** Mixed evidence for limited attention
+  - Short-term (+1d): Non-FOMC (0.87%) > FOMC (0.58%) → Supports limited attention
+  - Long-term (+10d): FOMC (2.01%) > Non-FOMC (1.37%) → Information diffusion effect
+- 
 
-### 3. Behavioral Interpretation ✅
+### 3. Behavioral Interpretation 
 - Test small-cap (EW) vs large-cap (VW) patterns
 - **Result:** EW effects 3-10x larger than VW across all tests
 - Consistent with limited attention hypothesis (patterns persist where arbitrage is limited)
-
+- Interpretation: more costly to pay attention to small caps than large caps --> results should then be stronger in small caps
+- Rec: from wrds and ibes and get analyst coverage for every company (infer that companies not othere will have 0 analyst coverage)
 ---
 
 ## 📊 Results Overview
@@ -54,7 +61,7 @@ Tests predictive power at different return horizons:
 |--------|---------------|------------|--------------|
 | Low    | -28.08%       | 18.07%     | -1.55        |
 | 2      | -2.20%        | 19.52%     | -0.11        |
-| 3      | 5.75%         | 19.94%     | 0.29         |
+| 3      | 5.75%         | 19.94%     | 0.29         | Concave relationship
 | 4      | 10.63%        | 20.02%     | 0.53         |
 | 5      | 12.25%        | 19.98%     | 0.61         |
 | 6      | 15.25%        | 20.04%     | 0.76         |
@@ -91,6 +98,7 @@ Tests predictive power at different return horizons:
 2. **VW portfolios show weaker but still significant power:** H-L spread of 22.69% with Sharpe ratio of 1.54
 3. **Effect concentrated in small-caps:** EW outperforms VW by 3x (consistent with market efficiency - large stocks already capture most of the signal)
 4. **Monotonic relationship:** Returns increase smoothly across deciles (no jumps)
+- test this! gillen will ask
 
 ---
 
@@ -112,6 +120,7 @@ Tests predictive power at different return horizons:
 - **Announcement Day (t):** Return on the day Fed releases decision
 - **Reaction (t+1):** Return on next trading day
 - **Intermediate (t+5 to t+20):** Cumulative return 5-20 days after announcement
+- should compare to 200 randomly selected days
 
 **Note on Pre-FOMC Analysis:**
 We focus on announcement-day and post-announcement windows. Pre-announcement drift analysis (Lucca & Moench 2015) would require predictions made before day t-1, which limits sample size, so we focus on windows where prediction-event alignment is unambiguous.
@@ -162,13 +171,32 @@ We focus on announcement-day and post-announcement windows. Pre-announcement dri
 
 ## 🎯 Current Status & Next Steps
 
-### ✅ ANALYSIS COMPLETE:
+### ✅ ANALYSIS COMPLETE & VALIDATED (November 5, 2025):
 1. ✅ CNN model trained and validated (2001-2024)
 2. ✅ Horizon evaluation complete (1d, 3d, 10d)
 3. ✅ Portfolio performance computed (EW/VW deciles)
 4. ✅ FOMC event study complete (217 meetings)
 5. ✅ Statistical significance tests complete (t-stats, p-values)
-6. ✅ All results files generated and saved
+6. ✅ **Outlier analysis complete - results are ROBUST!**
+7. ✅ All results files generated and saved
+
+### ✅ ROBUSTNESS CHECKS (November 5, 2025):
+
+**Announcement Day (0.21%***):**
+- Mean = 0.208%, Median = 0.205% (nearly identical!) ✅
+- Winsorized means within 0.03% of raw mean ✅
+- Dropping top/bottom 5 events changes mean by only 2.0% ✅
+- **CONCLUSION: ROBUST - not driven by outliers**
+
+**Intermediate Window (0.35%**):**
+- Mean = 0.350%, Median = 0.339% (very close) ✅
+- Dropping extremes changes mean by only 12.4% ✅
+- **CONCLUSION: ROBUST**
+
+**Reaction Window (0.10%*):**
+- Mean = 0.097%, Median = 0.143%
+- Dropping extremes changes mean by 38.9% ⚠️
+- **CONCLUSION: FRAGILE - sensitive to outliers, de-emphasize**
 
 ### 📝 THESIS WRITING (Use ChatGPT Agent):
 1. ⏳ **Data & Methodology sections** - In progress with ChatGPT
@@ -190,6 +218,36 @@ scp -r laguna:~/cnnthesis/CACHE_DIR/PORTFOLIO ~/Desktop/Thesis_Results/
 
 # Horizon evaluation
 scp laguna:~/cnnthesis/CACHE_DIR/horizon_eval.csv ~/Desktop/Thesis_Results/
+
+
+COMMENTS:
+### Portfolio Construction Details:
+- **Holding period:** 1 week (rebalanced weekly based on new predictions)
+- **Returns:** Backtested simulation (not actual trading), gross of transaction costs
+- **Turnover:** High due to weekly rebalancing (typical for short-horizon strategies)
+
+### Interpretation of FOMC Results:
+- **0.21% announcement-day effect ≈ average daily effect** (70% annual ÷ 252 days ≈ 0.28% per day)
+- **Short-term:** Limited attention reduces immediate predictability on high-attention days
+- **Long-term:** FOMC events create information diffusion patterns CNN can exploit
+- **Small-cap concentration:** EW >> VW across all horizons (3-10x larger spreads)
 ```
 
+### FOMC vs Non-FOMC Comparison (November 5, 2025):
 
+**⚠️ METHODOLOGICAL ISSUES IDENTIFIED - PENDING VALIDATION**
+
+**Preliminary Results (DO NOT USE UNTIL VALIDATED):**
+- +1 day: FOMC 0.58% vs Non-FOMC 0.87%
+- +3 days: FOMC 2.06% vs Non-FOMC 1.11%
+- +10 days: FOMC 2.01% vs Non-FOMC 1.37%
+
+**Issues Found:**
+1. ❌ Contaminated baseline: "Normal" includes t+1 to t+10 after FOMC
+2. ❌ Inconsistent windows: Measured from prediction for FOMC (includes event) vs clean for normal
+3. ❌ No proper statistical tests: Sample size imbalance (20K vs 8.9M)
+4. ❌ VW results nonsensical (-3.14% → +1.25% → -0.95%)
+
+**Proper Analysis:** Event-level with matched sampling running on compute cluster
+
+**Until validated:** Focus thesis on robust findings (0.21%*** announcement, 0.35%** intermediate)
