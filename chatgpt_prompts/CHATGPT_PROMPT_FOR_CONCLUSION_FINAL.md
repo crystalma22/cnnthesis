@@ -90,8 +90,11 @@ Write Section 7: Conclusion (~1,000-1,200 words) with these subsections:
 - Match my lit review's academic tone
 - Use transitional phrases
 - Write flowing paragraphs (not bullet points)
+- Cite papers using conventional academic format (e.g., Hirshleifer and Sheng (2021); Jiang, Kelly and Xiu (2023)); avoid internal trace codes like `[49358239750644†L34-L41]`
 - Connect opening and closing (circular structure)
 - End on forward-looking note
+- Conclude with a **Works Cited** section listing every source referenced (include all papers drawn from the Box folder as needed)
+- Maintain a **first-person singular** voice throughout (use “I”, “me”, “my”)
 
 ---
 

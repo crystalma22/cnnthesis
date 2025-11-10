@@ -272,6 +272,19 @@
 
 ---
 
+## 📁 ChatGPT Prompt Library (Working Set)
+
+| Order | File | Purpose | Time | Notes |
+|-------|------|---------|------|-------|
+| 0 | `chatgpt_prompts/CHATGPT_PROMPT_FOR_METHODOLOGY_FINAL.md` | Section 3 Methodology (code-backed rewrite) | 2-3 hrs | Uses `replication-edited` branch scripts; describes event-level design and validation |
+| 1 | `chatgpt_prompts/CHATGPT_PROMPT_FOR_INTRO_LIT_REWRITE.md` | Edit Intro + Literature Review | 2-3 hrs | Requires Box papers; adds Section 2.4 predictions |
+| 2 | `chatgpt_prompts/CHATGPT_PROMPT_FOR_RESULTS_FINAL.md` | Section 5 Results | 2-3 hrs | Presents FOMC vs matched findings |
+| 3 | `chatgpt_prompts/CHATGPT_PROMPT_FOR_DISCUSSION_FINAL.md` | Section 6 Discussion | 2-3 hrs | Interprets attention-efficiency mechanism |
+| 4 | `chatgpt_prompts/CHATGPT_PROMPT_FOR_CONCLUSION_FINAL.md` | Section 7 Conclusion | 30 min | Summarizes contributions |
+| 5 | `chatgpt_prompts/CHATGPT_PROMPT_FOR_ABSTRACT_FINAL.md` | Abstract | 20 min | One-paragraph summary |
+
+---
+
 **END OF MASTER GUIDE**
 
 For detailed questions, see `PROFESSOR_QUESTIONS_ANSWERED_EXPANDED.md`  

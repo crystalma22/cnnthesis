@@ -268,3 +268,4 @@ If β₂ < 0, confirms CNN works better for small caps.
 
 **File saved! Use this to understand and explain the EW vs VW interpretation.** 📊
 
+

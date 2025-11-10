@@ -19,6 +19,7 @@ Does CNN-based return predictability vary between FOMC announcement weeks and no
 - 216 FOMC events (2001-2024)
 - Event-level analysis with matched controls (same month, day-of-week, volatility)
 - Test across 10 horizons with FDR correction
+- Cross-reference `ANALYTIC_SUMMARY_TABLES_FIGURES.md` for detailed descriptions of each table/figure referenced in the abstract
 
 **Main Finding:**
 - CNN High-Low spreads 0.78pp LOWER on FOMC weeks (t = -11.90, p < 0.001)
@@ -70,7 +71,9 @@ Does CNN-based return predictability vary between FOMC announcement weeks and no
 - Match my lit review's academic tone
 - Dense, information-packed (every sentence counts)
 - Use active voice where possible
-- Include citation placeholders [X] where needed
+- If you reference literature, use standard academic citations (e.g., Hirshleifer and Sheng (2021)); do not include internal trace markers such as `[49358239750644†L34-L41]`
+- Finish the response with a **Works Cited** section listing every source referenced (include Box folder papers if used)
+- Write in the **first person singular** (use “I”, “me”, “my”) to match the single-author thesis voice
 
 ---
 

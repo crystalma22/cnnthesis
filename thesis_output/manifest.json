@@ -1,0 +1,24 @@
+{
+  "tables": [
+    "table10_decile_regimes.tex",
+    "table11_architecture_robustness.tex",
+    "table1_sample_statistics.tex",
+    "table2_horizon_evaluation.tex",
+    "table3_portfolio_ew.tex",
+    "table4_portfolio_vw.tex",
+    "table5_fomc_event_study.tex",
+    "table6_fomc_vs_matched.tex",
+    "table7_ew_vs_vw_summary.tex",
+    "table8_size_sorted.tex",
+    "table9_fomc_timeline.tex"
+  ],
+  "figures": [
+    "figure1_fomc_timeline.png",
+    "figure2_decile_performance.png",
+    "figure3_horizon_evaluation.png",
+    "figure4_fomc_event_study.png",
+    "figure5_fomc_vs_matched.png",
+    "figure6_ew_vw_ratios.png",
+    "figure7_attention_timeline.png"
+  ]
+}
