@@ -5,7 +5,7 @@
 
 ---
 
-## 📁 ROOT DIRECTORY (5 files - START HERE)
+##  ROOT DIRECTORY (5 files - START HERE)
 
 ### 1. **⭐_THESIS_MASTER_GUIDE.md** ← START HERE!
 **What:** Complete overview of your thesis
@@ -66,7 +66,7 @@
 
 ---
 
-## 📝 CHATGPT_PROMPTS/ (5 files - For Writing)
+##  CHATGPT_PROMPTS/ (5 files - For Writing)
 
 **Use these to write each thesis section with ChatGPT:**
 
@@ -99,7 +99,7 @@
 
 ---
 
-## 📚 DOCS/ (3 files - Reference)
+##  DOCS/ (3 files - Reference)
 
 ### 1. **docs/COMPLETE_THESIS_GUIDE_FOR_WRITING.md**
 **What:** Comprehensive thesis writing guide
@@ -131,7 +131,7 @@
 
 ---
 
-## 📊 REFERENCE (2 files)
+##  REFERENCE (2 files)
 
 ### 1. **FIGURES_AND_TABLES_REFERENCE.md**
 **What:** What tables/figures to include and how to explain them
@@ -151,7 +151,7 @@
 
 ---
 
-## 🎯 HOW TO USE THIS SYSTEM
+##  HOW TO USE THIS SYSTEM
 
 ### For Writing Thesis:
 
@@ -184,7 +184,7 @@
 
 ---
 
-## ✅ FINAL FILE COUNT
+##  FINAL FILE COUNT
 
 **Total:** 15 essential .md files (from 62!)
 
@@ -197,7 +197,7 @@
 
 ---
 
-**DONE! Your repo is now clean and organized.** 🎉
+**DONE! Your repo is now clean and organized.** 
 
 For any questions, START with ⭐_THESIS_MASTER_GUIDE.md
 

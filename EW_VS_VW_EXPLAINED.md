@@ -6,7 +6,7 @@
 
 ---
 
-## 🔢 **THE MATH: How Weighting Works**
+##  **THE MATH: How Weighting Works**
 
 ### **Equal-Weight (EW)**
 ```
@@ -38,7 +38,7 @@ Same example:
 
 ---
 
-## 🎯 **THE LOGIC: Why EW > VW Suggests Small-Cap Effect**
+##  **THE LOGIC: Why EW > VW Suggests Small-Cap Effect**
 
 ### **Step 1: Your Results**
 ```
@@ -67,7 +67,7 @@ VW over-weights large stocks → 22.69% H-L
 
 ---
 
-## 📊 **VISUALIZING THE LOGIC**
+##  **VISUALIZING THE LOGIC**
 
 ### **Hypothetical Example: 3 Stocks**
 
@@ -98,7 +98,7 @@ VW over-weights large stocks → 22.69% H-L
 
 ---
 
-## ❓ **WHY NOT JUST SPLIT BY MARKET CAP DIRECTLY?**
+##  **WHY NOT JUST SPLIT BY MARKET CAP DIRECTLY?**
 
 **Good question!** You could do that, and it would be more direct. But EW vs VW is a **standard approach** in finance because:
 
@@ -123,7 +123,7 @@ This would be **more direct**, but:
 
 ---
 
-## 📚 **ACADEMIC PRECEDENT**
+##  **ACADEMIC PRECEDENT**
 
 This interpretation (EW > VW → small-cap effect) is standard in finance:
 
@@ -147,7 +147,7 @@ This interpretation (EW > VW → small-cap effect) is standard in finance:
 
 ---
 
-## 🎓 **FOR YOUR THESIS: What to Write**
+##  **FOR YOUR THESIS: What to Write**
 
 ### **Option 1: Direct Statement (Standard)**
 > "The substantially larger equal-weighted spreads (70.74%) compared to value-weighted spreads (22.69%) indicate the CNN's predictive power is concentrated in smaller-capitalization stocks."
@@ -160,24 +160,24 @@ This interpretation (EW > VW → small-cap effect) is standard in finance:
 
 ---
 
-## ⚠️ **IMPORTANT CAVEATS**
+## ️ **IMPORTANT CAVEATS**
 
 ### **What You CAN Say:**
-✅ "EW > VW suggests small-cap concentration"  
-✅ "The effect appears stronger in smaller stocks"  
-✅ "Consistent with limited arbitrage in small caps"  
+ "EW > VW suggests small-cap concentration"  
+ "The effect appears stronger in smaller stocks"  
+ "Consistent with limited arbitrage in small caps"  
 
 ### **What You CANNOT Say:**
-❌ "We directly tested small vs large caps" (you didn't split by size)  
-❌ "Only small caps show the effect" (VW is still positive!)  
-❌ "Large caps have zero effect" (22.69% is still meaningful)
+ "We directly tested small vs large caps" (you didn't split by size)  
+ "Only small caps show the effect" (VW is still positive!)  
+ "Large caps have zero effect" (22.69% is still meaningful)
 
 ### **Nuanced Version:**
-✅ "The CNN signal appears most powerful in smaller stocks (as evidenced by EW > VW), though the positive value-weighted spread (22.69%, Sharpe 1.54) indicates the effect exists across the market-cap spectrum, albeit with diminishing strength for larger firms."
+ "The CNN signal appears most powerful in smaller stocks (as evidenced by EW > VW), though the positive value-weighted spread (22.69%, Sharpe 1.54) indicates the effect exists across the market-cap spectrum, albeit with diminishing strength for larger firms."
 
 ---
 
-## 🔍 **COULD YOU TEST THIS MORE DIRECTLY?**
+##  **COULD YOU TEST THIS MORE DIRECTLY?**
 
 **Yes! For robustness, you could:**
 
@@ -207,7 +207,7 @@ If β₂ < 0, confirms CNN works better for small caps.
 
 ---
 
-## 📊 **YOUR ACTUAL RESULTS: What They Mean**
+##  **YOUR ACTUAL RESULTS: What They Mean**
 
 ### **Overall Portfolio:**
 - EW: 70.74% (small-cap dominated)
@@ -232,7 +232,7 @@ If β₂ < 0, confirms CNN works better for small caps.
 
 ---
 
-## ✅ **BOTTOM LINE**
+##  **BOTTOM LINE**
 
 ### **Your Original Question:**
 > "Is EW vs VW necessarily pointing to small vs large cap? I'm confused where that came from?"
@@ -254,7 +254,7 @@ If β₂ < 0, confirms CNN works better for small caps.
 
 ---
 
-## 🎯 **DEFENSE Q&A**
+##  **DEFENSE Q&A**
 
 **Q:** "How do you know it's a small-cap effect? Did you split by size?"
 
@@ -266,6 +266,6 @@ If β₂ < 0, confirms CNN works better for small caps.
 
 ---
 
-**File saved! Use this to understand and explain the EW vs VW interpretation.** 📊
+**File saved! Use this to understand and explain the EW vs VW interpretation.** 
 
 

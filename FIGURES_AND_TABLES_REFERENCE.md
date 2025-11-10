@@ -4,7 +4,7 @@
 
 ---
 
-## 📊 Tables (11 total)
+##  Tables (11 total)
 
 ### Table 1 – Sample Statistics `[TABLE 1 ABOUT HERE]`
 - **Content:** Out-of-sample period (2001–2024), number of unique stocks (22,480), weekly prediction dates (1,211), FOMC meetings with signals (216), CNN architecture summary (20-day lookback, 5-day horizon, 5-model ensemble).
@@ -63,7 +63,7 @@
 
 ---
 
-## 📈 Figures (7 total)
+##  Figures (7 total)
 
 ### Figure 1 – FOMC Timeline `[FIGURE 1 ABOUT HERE]`
 - **Use:** Methodology 3.4 to demonstrate no look-ahead; reference again in Discussion 6.2.
@@ -95,7 +95,7 @@
 
 ---
 
-## 🧭 Placement Cheat Sheet
+##  Placement Cheat Sheet
 
 | Location | Exhibits to Insert | Notes |
 |----------|-------------------|-------|
@@ -111,7 +111,7 @@ Remember to drop each placeholder on its own line immediately after the paragrap
 
 ---
 
-## ✍️ Writing Reminders
+## ️ Writing Reminders
 - Discuss the exhibit before presenting the placeholder (“As shown in Table 6…” then add `[TABLE 6 ABOUT HERE]`).
 - When referencing numbers, mirror the exact values shown in **`VALIDATED_RESULTS.md`** and **`ANALYTIC_SUMMARY_TABLES_FIGURES.md`** so everything stays consistent.
 - Update the Works Cited section in each chapter whenever a new paper is mentioned in relation to an exhibit.

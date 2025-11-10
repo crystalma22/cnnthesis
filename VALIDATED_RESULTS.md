@@ -1,11 +1,11 @@
-# ✅ ALL VALIDATED RESULTS (November 6, 2025)
+#  ALL VALIDATED RESULTS (November 6, 2025)
 
 **Status:** All analyses complete, outlier-checked, robust  
 **Ready for:** Thesis writing
 
 ---
 
-## 📊 RESULT 1: CNN Replication
+##  RESULT 1: CNN Replication
 
 **Portfolio Performance (2001-2024):**
 
@@ -29,7 +29,7 @@
 
 ---
 
-## 📊 RESULT 2: Horizon Evaluation
+##  RESULT 2: Horizon Evaluation
 
 | Horizon | EW H-L | VW H-L |
 |---------|--------|--------|
@@ -42,21 +42,21 @@
 
 ---
 
-## 📊 RESULT 3: FOMC Event Study
+##  RESULT 3: FOMC Event Study
 
 **Three Windows (N=217 events, 2001-2024):**
 
 | Window | EW H-L | t-stat | p-value | Mean | Median | Robust? |
 |--------|--------|--------|---------|------|--------|---------|
-| **Announcement (t)** | **0.21%** | **2.95** | **0.004***| 0.208% | 0.205% | ✅ YES (2.0% change) |
-| Reaction (t+1) | 0.10% | 1.76 | 0.079* | 0.097% | 0.143% | ⚠️ NO (38.9% change) |
-| **Intermediate (t+5→t+20)** | **0.35%** | **2.24** | **0.026**| 0.350% | 0.339% | ✅ YES (12.4% change) |
+| **Announcement (t)** | **0.21%** | **2.95** | **0.004***| 0.208% | 0.205% |  YES (2.0% change) |
+| Reaction (t+1) | 0.10% | 1.76 | 0.079* | 0.097% | 0.143% | ️ NO (38.9% change) |
+| **Intermediate (t+5→t+20)** | **0.35%** | **2.24** | **0.026**| 0.350% | 0.339% |  YES (12.4% change) |
 
 **Use:** Announcement & Intermediate with confidence. De-emphasize Reaction (fragile).
 
 ---
 
-## 📊 RESULT 4: FOMC vs Matched Non-FOMC Comparison
+##  RESULT 4: FOMC vs Matched Non-FOMC Comparison
 
 **Methodology:** Event-level aggregation, matched by month, exclude ±10 days around any FOMC
 
@@ -81,7 +81,7 @@
 
 ---
 
-## 📊 RESULT 5: Small-Cap Concentration
+##  RESULT 5: Small-Cap Concentration
 
 **EW/VW Ratios Across All Tests:**
 
@@ -97,7 +97,7 @@
 
 ---
 
-## 📊 RESULT 6: Size-Sorted Predictability (Table 8)
+##  RESULT 6: Size-Sorted Predictability (Table 8)
 
 | Size Quintile | EW H-L | VW H-L | Weeks Used |
 |---------------|--------|--------|------------|
@@ -113,7 +113,7 @@
 
 ---
 
-## 📊 RESULT 7: FOMC Timeline Decomposition (Table 9)
+##  RESULT 7: FOMC Timeline Decomposition (Table 9)
 
 | Window | EW H-L | EW t | EW p | VW H-L | VW t | VW p | Events |
 |--------|--------|------|------|--------|------|------|--------|
@@ -126,7 +126,7 @@
 
 ---
 
-## 📊 RESULT 8: Decile Returns by Regime (Table 10)
+##  RESULT 8: Decile Returns by Regime (Table 10)
 
 - FOMC-week H–L (EW) = 1.61% vs matched-week H–L (EW) = 1.79% → −0.18 pp.
 - For individual deciles, both long and short legs move toward zero during FOMC weeks (e.g., Decile 1 improves from −1.10% to −0.88%; Decile 10 softens from 0.69% to 0.73%).
@@ -136,7 +136,7 @@
 
 ---
 
-## 📊 RESULT 9: Architecture Robustness (Table 11)
+##  RESULT 9: Architecture Robustness (Table 11)
 
 | Model   | Input Window | Return Horizon | EW H-L | VW H-L |
 |---------|--------------|----------------|--------|--------|
@@ -151,7 +151,7 @@
 
 ---
 
-## 🎯 THESIS STRUCTURE (Recommended)
+##  THESIS STRUCTURE (Recommended)
 
 ### 5. RESULTS
 
@@ -214,7 +214,7 @@
 
 ---
 
-## 📖 KEY CITATIONS
+##  KEY CITATIONS
 
 **Methods:**
 - Jiang, Kelly & Xiu (2023) - CNN replication
@@ -236,7 +236,7 @@
 
 ---
 
-## 🎓 ABSTRACT (Draft)
+##  ABSTRACT (Draft)
 
 > I replicate Jiang, Kelly & Xiu (2023)'s convolutional neural network approach for stock return prediction and extend it to Federal Reserve FOMC announcements. Confirming their findings, equal-weighted portfolios earn 70.74% annually (Sharpe 5.60) from 2001-2024, while value-weighted earn 22.69% (Sharpe 1.54).
 >

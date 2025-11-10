@@ -1,11 +1,11 @@
 # ⭐ THESIS MASTER GUIDE - Everything You Need
 
 **Last Updated:** November 6, 2025  
-**Status:** ✅ ALL ANALYSIS VALIDATED - READY TO WRITE
+**Status:**  ALL ANALYSIS VALIDATED - READY TO WRITE
 
 ---
 
-## 🎯 QUICK START (Read in 5 minutes)
+##  QUICK START (Read in 5 minutes)
 
 ### Your Thesis in One Sentence:
 > "I replicate CNN stock prediction (Jiang et al. 2023), extend it to FOMC events, and find significant cross-sectional predictability on announcement days (0.21%***) that's concentrated in small caps and LOWER during high-attention periods compared to normal days."
@@ -16,17 +16,17 @@
 3. **Attention Mechanism:** Showed predictability is LOWER on FOMC vs matched normal days (all horizons, t=-11.90 to -4.17***)
 
 ### What's Validated (Use with Confidence):
-✅ Portfolio: 71% EW, 23% VW  
-✅ Horizons: 0.87% → 1.37%  
-✅ FOMC Announcement: 0.21%*** (ROBUST to outliers)  
-✅ FOMC Intermediate: 0.35%** (ROBUST to outliers)  
-✅ **FOMC vs Normal: Uniformly lower on FOMC (proper event-level analysis, t=-11.90 to -4.17***)**  
-✅ Small-cap: EW/VW = 3-10× everywhere  
-✅ Monotonicity: Perfect (ρ=1.00, p<0.001)
+ Portfolio: 71% EW, 23% VW  
+ Horizons: 0.87% → 1.37%  
+ FOMC Announcement: 0.21%*** (ROBUST to outliers)  
+ FOMC Intermediate: 0.35%** (ROBUST to outliers)  
+ **FOMC vs Normal: Uniformly lower on FOMC (proper event-level analysis, t=-11.90 to -4.17***)**  
+ Small-cap: EW/VW = 3-10× everywhere  
+ Monotonicity: Perfect (ρ=1.00, p<0.001)
 
 ---
 
-## 📊 VALIDATED RESULTS (Use These Numbers)
+##  VALIDATED RESULTS (Use These Numbers)
 
 ### 1. CNN Replication (2001-2024)
 
@@ -61,9 +61,9 @@
 
 | Window | EW H-L | VW H-L | t-stat | p-value | Robustness |
 |--------|--------|--------|--------|---------|------------|
-| Announcement (t) | 0.21% | 0.05% | 2.95 | 0.004*** | ✅ ROBUST (Mean≈Median, 2.0% change) |
-| Reaction (t+1) | 0.10% | 0.03% | 1.76 | 0.079* | ⚠️ FRAGILE (38.9% change) |
-| Intermediate (t+5→t+20) | 0.35% | -0.28% | 2.24 | 0.026** | ✅ ROBUST (12.4% change) |
+| Announcement (t) | 0.21% | 0.05% | 2.95 | 0.004*** |  ROBUST (Mean≈Median, 2.0% change) |
+| Reaction (t+1) | 0.10% | 0.03% | 1.76 | 0.079* | ️ FRAGILE (38.9% change) |
+| Intermediate (t+5→t+20) | 0.35% | -0.28% | 2.24 | 0.026** |  ROBUST (12.4% change) |
 
 ---
 
@@ -85,7 +85,7 @@
 
 ---
 
-## 🎓 YOUR THESIS NARRATIVE (Final Version)
+##  YOUR THESIS NARRATIVE (Final Version)
 
 ### The Research Question:
 > "Do CNN predictions work during high-information macro events like FOMC announcements, and does their performance vary with market attention?"
@@ -101,7 +101,7 @@
 
 ---
 
-## 📝 HOW TO WRITE YOUR THESIS
+##  HOW TO WRITE YOUR THESIS
 
 ### Use These ChatGPT Prompts (In Order):
 
@@ -120,7 +120,7 @@
 
 ---
 
-## 📊 TABLES & FIGURES NEEDED
+##  TABLES & FIGURES NEEDED
 
 **See:** `FIGURES_AND_TABLES_REFERENCE.md` (consolidated guide)
 
@@ -143,7 +143,7 @@
 
 ---
 
-## 💬 PROFESSOR MEETING PREP
+##  PROFESSOR MEETING PREP
 
 **See:** `PROFESSOR_QUESTIONS_ANSWERED_EXPANDED.md` for detailed Q&A
 
@@ -160,7 +160,7 @@
 
 ---
 
-## 🔬 TECHNICAL DETAILS
+##  TECHNICAL DETAILS
 
 ### Temporal Ordering (No Overlap):
 - CNN input: Past 20 days from prediction date
@@ -182,7 +182,7 @@
 
 ---
 
-## 📚 FILES TO REFERENCE
+##  FILES TO REFERENCE
 
 **For Writing:**
 - This file (master overview)
@@ -202,7 +202,7 @@
 
 ---
 
-## ✅ WHAT'S DIFFERENT FROM EARLIER TODAY
+##  WHAT'S DIFFERENT FROM EARLIER TODAY
 
 **This Morning:** You had preliminary comparison showing "mixed" pattern (FOMC lower at short horizons, higher at long)
 
@@ -220,7 +220,7 @@
 
 ---
 
-## 🎓 YOUR COMPLETE THESIS CONTRIBUTIONS
+##  YOUR COMPLETE THESIS CONTRIBUTIONS
 
 **Contribution 1: Successful Replication**
 - Validates Jiang et al. (2023) through 2024
@@ -253,11 +253,11 @@
 - Day 4: Write Conclusion & Abstract
 - Day 5: Proofread, finalize tables/figures
 
-**You have everything validated. Just execute!** 🚀
+**You have everything validated. Just execute!** 
 
 ---
 
-## 📁 DATA FILES (All on laguna)
+##  DATA FILES (All on laguna)
 
 **Main Results:**
 - `CACHE_DIR/fomc/event_level_summary.csv` ← Proper comparison results
@@ -272,7 +272,7 @@
 
 ---
 
-## 📁 ChatGPT Prompt Library (Working Set)
+##  ChatGPT Prompt Library (Working Set)
 
 | Order | File | Purpose | Time | Notes |
 |-------|------|---------|------|-------|

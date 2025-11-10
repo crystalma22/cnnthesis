@@ -1,11 +1,11 @@
-# ✅ Repository Consolidation Snapshot (November 2025)
+#  Repository Consolidation Snapshot (November 2025)
 
 **Before cleanup:** 62 Markdown files (duplicated narratives, stale notes).  
 **After cleanup:** 18 Markdown files that cover everything I need to finish the thesis.
 
 ---
 
-## 📁 Essential Files (Read in This Order)
+##  Essential Files (Read in This Order)
 
 ### Orientation
 1. **`⭐⭐⭐_START_HERE.md`** – 30-second reminder of the thesis story and immediate next steps.
@@ -33,7 +33,7 @@
 
 ---
 
-## 🗑️ What Was Removed (and Why)
+## ️ What Was Removed (and Why)
 - Duplicate status dashboards (multiple “START_HERE”, “EVERYTHING_READY”, etc.).
 - Outdated prompt drafts (only `*_FINAL.md` kept).
 - Legacy methodology notes superseded by the new workflow documents.
@@ -43,7 +43,7 @@ If you ever need an older version, recover it from Git history; nothing critical
 
 ---
 
-## ✅ Validation Recap (Still True)
+##  Validation Recap (Still True)
 - **Replication:** EW 70.74%, VW 22.69%, monotonic deciles.
 - **Horizon momentum:** 0.87% → 1.37% (EW grows with horizon).
 - **Event study:** 0.21%*** (announcement), 0.35%** (intermediate).
@@ -55,7 +55,7 @@ Everything is scripted (`generate_updated_tables_and_figures.py`). Re-run once i
 
 ---
 
-## 🎯 Next Action Checklist
+##  Next Action Checklist
 1. Re-read `⭐_THESIS_MASTER_GUIDE.md` for the storyline.
 2. Use the writing prompts (Intro → Methodology → Results → Discussion → Conclusion → Abstract).
 3. Drop table/figure placeholders (`[TABLE X ABOUT HERE]`) as prescribed in the prompts and reference file.
