@@ -1,0 +1,156 @@
+% ============================================================================
+% TABLE TEMPLATES - Finance/Economics Journal Style
+% ============================================================================
+% These are examples of properly formatted tables for your thesis.
+% Use these as templates when creating or updating tables.
+
+% ============================================================================
+% TEMPLATE 1: Summary Statistics Table
+% ============================================================================
+\begin{table}[htbp]
+    \centering
+    \caption{Summary Statistics for Daily Returns}
+    \label{tab:summary_stats_template}
+    \begin{tabular}{l
+                    S[table-format=1.3]
+                    S[table-format=1.3]
+                    S[table-format=2.3]
+                    S[table-format=2.3]}
+        \toprule
+        {Variable} & {Mean} & {Median} & {Std.\ Dev.} & {N} \\
+        \midrule
+        Return (\%) & 0.045 & 0.012 & 1.256 & 125000 \\
+        Volatility (\%) & 1.850 & 1.420 & 0.950 & 125000 \\
+        Turnover (\%) & 0.900 & 0.600 & 1.200 & 125000 \\
+        \bottomrule
+    \end{tabular}
+    
+    \vspace{0.5em}
+    {\footnotesize
+    This table reports summary statistics for daily stock-level variables from
+    2001--2024. Returns and volatility are expressed in percent per day.
+    }
+\end{table}
+
+% ============================================================================
+% TEMPLATE 2: Regression / Results Table with Significance Stars
+% ============================================================================
+\begin{table}[htbp]
+    \centering
+    \caption{Return Predictability and CNN Signal Strength}
+    \label{tab:reg_cnn_template}
+    \begin{threeparttable}
+    \begin{tabular}{l
+                    S[table-format=1.3]
+                    S[table-format=1.3]
+                    S[table-format=1.3]}
+        \toprule
+        & \multicolumn{3}{c}{Dependent variable: Next-week return (\%)} \\
+        \cmidrule(lr){2-4}
+        & {(1)} & {(2)} & {(3)} \\
+        \midrule
+        CNN signal & 0.215\tnote{***} & 0.180\tnote{***} & 0.150\tnote{***} \\
+                   & (0.030)     & (0.028)     & (0.026)     \\
+        Size       &             & -0.045\tnote{**} & -0.030\tnote{*}  \\
+                   &             & (0.020)     & (0.018)     \\
+        Book-to-market &         &             & 0.055\tnote{***} \\
+                       &         &             & (0.015)     \\
+        \midrule
+        Observations & {250000} & {250000} & {250000} \\
+        R-squared    & {0.035}  & {0.045}  & {0.060}  \\
+        \bottomrule
+    \end{tabular}
+    \begin{tablenotes}
+        \footnotesize
+        \item Notes: This table reports panel regressions of next-week stock returns
+        on the CNN-based technical signal and firm characteristics. Standard errors
+        are clustered by stock and week and reported in parentheses.
+        \item $^{*}$, $^{**}$, and $^{***}$ indicate significance at the 10\%, 5\%, and 1\% levels, respectively.
+    \end{tablenotes}
+    \end{threeparttable}
+\end{table}
+
+% ============================================================================
+% TEMPLATE 3: Portfolio Performance Table (Your Style)
+% ============================================================================
+\begin{table}[htbp]
+    \centering
+    \caption{Equal-Weighted Portfolio Performance by CNN Prediction Decile}
+    \label{tab:portfolio_ew_template}
+    \begin{threeparttable}
+    \begin{tabular}{l
+                    S[table-format=-2.2]
+                    S[table-format=2.2]
+                    S[table-format=-1.2]}
+        \toprule
+        {Decile} & {Annual Return (\%)} & {Volatility (\%)} & {Sharpe Ratio} \\
+        \midrule
+        Low (1) & -28.08 & 18.07 & -1.55 \\
+        2 & -2.20 & 19.52 & -0.11 \\
+        3 & 5.75 & 19.94 & 0.29 \\
+        4 & 10.63 & 20.02 & 0.53 \\
+        5 & 12.25 & 19.98 & 0.61 \\
+        6 & 15.25 & 20.04 & 0.76 \\
+        7 & 17.43 & 19.96 & 0.87 \\
+        8 & 20.73 & 20.05 & 1.03 \\
+        9 & 24.10 & 19.91 & 1.21 \\
+        High (10) & 42.66 & 19.09 & 2.23 \\
+        \midrule
+        H-L & 70.74 & 12.64 & 5.60 \\
+        \bottomrule
+    \end{tabular}
+    \begin{tablenotes}
+        \footnotesize
+        \item Notes: This table reports equal-weighted portfolio performance by CNN prediction decile
+        for the period 2001--2024. Decile 1 (Low) contains stocks with the lowest predicted up-probability,
+        and Decile 10 (High) contains stocks with the highest. H-L is the long-short spread (High minus Low).
+    \end{tablenotes}
+    \end{threeparttable}
+\end{table}
+
+% ============================================================================
+% TEMPLATE 4: FOMC Event Study Table (Your Style)
+% ============================================================================
+\begin{table}[htbp]
+    \centering
+    \caption{CNN Performance Around FOMC Announcements}
+    \label{tab:fomc_event_template}
+    \begin{threeparttable}
+    \begin{tabular}{ll
+                    S[table-format=1.2]
+                    S[table-format=-1.2]
+                    S[table-format=1.3]
+                    S[table-format=3.0]}
+        \toprule
+        {Window} & {Weight} & {Mean H-L (\%)} & {t-statistic} & {p-value} & {N Events} \\
+        \midrule
+        Announcement Day (t) & EW & 0.21\tnote{***} & 2.95 & 0.004 & 217 \\
+                             & VW & 0.05 & 0.66 & 0.510 & 217 \\
+        Reaction (t+1) & EW & 0.10\tnote{*} & 1.76 & 0.079 & 215 \\
+                       & VW & 0.03 & 0.38 & 0.710 & 215 \\
+        Intermediate (t+5 to t+20) & EW & 0.35\tnote{**} & 2.24 & 0.026 & 208 \\
+                                   & VW & -0.28 & -1.57 & 0.120 & 208 \\
+        \bottomrule
+    \end{tabular}
+    \begin{tablenotes}
+        \footnotesize
+        \item Notes: This table reports CNN-based high-minus-low (H-L) portfolio returns around FOMC
+        announcement days. The sample includes 217 FOMC meetings from 2001--2024. EW and VW denote
+        equal-weighted and value-weighted portfolios, respectively.
+        \item $^{*}$, $^{**}$, and $^{***}$ indicate significance at the 10\%, 5\%, and 1\% levels, respectively.
+    \end{tablenotes}
+    \end{threeparttable}
+\end{table}
+
+% ============================================================================
+% NOTES ON FORMATTING:
+% ============================================================================
+% 1. Always use booktabs: \toprule, \midrule, \bottomrule (no vertical lines)
+% 2. Use S columns from siunitx for numeric data (aligns on decimal point)
+% 3. Format: S[table-format=X.Y] where X = digits before decimal, Y = after
+% 4. For negative numbers: S[table-format=-X.Y]
+% 5. Wrap significance stars in math mode: $^{*}$, $^{**}$, $^{***}$
+% 6. Use threeparttable for notes (cleaner than manual \footnotesize)
+% 7. Caption goes above table, notes go below in \footnotesize
+% 8. Use \cmidrule(lr){X-Y} for partial horizontal lines under column headers
+
