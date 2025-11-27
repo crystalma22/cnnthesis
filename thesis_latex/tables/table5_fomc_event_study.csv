@@ -1,7 +1,0 @@
-Window,Weight,Mean H-L (%),t-statistic,p-value,Significance,N Events
-Announcement Day (t),EW,0.21,2.95,0.0,***,217
-,VW,0.05,0.66,0.51,,217
-Reaction (t+1),EW,0.1,1.76,0.08,*,215
-,VW,0.03,0.38,0.71,,215
-Intermediate (t+4 to t+20),EW,0.35,2.24,0.03,**,208
-,VW,-0.28,-1.57,0.12,,208
