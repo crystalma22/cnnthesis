@@ -35,3 +35,5 @@ trend_code_submit/CACHE_DIR/
 *.docx
 *.pptx
 *.xlsx
+.gitignore
+thesis_latex/
