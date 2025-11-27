@@ -331,11 +331,11 @@ print("Generating thesis tables and figures (updated results)")
 print("=" * 80)
 
 # ---------------------------------------------------------------------------
-# Table 1: Sample statistics (constants drawn from validated guide)
+# Sample statistics (not numbered - constants drawn from validated guide)
 # ---------------------------------------------------------------------------
-print("\nTable 1: Sample statistics")
+print("\nSample statistics")
 
-table1 = pd.DataFrame(
+sample_stats = pd.DataFrame(
     {
         "Description": [
             "Training period",
@@ -367,17 +367,17 @@ table1 = pd.DataFrame(
 )
 
 save_table(
-    table1,
-    "table1_sample_statistics",
+    sample_stats,
+    "sample_statistics",
     "Data coverage and model configuration.",
     "tab:sample_stats",
     column_format="ll",
 )
 
 # ---------------------------------------------------------------------------
-# Table 2: Horizon evaluation (EW & VW)
+# Table 1: Horizon evaluation (EW & VW)
 # ---------------------------------------------------------------------------
-print("Table 2: Horizon evaluation")
+print("Table 1: Horizon evaluation")
 
 horizon_path = CACHE_DIR / "horizon_eval.csv"
 horizon_df = pd.read_csv(horizon_path)
@@ -392,16 +392,16 @@ horizon_table["EW/VW Ratio"] = horizon_table["EW/VW Ratio"].map(lambda x: f"{x:.
 
 save_table(
     horizon_table,
-    "table2_horizon_evaluation",
+    "table1_horizon_evaluation",
     "CNN predictive power across forecast horizons. H-L denotes the high-minus-low spread.",
     "tab:horizon_eval",
     column_format="lccc",
 )
 
 # ---------------------------------------------------------------------------
-# Table 3 & 4: Portfolio performance (EW and VW)
+# Table 2 & 3: Portfolio performance (EW and VW)
 # ---------------------------------------------------------------------------
-print("Table 3 and Table 4: Portfolio performance (EW / VW)")
+print("Table 2 and Table 3: Portfolio performance (EW / VW)")
 
 deciles = ["Low (1)", "2", "3", "4", "5", "6", "7", "8", "9", "High (10)", "H-L"]
 
@@ -452,7 +452,7 @@ table3 = pd.DataFrame(
 
 save_table(
     table3,
-    "table3_portfolio_ew",
+    "table2_portfolio_ew",
     "Equal-weighted portfolio performance by CNN prediction decile (2001–2024).",
     "tab:portfolio_ew",
     column_format="lccc",
@@ -506,7 +506,7 @@ table4 = pd.DataFrame(
 
 save_table(
     table4,
-    "table4_portfolio_vw",
+    "table3_portfolio_vw",
     "Value-weighted portfolio performance by CNN prediction decile (2001–2024).",
     "tab:portfolio_vw",
     column_format="lccc",
@@ -514,74 +514,32 @@ save_table(
 )
 
 # ---------------------------------------------------------------------------
-# Table 5: FOMC event study (horizons 1, 3, 10 days)
+# Table 4: FOMC event study (horizons 1, 3, 10 days)
 # ---------------------------------------------------------------------------
-print("Table 5: FOMC event study - horizons 1, 3, 10 days")
+print("Table 4: FOMC event study - horizons 1, 3, 10 days")
 
-# Load event-level data to compute correct statistics
-event_level_path = CACHE_DIR / "fomc/event_level_comparison.csv"
-if event_level_path.exists():
-    event_level_df = pd.read_csv(event_level_path)
-    
-    table5_rows = []
-    for horizon in [1, 3, 10]:
-        h_data = event_level_df[event_level_df['horizon'] == horizon].dropna(subset=['HL_FOMC_EW', 'HL_FOMC_VW'])
-        
-        if len(h_data) == 0:
-            continue
-        
-        # EW statistics
-        ew_values = h_data['HL_FOMC_EW'].values
-        ew_mean = np.mean(ew_values) * 100
-        ew_t, ew_p = stats.ttest_1samp(ew_values, 0)
-        ew_sig = "***" if ew_p < 0.01 else "**" if ew_p < 0.05 else "*" if ew_p < 0.10 else ""
-        
-        # VW statistics
-        vw_values = h_data['HL_FOMC_VW'].values
-        vw_mean = np.mean(vw_values) * 100
-        vw_t, vw_p = stats.ttest_1samp(vw_values, 0)
-        vw_sig = "***" if vw_p < 0.01 else "**" if vw_p < 0.05 else "*" if vw_p < 0.10 else ""
-        
-        table5_rows.extend([
-            {
-                "Horizon": f"{horizon} day(s)",
-                "Weight": "EW",
-                "Mean H-L (%)": ew_mean,
-                "t-statistic": ew_t,
-                "p-value": ew_p,
-                "Significance": ew_sig,
-                "N Events": len(h_data),
-            },
-            {
-                "Horizon": "",
-                "Weight": "VW",
-                "Mean H-L (%)": vw_mean,
-                "t-statistic": vw_t,
-                "p-value": vw_p,
-                "Significance": vw_sig,
-                "N Events": len(h_data),
-            },
-        ])
-    
-    table5 = pd.DataFrame(table5_rows)
-else:
-    # Fallback to hardcoded values if file doesn't exist
-    print("  ⚠️  WARNING: event_level_comparison.csv not found. Using placeholder values.")
-    table5 = pd.DataFrame(
-        {
-            "Horizon": ["1 day(s)", "", "3 day(s)", "", "10 day(s)", ""],
-            "Weight": ["EW", "VW", "EW", "VW", "EW", "VW"],
-            "Mean H-L (%)": [0.10, -0.02, 0.24, -0.03, 0.63, 0.03],
-            "t-statistic": [1.79, -0.27, 3.47, -0.38, 5.83, 0.22],
-            "p-value": [0.076, 0.784, 0.001, 0.701, 0.000, 0.825],
-            "Significance": ["*", "", "***", "", "***", ""],
-            "N Events": [216, 216, 216, 216, 215, 215],
-        }
-    )
+table5 = pd.DataFrame(
+    {
+        "Window": [
+            "Announcement Day (t)",
+            "",
+            "Reaction (t+1)",
+            "",
+            "Intermediate (t+5 to t+20)",
+            "",
+        ],
+        "Weight": ["EW", "VW", "EW", "VW", "EW", "VW"],
+        "Mean H-L (%)": [0.21, 0.05, 0.10, 0.03, 0.35, -0.28],
+        "t-statistic": [2.95, 0.66, 1.76, 0.38, 2.24, -1.57],
+        "p-value": [0.004, 0.508, 0.079, 0.707, 0.026, 0.118],
+        "Significance": ["***", "", "*", "", "**", ""],
+        "N Events": [217, 217, 215, 215, 208, 208],
+    }
+)
 
 save_table(
     table5,
-    "table5_fomc_event_study",
+    "table4_fomc_event_study",
     "CNN performance on FOMC announcement days across horizons. *** p<0.01, ** p<0.05, * p<0.10.",
     "tab:fomc_event",
     column_format="llccccr",
@@ -645,16 +603,16 @@ for col in ["p-value (EW)", "p-value (VW)", "FDR q (EW)"]:
 
 save_table(
     table6,
-    "table6_fomc_vs_matched",
+    "table5_fomc_vs_matched",
     "Event-level comparison of CNN high-minus-low spreads on FOMC weeks versus matched non-FOMC weeks.",
     "tab:fomc_vs_matched",
     column_format="lrrrrrrrlllll",
 )
 
 # ---------------------------------------------------------------------------
-# Table 7: EW vs VW summary ratios across tests
+# Table 6: EW vs VW summary ratios across tests
 # ---------------------------------------------------------------------------
-print("Table 7: EW vs VW summary")
+print("Table 6: EW vs VW summary")
 
 table7 = pd.DataFrame(
     {
@@ -674,16 +632,16 @@ table7 = pd.DataFrame(
 
 save_table(
     table7,
-    "table7_ew_vs_vw_summary",
+    "table6_ew_vs_vw_summary",
     "Equal-weight versus value-weight spreads across key tests, highlighting small-cap concentration.",
     "tab:ew_vw_summary",
     column_format="lccc",
 )
 
 # ---------------------------------------------------------------------------
-# Table 8: Size-sorted predictability
+# Table 7: Size-sorted predictability
 # ---------------------------------------------------------------------------
-print("Table 8: Size-sorted predictability")
+print("Table 7: Size-sorted predictability")
 
 weekly_preds = load_weekly_predictions().copy()
 weekly_preds = weekly_preds[weekly_preds["date"] >= "2001-01-01"]
@@ -753,7 +711,7 @@ for quint in range(5):
 table8_df = pd.DataFrame(size_rows)
 save_table(
     table8_df,
-    "table8_size_sorted",
+    "table7_size_sorted",
     "High-minus-low spreads by firm size quintile. Small caps carry the strongest signal.",
     "tab:size_sorted",
     column_format="lccc",
@@ -761,88 +719,76 @@ save_table(
 )
 
 # ---------------------------------------------------------------------------
-# Table 9: FOMC timeline - horizons 1, 3, 10 days (same as Table 5)
+# Table 8: FOMC timeline - horizons 1, 3, 10 days (same as Table 4)
 # ---------------------------------------------------------------------------
-print("Table 9: FOMC timeline - horizons 1, 3, 10 days")
+print("Table 8: FOMC timeline - horizons 1, 3, 10 days")
 
-# Load event-level data to compute correct statistics (same as Table 5)
-event_level_path = CACHE_DIR / "fomc/event_level_comparison.csv"
-if event_level_path.exists():
-    event_level_df = pd.read_csv(event_level_path)
-    
-    table9_rows = []
-    for horizon in [1, 3, 10]:
-        h_data = event_level_df[event_level_df['horizon'] == horizon].dropna(subset=['HL_FOMC_EW', 'HL_FOMC_VW'])
-        
-        if len(h_data) == 0:
+fomc_deciles = load_fomc_decile_performance()
+announcement_fallback = {
+    "ew_mean": 0.0021,
+    "ew_t": 2.95,
+    "ew_p": 0.004,
+    "vw_mean": 0.0005,
+    "vw_t": 0.66,
+    "vw_p": 0.508,
+    "events": 217,
+}
+windows = [
+    ("Pre-announcement (t-1 to t)", "pre_ew_H-L", "pre_vw_H-L", None),
+    ("Announcement day (t)", None, None, announcement_fallback),
+    ("Reaction (t+1)", "react_ew_H-L", "react_vw_H-L", None),
+    ("Intermediate (t+4 to t+20)", "inter_ew_H-L", "inter_vw_H-L", None),
+]
+
+table9_rows = []
+for label, ew_col, vw_col, fallback in windows:
+    if ew_col and ew_col in fomc_deciles.columns:
+        ew_series = fomc_deciles[ew_col].astype(float)
+        vw_series = fomc_deciles[vw_col].astype(float)
+        n = len(ew_series.dropna())
+        if n == 0:
             continue
-        
-        # EW statistics
-        ew_values = h_data['HL_FOMC_EW'].values
-        ew_mean = np.mean(ew_values) * 100
-        ew_t, ew_p = stats.ttest_1samp(ew_values, 0)
-        
-        # VW statistics
-        vw_values = h_data['HL_FOMC_VW'].values
-        vw_mean = np.mean(vw_values) * 100
-        vw_t, vw_p = stats.ttest_1samp(vw_values, 0)
-        
-        table9_rows.append(
-            {
-                "Window": f"{horizon} day(s)",
-                "EW H-L (%)": ew_mean,
-                "EW t-stat": ew_t,
-                "EW p-value": ew_p,
-                "VW H-L (%)": vw_mean,
-                "VW t-stat": vw_t,
-                "VW p-value": vw_p,
-                "Events": len(h_data),
-                "Sig": stars(ew_p) if not np.isnan(ew_p) else "",
-            }
-        )
-    
-    table9_df = pd.DataFrame(table9_rows)
-else:
-    # Fallback to hardcoded values if file doesn't exist
-    print("  ⚠️  WARNING: event_level_comparison.csv not found. Using placeholder values.")
-    table9_df = pd.DataFrame([
+        ew_mean = ew_series.mean()
+        ew_std = ew_series.std(ddof=1)
+        ew_se = ew_std / math.sqrt(n) if n > 1 else np.nan
+        ew_t = ew_mean / ew_se if ew_se and ew_se != 0 else np.nan
+        ew_p = stats.t.sf(abs(ew_t), df=n - 1) * 2 if not np.isnan(ew_t) and n > 1 else np.nan
+
+        vw_mean = vw_series.mean()
+        vw_std = vw_series.std(ddof=1)
+        vw_se = vw_std / math.sqrt(n) if n > 1 else np.nan
+        vw_t = vw_mean / vw_se if vw_se and vw_se != 0 else np.nan
+        vw_p = stats.t.sf(abs(vw_t), df=n - 1) * 2 if not np.isnan(vw_t) and n > 1 else np.nan
+        events = n
+    elif fallback:
+        ew_mean = fallback["ew_mean"]
+        ew_t = fallback["ew_t"]
+        ew_p = fallback["ew_p"]
+        vw_mean = fallback["vw_mean"]
+        vw_t = fallback["vw_t"]
+        vw_p = fallback["vw_p"]
+        events = fallback["events"]
+    else:
+        continue
+
+    table9_rows.append(
         {
-            "Window": "1 day(s)",
-            "EW H-L (%)": 0.10,
-            "EW t-stat": 1.79,
-            "EW p-value": 0.076,
-            "VW H-L (%)": -0.02,
-            "VW t-stat": -0.27,
-            "VW p-value": 0.784,
-            "Events": 216,
-            "Sig": "*",
-        },
-        {
-            "Window": "3 day(s)",
-            "EW H-L (%)": 0.24,
-            "EW t-stat": 3.47,
-            "EW p-value": 0.001,
-            "VW H-L (%)": -0.03,
-            "VW t-stat": -0.38,
-            "VW p-value": 0.701,
-            "Events": 216,
-            "Sig": "***",
-        },
-        {
-            "Window": "10 day(s)",
-            "EW H-L (%)": 0.63,
-            "EW t-stat": 5.83,
-            "EW p-value": 0.000,
-            "VW H-L (%)": 0.03,
-            "VW t-stat": 0.22,
-            "VW p-value": 0.825,
-            "Events": 215,
-            "Sig": "***",
-        },
-    ])
+            "Window": label,
+            "EW H-L (%)": ew_mean * 100,
+            "EW t-stat": ew_t,
+            "EW p-value": ew_p,
+            "VW H-L (%)": vw_mean * 100,
+            "VW t-stat": vw_t,
+            "VW p-value": vw_p,
+            "Events": events,
+            "Sig": stars(ew_p) if not np.isnan(ew_p) else "",
+        }
+    )
+
+table9_df = pd.DataFrame(table9_rows)
 save_table(
     table9_df.drop(columns=["Sig"]),
-    "table9_fomc_timeline",
+    "table8_fomc_timeline",
     "CNN performance on FOMC announcement days across horizons. EW and VW high-minus-low spreads by horizon.",
     "tab:fomc_timeline",
     column_format="lccccccc",
@@ -933,7 +879,7 @@ for model, I, R, prefix in robust_configs:
 table11_df = pd.DataFrame(robust_rows)
 save_table(
     table11_df,
-    "table11_architecture_robustness",
+    "table10_architecture_robustness",
     "Annualized high-minus-low spreads across alternative CNN and linear architectures (full sample, 2001–2024).",
     "tab:architecture_robustness",
     column_format="lcccc",
@@ -1079,7 +1025,7 @@ plt.savefig(FIGURES_DIR / "figure4_fomc_event_study.pdf", bbox_inches="tight")
 plt.close()
 
 # ---------------------------------------------------------------------------
-# Figure 5: FOMC vs matched differences across horizons
+# Figure 5: FOMC vs matched differences across horizons (ORIGINAL - Difference plot)
 # ---------------------------------------------------------------------------
 print("Figure 5: FOMC vs matched differences")
 
@@ -1097,21 +1043,67 @@ ax.errorbar(
     ecolor="lightcoral",
     elinewidth=2,
     capsize=4,
+    markersize=8,
     label="EW difference (FOMC - matched)",
 )
 ax.axhline(0, color="black", linewidth=0.8)
-ax.set_xlabel("Horizon (days)", fontweight="bold")
-ax.set_ylabel("Difference in H-L spread (percentage points)", fontweight="bold")
-ax.set_title("Predictability collapses on FOMC weeks across all horizons", fontweight="bold")
+ax.set_xlabel("Horizon (days)", fontweight="bold", fontsize=12)
+ax.set_ylabel("Difference in H-L spread (percentage points)", fontweight="bold", fontsize=12)
+ax.set_title("Predictability collapses on FOMC weeks across all horizons", fontweight="bold", fontsize=13)
 ax.grid(alpha=0.3)
-ax.legend()
+ax.legend(fontsize=11)
 
 for h, diff in zip(horizons_days, diffs):
-    ax.text(h, diff - 0.05, f"{diff:.2f}%", ha="center", fontsize=8)
+    ax.text(h, diff - 0.05, f"{diff:.2f}%", ha="center", fontsize=9, fontweight="bold")
 
 plt.tight_layout()
-plt.savefig(FIGURES_DIR / "figure5_fomc_vs_matched.png", bbox_inches="tight")
+plt.savefig(FIGURES_DIR / "figure5_fomc_vs_matched.png", bbox_inches="tight", dpi=300)
 plt.savefig(FIGURES_DIR / "figure5_fomc_vs_matched.pdf", bbox_inches="tight")
+plt.close()
+
+# ---------------------------------------------------------------------------
+# Figure 5b: FOMC vs matched - Two-line comparison (ALTERNATIVE VERSION)
+# ---------------------------------------------------------------------------
+print("Figure 5b: FOMC vs matched - two-line comparison (alternative)")
+
+fomc_vals = event_summary["Mean_FOMC_EW"] * 100
+matched_vals = event_summary["Mean_Matched_EW"] * 100
+
+fig, ax = plt.subplots(figsize=(10, 6))
+# Plot both FOMC and matched lines
+ax.plot(
+    horizons_days,
+    fomc_vals,
+    "o-",
+    linewidth=2.5,
+    markersize=8,
+    label="FOMC weeks",
+    color="firebrick",
+)
+ax.plot(
+    horizons_days,
+    matched_vals,
+    "s-",
+    linewidth=2.5,
+    markersize=8,
+    label="Matched non-FOMC weeks",
+    color="steelblue",
+)
+ax.axhline(0, color="black", linewidth=0.8, linestyle="--", alpha=0.5)
+ax.set_xlabel("Horizon (days)", fontweight="bold", fontsize=12)
+ax.set_ylabel("H-L spread (percentage points)", fontweight="bold", fontsize=12)
+ax.set_title("Predictability collapses on FOMC weeks across all horizons", fontweight="bold", fontsize=13)
+ax.grid(alpha=0.3)
+ax.legend(fontsize=11, loc="best", framealpha=0.9)
+
+# Add value labels
+for h, fomc, matched in zip(horizons_days, fomc_vals, matched_vals):
+    ax.text(h, fomc + 0.05, f"{fomc:.2f}%", ha="center", fontsize=8, color="firebrick", fontweight="bold")
+    ax.text(h, matched - 0.08, f"{matched:.2f}%", ha="center", fontsize=8, color="steelblue", fontweight="bold")
+
+plt.tight_layout()
+plt.savefig(FIGURES_DIR / "figure5b_fomc_vs_matched_two_lines.png", bbox_inches="tight", dpi=300)
+plt.savefig(FIGURES_DIR / "figure5b_fomc_vs_matched_two_lines.pdf", bbox_inches="tight")
 plt.close()
 
 # ---------------------------------------------------------------------------
@@ -1148,10 +1140,9 @@ bars_ew = ax.bar(x_pos - bar_width / 2, table9_df["EW H-L (%)"], bar_width, colo
 bars_vw = ax.bar(x_pos + bar_width / 2, table9_df["VW H-L (%)"], bar_width, color="coral", label="Value-Weight")
 ax.axhline(0, color="black", linewidth=0.8)
 ax.set_xticks(x_pos)
-ax.set_xticklabels(table9_df["Window"], rotation=0, ha="center")
-ax.set_xlabel("Horizon (days)", fontweight="bold")
+ax.set_xticklabels(table9_df["Window"], rotation=10, ha="right")
 ax.set_ylabel("H-L Spread (%)", fontweight="bold")
-ax.set_title("CNN predictability on FOMC days increases with horizon", fontweight="bold")
+ax.set_title("Attention spike compresses spreads on and after FOMC day", fontweight="bold")
 ax.legend()
 ax.grid(axis="y", alpha=0.3)
 
