@@ -1,0 +1,7 @@
+Model,Input Window,Return Horizon,EW H-L (%),VW H-L (%)
+CNN,I5,R5,30.46,11.58
+CNN,I20,R20,27.47,12.61
+CNN,I60,R20,22.24,4.0
+Linear,I5,R5,7.58,-4.68
+Linear,I20,R20,8.73,12.38
+Linear,I60,R20,9.76,8.27
