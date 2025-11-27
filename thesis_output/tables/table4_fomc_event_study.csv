@@ -1,7 +1,7 @@
-Window,Weight,Mean H-L (%),t-statistic,p-value,Significance,N Events
-Announcement Day (t),EW,0.21,2.95,0.0,***,217
-,VW,0.05,0.66,0.51,,217
-Reaction (t+1),EW,0.1,1.76,0.08,*,215
-,VW,0.03,0.38,0.71,,215
-Intermediate (t+4 to t+20),EW,0.35,2.24,0.03,**,208
-,VW,-0.28,-1.57,0.12,,208
+Horizon,Weight,Mean H-L (%),t-statistic,p-value,Significance,N Events
+1 day (t+1),EW,0.10,1.79,0.08,*,216
+,VW,-0.02,-0.27,0.78,,216
+3 days (t+3),EW,0.24,3.47,0.00,***,216
+,VW,-0.03,-0.38,0.70,,216
+10 days (t+10),EW,0.63,5.83,0.00,***,215
+,VW,0.03,0.22,0.82,,215
