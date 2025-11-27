@@ -1,17 +1,17 @@
 \begin{table}[ht]
 \centering
-\caption{CNN performance on FOMC announcement days across horizons. *** p<0.01, ** p<0.05, * p<0.10.}
+\caption{CNN performance around FOMC announcements. *** p<0.01, ** p<0.05, * p<0.10.}
 \label{tab:fomc_event}
 \begin{tabular}{llccccr}
 \toprule
-Horizon & Weight & Mean H-L (%) & t-statistic & p-value & Significance & N Events \\
+Window & Weight & Mean H-L (%) & t-statistic & p-value & Significance & N Events \\
 \midrule
-1 day(s) & EW & 0.10 & 1.79 & 0.08 & * & 216.00 \\
- & VW & -0.02 & -0.27 & 0.78 &  & 216.00 \\
-3 day(s) & EW & 0.24 & 3.47 & 0.00 & *** & 216.00 \\
- & VW & -0.03 & -0.38 & 0.70 &  & 216.00 \\
-10 day(s) & EW & 0.63 & 5.83 & 0.00 & *** & 215.00 \\
- & VW & 0.03 & 0.22 & 0.82 &  & 215.00 \\
+Announcement Day (t) & EW & 0.21 & 2.95 & 0.00 & *** & 217.00 \\
+ & VW & 0.05 & 0.66 & 0.51 &  & 217.00 \\
+Reaction (t+1) & EW & 0.10 & 1.76 & 0.08 & * & 215.00 \\
+ & VW & 0.03 & 0.38 & 0.71 &  & 215.00 \\
+Intermediate (t+4 to t+20) & EW & 0.35 & 2.24 & 0.03 & ** & 208.00 \\
+ & VW & -0.28 & -1.57 & 0.12 &  & 208.00 \\
 \bottomrule
 \end{tabular}
 \end{table}
