@@ -15,13 +15,11 @@
   "figures": [
     "figure1_fomc_timeline.png",
     "figure2_decile_performance.png",
+    "figure3_fomc_results.png",
     "figure3_horizon_evaluation.png",
     "figure4_fomc_event_study.png",
     "figure5_fomc_vs_matched.png",
-<<<<<<< Updated upstream
-=======
-    "figure5b_fomc_vs_matched_two_lines.png",
->>>>>>> Stashed changes
+    "figure6_attention_timeline.png",
     "figure6_ew_vw_ratios.png",
     "figure7_attention_timeline.png"
   ]

@@ -253,76 +253,100 @@ print(f"  ✅ Saved: {TABLES_DIR}/table6_ew_vw_comparison.tex")
 df_comparison.to_csv(TABLES_DIR / "table6_ew_vw_comparison.csv", index=False)
 
 # ============================================================================
-# FIGURE 1: TIMELINE DIAGRAM (No Overlap)
+# FIGURE 1: TIMELINE DIAGRAM (No Overlap) - CORRECT VERSION
 # ============================================================================
-print("\nCreating Figure 1: FOMC Timeline (No Overlap)...")
+print("\nCreating Figure 1: FOMC Timeline (No Overlap) with correct horizons...")
 
-fig, ax = plt.subplots(figsize=(12, 4))
+fig, ax = plt.subplots(figsize=(14, 5))
 ax.axis('off')
 
 # Timeline
 timeline_y = 0.5
-ax.plot([0, 10], [timeline_y, timeline_y], 'k-', linewidth=2)
+ax.plot([0, 12], [timeline_y, timeline_y], 'k-', linewidth=3)
 
-# Key dates
-dates = {
-    'June 5': 1,
-    'June 12': 3,
-    'June 15': 5,
-    'June 16': 6,
-    'June 19': 7,
-    'July 13': 9
-}
+# Key positions
+pred_x = 2.5
+fomc_x = 6.5
+h1_x = 7.5
+h3_x = 8.5
+h10_x = 10.5
 
-# Labels and descriptions
-labels = {
-    1: ('June 5\n(pred?)', 0.25),
-    3: ('June 12\n(pred?)', 0.25),
-    5: ('June 15\n(t)', 0.75),
-    6: ('June 16\n(t+1)', 0.75),
-    7: ('June 19\n(t+5)', 0.75),
-    9: ('July 13\n(t+20)', 0.75)
-}
+# 20-day lookback box (left side)
+lookback_x1 = 0.5
+lookback_x2 = 2.3
+ax.add_patch(plt.Rectangle((lookback_x1, 0.15), lookback_x2 - lookback_x1, 0.2, 
+                           facecolor='lightblue', edgecolor='blue', linewidth=2, alpha=0.7))
+ax.text((lookback_x1 + lookback_x2)/2, 0.25, '20-day lookback', ha='center', 
+        fontsize=10, fontweight='bold', color='blue')
 
-# Plot markers
-for date, x in dates.items():
-    ax.plot(x, timeline_y, 'ko', markersize=10)
+# Prediction generation point
+ax.plot(pred_x, timeline_y, 'go', markersize=15, zorder=5)
+ax.annotate('', xy=(pred_x, 0.7), xytext=(pred_x, 0.35),
+            arrowprops=dict(arrowstyle='->', lw=2, color='green'))
+pred_box = plt.Rectangle((pred_x-0.4, 0.72), 0.8, 0.15, 
+                        facecolor='lightgreen', edgecolor='green', linewidth=2, alpha=0.8)
+ax.add_patch(pred_box)
+ax.text(pred_x, 0.795, 'PREDICTIONS\nGENERATED', ha='center', fontsize=9,
+        fontweight='bold', color='darkgreen')
+ax.text(pred_x, 0.3, 'Friday Prediction\nMade', ha='center', fontsize=9,
+        style='italic', color='green')
 
-# Add labels
-for x, (label, y) in labels.items():
-    ax.text(x, y, label, ha='center', va='center', fontsize=9)
+# Gap region (NO OVERLAP)
+gap_x1 = pred_x + 0.3
+gap_x2 = fomc_x - 0.3
+ax.axvspan(gap_x1, gap_x2, alpha=0.3, color='gray', zorder=1)
+gap_box = plt.Rectangle((gap_x1, 0.55), gap_x2 - gap_x1, 0.12, 
+                       facecolor='white', edgecolor='gray', linewidth=2, alpha=0.9)
+ax.add_patch(gap_box)
+ax.text((gap_x1 + gap_x2)/2, 0.61, 'NO OVERLAP\n(Ensures no look-ahead bias)', 
+        ha='center', fontsize=9, fontweight='bold', color='black')
+ax.text((gap_x1 + gap_x2)/2, 0.3, 'Gap (Weekend + Days)', ha='center', 
+        fontsize=8, style='italic', color='gray')
 
-# Add spans
-# Prediction made here
-ax.annotate('', xy=(3, 0.4), xytext=(3, 0.15),
-            arrowprops=dict(arrowstyle='->', lw=2, color='blue'))
-ax.text(3, 0.05, 'PREDICTION\nMADE HERE', ha='center', fontsize=10,
-        fontweight='bold', color='blue')
+# FOMC Announcement
+ax.plot(fomc_x, timeline_y, 'ro', markersize=15, zorder=5)
+ax.annotate('', xy=(fomc_x, 0.85), xytext=(fomc_x, 0.6),
+            arrowprops=dict(arrowstyle='->', lw=3, color='red'))
+fomc_box = plt.Rectangle((fomc_x-0.5, 0.87), 1.0, 0.12, 
+                        facecolor='lightcoral', edgecolor='red', linewidth=2, alpha=0.8)
+ax.add_patch(fomc_box)
+ax.text(fomc_x, 0.93, 'FOMC ANNOUNCEMENT', ha='center', fontsize=10,
+        fontweight='bold', color='darkred')
+ax.text(fomc_x, 0.3, 'FOMC Announcement\n(t = 0) Tue/Wed', ha='center', 
+        fontsize=9, style='italic', color='red')
 
-# CNN Lookback
-ax.plot([1, 3], [0.35, 0.35], 'b-', linewidth=3, alpha=0.7)
-ax.text(2, 0.28, 'CNN Lookback\n(20 days)', ha='center', fontsize=8, color='blue')
+# Returns measured arrow and label
+ax.plot([fomc_x, h10_x+0.5], [0.85, 0.85], 'b-', linewidth=4, alpha=0.7, zorder=2)
+ax.text((fomc_x + h10_x+0.5)/2, 0.92, 'RETURNS MEASURED (H-L spreads at horizons 1, 3, 10 days)', 
+        ha='center', fontsize=10, fontweight='bold', color='darkblue')
 
-# FOMC Event
-ax.annotate('', xy=(5, 0.85), xytext=(5, 0.6),
-            arrowprops=dict(arrowstyle='->', lw=2, color='red'))
-ax.text(5, 0.95, 'FOMC\nANNOUNCEMENT', ha='center', fontsize=10,
-        fontweight='bold', color='red')
+# Horizon markers (t+1, t+3, t+10)
+horizons = [
+    (h1_x, 't+1', 'Horizon 1'),
+    (h3_x, 't+3', 'Horizon 3'),
+    (h10_x, 't+10', 'Horizon 10')
+]
 
-# Returns measured
-ax.plot([5, 9], [0.85, 0.85], 'g-', linewidth=4, alpha=0.7)
-ax.text(7, 0.92, 'Returns Measured →→→', ha='center', fontsize=9,
-        fontweight='bold', color='green')
+for i, (x_pos, label, desc) in enumerate(horizons):
+    # Triangle marker
+    triangle = plt.Polygon([(x_pos, 0.85), (x_pos-0.15, 0.75), (x_pos+0.15, 0.75)],
+                          facecolor='blue', edgecolor='darkblue', linewidth=2, alpha=0.8)
+    ax.add_patch(triangle)
+    # Label
+    ax.text(x_pos, 0.7, f'{label}\n({desc})', ha='center', fontsize=9,
+            fontweight='bold', color='darkblue')
 
-# No overlap region
-ax.axvspan(3.2, 4.8, alpha=0.2, color='gray')
-ax.text(4, 0.5, 'GAP\n(No Overlap)', ha='center', fontsize=9,
-        style='italic')
+# Horizon bars (visual representation)
+bar_y = 0.78
+bar_lengths = [0.3, 0.6, 1.2]
+for i, (x_pos, length) in enumerate(zip([h1_x, h3_x, h10_x], bar_lengths)):
+    ax.plot([fomc_x, fomc_x + length], [bar_y - i*0.05, bar_y - i*0.05], 
+           'b-', linewidth=3, alpha=0.6)
 
-ax.set_xlim(0, 10)
-ax.set_ylim(0, 1)
+ax.set_xlim(0, 12)
+ax.set_ylim(0, 1.1)
 ax.set_title('FOMC Event Study Timeline: Temporal Ordering (No Overlap)',
-             fontsize=13, fontweight='bold', pad=20)
+             fontsize=14, fontweight='bold', pad=25)
 
 plt.tight_layout()
 plt.savefig(FIGURES_DIR / "figure1_fomc_timeline.png", bbox_inches='tight', dpi=300)
@@ -409,43 +433,43 @@ for i, (h, ew, vw) in enumerate(zip(horizons, ew_hl, vw_hl)):
     ax.text(h, vw + 0.05, f'{vw:.2f}%', ha='center', fontweight='bold', color='coral')
 
 plt.tight_layout()
-plt.savefig(FIGURES_DIR / "figure3_horizon_evaluation.png", bbox_inches='tight', dpi=300)
-plt.savefig(FIGURES_DIR / "figure3_horizon_evaluation.pdf", bbox_inches='tight')
+plt.savefig(FIGURES_DIR / "horizon_evaluation.png", bbox_inches='tight', dpi=300)
+plt.savefig(FIGURES_DIR / "horizon_evaluation.pdf", bbox_inches='tight')
 plt.close()
 
-print(f"  ✅ Saved: {FIGURES_DIR}/figure3_horizon_evaluation.png/.pdf")
+print(f"  ✅ Saved: {FIGURES_DIR}/horizon_evaluation.png/.pdf")
 
 # ============================================================================
-# FIGURE 4: FOMC RESULTS
+# FIGURE 3: FOMC RESULTS
 # ============================================================================
-print("\nCreating Figure 4: FOMC Event Study Results...")
+print("\nCreating Figure 3: FOMC Event Study Results...")
 
 fig, ax = plt.subplots(figsize=(11, 6))
 
-windows = ['Announcement\nDay (t)', 'Reaction\n(t+1)', 'Intermediate\n(t+5 to t+20)']
+windows = ['1 day\n(t+1)', '3 days\n(t+3)', '10 days\n(t+10)']
 x = np.arange(len(windows))
 width = 0.35
 
-ew_fomc = [0.21, 0.10, 0.35]
-vw_fomc = [0.05, 0.03, -0.28]
+ew_fomc = [0.10, 0.24, 0.63]
+vw_fomc = [-0.02, -0.03, 0.03]
 
-# Significance stars
-ew_sig = ['***', '*', '**']
+# Significance stars (from table4_fomc_results: t+1: *, t+3: ***, t+10: ***)
+ew_sig = ['*', '***', '***']
 vw_sig = ['', '', '']
 
 bars1 = ax.bar(x - width/2, ew_fomc, width, label='Equal-Weight', alpha=0.8, color='steelblue')
 bars2 = ax.bar(x + width/2, vw_fomc, width, label='Value-Weight', alpha=0.8, color='coral')
 
-ax.set_xlabel('Event Window', fontweight='bold', fontsize=12)
+ax.set_xlabel('Horizon', fontweight='bold', fontsize=12)
 ax.set_ylabel('H-L Spread (%)', fontweight='bold', fontsize=12)
-ax.set_title('CNN Performance Around FOMC Announcements (217 Events, 2001-2024)',
+ax.set_title('CNN Performance Around FOMC Announcements (216 Events, 2001-2024)',
              fontweight='bold', fontsize=13, pad=20)
 ax.set_xticks(x)
 ax.set_xticklabels(windows)
 ax.axhline(y=0, color='black', linestyle='-', linewidth=1)
 
-# Set y-axis limits to prevent overflow
-ax.set_ylim(-0.35, 0.50)
+# Set y-axis limits to prevent overflow (max is 0.63% for t+10)
+ax.set_ylim(-0.10, 0.75)
 
 # Legend outside plot area
 ax.legend(fontsize=11, loc='upper left', bbox_to_anchor=(0, 1), framealpha=0.9)
@@ -487,11 +511,11 @@ ax.text(0.5, -0.12, '*** p<0.01, ** p<0.05, * p<0.10',
         ha='center', transform=ax.transAxes, fontsize=9, style='italic')
 
 plt.tight_layout()
-plt.savefig(FIGURES_DIR / "figure4_fomc_results.png", bbox_inches='tight', dpi=300)
-plt.savefig(FIGURES_DIR / "figure4_fomc_results.pdf", bbox_inches='tight')
+plt.savefig(FIGURES_DIR / "figure3_fomc_results.png", bbox_inches='tight', dpi=300)
+plt.savefig(FIGURES_DIR / "figure3_fomc_results.pdf", bbox_inches='tight')
 plt.close()
 
-print(f"  ✅ Saved: {FIGURES_DIR}/figure4_fomc_results.png/.pdf")
+print(f"  ✅ Saved: {FIGURES_DIR}/figure3_fomc_results.png/.pdf")
 
 # ============================================================================
 # FIGURE 5: EW vs VW COMPARISON ACROSS ALL TESTS (TWO PANELS)
@@ -636,11 +660,11 @@ ax.text(7, 0.5, 'Like how a radiologist detects patterns in X-rays,\nCNN detects
         ha='center', fontsize=10, style='italic', color='darkblue')
 
 plt.tight_layout()
-plt.savefig(FIGURES_DIR / "figure6_cnn_architecture.png", bbox_inches='tight', dpi=300)
-plt.savefig(FIGURES_DIR / "figure6_cnn_architecture.pdf", bbox_inches='tight')
+plt.savefig(FIGURES_DIR / "cnn_architecture.png", bbox_inches='tight', dpi=300)
+plt.savefig(FIGURES_DIR / "cnn_architecture.pdf", bbox_inches='tight')
 plt.close()
 
-print(f"  ✅ Saved: {FIGURES_DIR}/figure6_cnn_architecture.png/.pdf")
+print(f"  ✅ Saved: {FIGURES_DIR}/cnn_architecture.png/.pdf")
 
 # ============================================================================
 # TABLE 7: TRANSACTION COSTS & NET RETURNS
@@ -804,11 +828,12 @@ print()
 print("📈 FIGURES (PNG + PDF):")
 print("  1. figure1_fomc_timeline (no overlap)")
 print("  2. figure2_decile_performance")
-print("  3. figure3_horizon_evaluation")
-print("  4. figure4_fomc_results (MAIN CONTRIBUTION)")
+print("  3. figure3_fomc_results (MAIN CONTRIBUTION)")
+print("  4. figure4_fomc_vs_matched")
 print("  5. figure5_ew_vw_comparison")
-print("  6. figure6_cnn_architecture")
-print("  7. figure7_cumulative_returns (NEW - shows consistency over time)")
+print("  - horizon_evaluation (supplementary)")
+print("  - cnn_architecture (supplementary)")
+print("  7. figure7_attention_timeline")
 print("  8. figure8_prediction_distribution (NEW - explains mechanism)")
 print()
 print("✅ All files saved in: thesis_output/")
