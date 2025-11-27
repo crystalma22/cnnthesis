@@ -38,6 +38,13 @@ from Data.equity_data import processed_US_data  # type: ignore
 for directory in (OUTPUT_DIR, TABLES_DIR, FIGURES_DIR):
     directory.mkdir(parents=True, exist_ok=True)
 
+FONT_DELTA = 4
+
+
+def fs(size: float) -> float:
+    """Increase any base font size by the global delta."""
+    return size + FONT_DELTA
+
 # Global plotting style
 plt.style.use("seaborn-v0_8-whitegrid")
 plt.rcParams.update(
@@ -840,6 +847,7 @@ else:
             "Sig": "***",
         },
     ])
+
 save_table(
     table9_df.drop(columns=["Sig"]),
     "table9_fomc_timeline",
@@ -896,51 +904,6 @@ save_table(
 )
 
 # ---------------------------------------------------------------------------
-# Table 11: Architecture robustness (portfolio H-L across specs)
-# ---------------------------------------------------------------------------
-print("Table 11: Architecture robustness")
-
-portfolio_dir = CACHE_DIR / "cnn1d_and_linear_model_portfolio_returns"
-robust_configs = [
-    ("CNN", "I5", "R5", "cnn1d_I5R5_ret_scale"),
-    ("CNN", "I20", "R20", "cnn1d_I20R20_ret_scale"),
-    ("CNN", "I60", "R20", "cnn1d_I60R20_ret_scale"),
-    ("Linear", "I5", "R5", "linear_I5R5_ret_scale"),
-    ("Linear", "I20", "R20", "linear_I20R20_ret_scale"),
-    ("Linear", "I60", "R20", "linear_I60R20_ret_scale"),
-]
-
-robust_rows = []
-for model, I, R, prefix in robust_configs:
-    path_ew = portfolio_dir / f"{prefix}_ew.csv"
-    path_vw = portfolio_dir / f"{prefix}_vw.csv"
-    if not path_ew.exists() or not path_vw.exists():
-        continue
-    df_ew = pd.read_csv(path_ew)
-    df_vw = pd.read_csv(path_vw)
-    ew_mean = df_ew["H-L"].mean() * 12 * 100  # annualized
-    vw_mean = df_vw["H-L"].mean() * 12 * 100
-    robust_rows.append(
-        {
-            "Model": model,
-            "Input Window": I,
-            "Return Horizon": R,
-            "EW H-L (%)": ew_mean,
-            "VW H-L (%)": vw_mean,
-        }
-    )
-
-table11_df = pd.DataFrame(robust_rows)
-save_table(
-    table11_df,
-    "table11_architecture_robustness",
-    "Annualized high-minus-low spreads across alternative CNN and linear architectures (full sample, 2001–2024).",
-    "tab:architecture_robustness",
-    column_format="lcccc",
-    float_format="%.2f",
-)
-
-# ---------------------------------------------------------------------------
 # Figure 1: Timeline (reuse conceptual diagram)
 # ---------------------------------------------------------------------------
 print("\nFigure 1: FOMC timeline")
@@ -950,29 +913,55 @@ ax.axis("off")
 
 ax.plot([0, 10], [0.5, 0.5], "k-", linewidth=2)
 markers = {
-    "Prior Friday\nPrediction": 1.5,
-    "Signal Freeze": 3.0,
-    "FOMC\nAnnouncement": 5.0,
-    "Returns D0→D5": 7.5,
-    "Returns D0→D10": 9.0,
+    "Prior Friday\nPrediction": (1.5, 0.82),
+    "Signal Freeze": (3.0, 0.94),
+    "FOMC\nAnnouncement\n(D0)": (5.0, 0.88),
 }
 
-for label, xpos in markers.items():
+for label, (xpos, ypos) in markers.items():
     ax.plot(xpos, 0.5, "ko", markersize=9)
-    ax.text(xpos, 0.75, label, ha="center", fontsize=10, fontweight="bold")
+    ax.text(xpos, ypos, label, ha="center", va="center", fontsize=fs(10), fontweight="bold")
+
+# Add return measurement arrows showing forward-looking returns
+ax.annotate(
+    "",
+    xy=(7.0, 0.5),
+    xytext=(5.2, 0.5),
+    arrowprops=dict(arrowstyle="->", lw=3, color="green", alpha=0.7),
+)
+ax.text(6.1, 0.65, "Returns measured\nFROM D0 close\nTO D5 close", ha="center", fontsize=fs(9), color="green", fontweight="bold")
+
+ax.annotate(
+    "",
+    xy=(9.0, 0.5),
+    xytext=(5.2, 0.5),
+    arrowprops=dict(arrowstyle="->", lw=3, color="green", alpha=0.7),
+)
+ax.text(7.1, 0.75, "Returns measured\nFROM D0 close\nTO D10 close", ha="center", fontsize=fs(9), color="green", fontweight="bold")
+
+# Mark D5 and D10 endpoints
+ax.plot(7.0, 0.5, "go", markersize=8)
+ax.text(7.0, 0.35, "D5", ha="center", fontsize=fs(9), fontweight="bold")
+ax.plot(9.0, 0.5, "go", markersize=8)
+ax.text(9.0, 0.35, "D10", ha="center", fontsize=fs(9), fontweight="bold")
 
 ax.axvspan(3.3, 4.7, alpha=0.2, color="gray")
-ax.text(4.0, 0.35, "No overlap\nbetween signal and returns", ha="center", fontsize=9, style="italic")
+ax.text(4.0, 0.35, "No overlap\nbetween signal and returns", ha="center", fontsize=fs(9), style="italic")
 
-ax.annotate("", xy=(5.0, 0.9), xytext=(5.0, 0.65), arrowprops=dict(arrowstyle="->", lw=2, color="red"))
-ax.text(5.0, 0.95, "Event (D0)", ha="center", color="red", fontweight="bold")
+ax.annotate(
+    "",
+    xy=(5.0, 0.25),
+    xytext=(5.0, 0.45),
+    arrowprops=dict(arrowstyle="->", lw=2, color="red"),
+)
+ax.text(5.0, 0.15, "Event (D0)", ha="center", color="red", fontweight="bold", fontsize=fs(10))
 
 ax.annotate("", xy=(1.5, 0.2), xytext=(0.8, 0.2), arrowprops=dict(arrowstyle="->", lw=2, color="blue"))
-ax.text(1.15, 0.1, "CNN lookback\n(20 trading days)", ha="center", fontsize=8, color="blue")
+ax.text(1.15, 0.1, "CNN lookback\n(20 trading days)", ha="center", fontsize=fs(8), color="blue")
 
 ax.set_xlim(0, 10)
 ax.set_ylim(0, 1.1)
-ax.set_title("Temporal ordering of CNN signal and FOMC event study windows", fontweight="bold")
+ax.set_title("Temporal ordering of CNN signal and FOMC event study windows", fontweight="bold", fontsize=fs(12))
 
 plt.tight_layout()
 plt.savefig(FIGURES_DIR / "figure1_fomc_timeline.png", bbox_inches="tight")
@@ -996,16 +985,17 @@ ax.bar(x - width / 2, ew_returns, width, label="Equal-Weight", color="steelblue"
 ax.bar(x + width / 2, vw_returns, width, label="Value-Weight", color="coral", alpha=0.85)
 ax.axhline(0, color="black", linewidth=0.8)
 ax.set_xticks(x)
-ax.set_xticklabels(decile_labels)
-ax.set_ylabel("Annual return (%)", fontweight="bold")
-ax.set_xlabel("CNN prediction decile", fontweight="bold")
-ax.set_title("Portfolio returns by CNN prediction decile (2001–2024)", fontweight="bold")
-ax.legend()
+ax.set_xticklabels(decile_labels, fontsize=fs(10))
+ax.tick_params(labelsize=fs(10))
+ax.set_ylabel("Annual return (%)", fontweight="bold", fontsize=fs(12))
+ax.set_xlabel("CNN prediction decile", fontweight="bold", fontsize=fs(12))
+ax.set_title("Portfolio returns by CNN prediction decile (2001–2024)", fontweight="bold", fontsize=fs(14))
+ax.legend(fontsize=fs(10))
 
 for idx, value in enumerate(ew_returns):
-    ax.text(idx - width / 2, value + np.sign(value) * 1.5, f"{value:.1f}%", ha="center", fontsize=8)
+    ax.text(idx - width / 2, value + np.sign(value) * 1.5, f"{value:.1f}%", ha="center", fontsize=fs(8))
 for idx, value in enumerate(vw_returns):
-    ax.text(idx + width / 2, value + np.sign(value) * 1.5, f"{value:.1f}%", ha="center", fontsize=8)
+    ax.text(idx + width / 2, value + np.sign(value) * 1.5, f"{value:.1f}%", ha="center", fontsize=fs(8))
 
 plt.tight_layout()
 plt.savefig(FIGURES_DIR / "figure2_decile_performance.png", bbox_inches="tight")
@@ -1021,15 +1011,16 @@ fig, ax = plt.subplots(figsize=(8, 5))
 horizons_numeric = horizon_df["horizon"].str.replace("d", "", regex=False).astype(int)
 ax.plot(horizons_numeric, horizon_df["EW_HL"] * 100, "o-", label="Equal-Weight", linewidth=2.5, color="steelblue")
 ax.plot(horizons_numeric, horizon_df["VW_HL"] * 100, "s-", label="Value-Weight", linewidth=2.5, color="coral")
-ax.set_xlabel("Forecast horizon (days)", fontweight="bold")
-ax.set_ylabel("H-L spread (%)", fontweight="bold")
-ax.set_title("CNN predictive power increases with horizon", fontweight="bold")
+ax.set_xlabel("Forecast horizon (days)", fontweight="bold", fontsize=fs(12))
+ax.set_ylabel("H-L spread (%)", fontweight="bold", fontsize=fs(12))
+ax.set_title("CNN predictive power increases with horizon", fontweight="bold", fontsize=fs(14))
 ax.grid(alpha=0.3)
-ax.legend()
+ax.legend(fontsize=fs(10))
+ax.tick_params(labelsize=fs(10))
 
 for h, ew, vw in zip(horizons_numeric, horizon_df["EW_HL"] * 100, horizon_df["VW_HL"] * 100):
-    ax.text(h, ew + 0.05, f"{ew:.2f}%", ha="center", fontsize=8, color="steelblue")
-    ax.text(h, vw - 0.15, f"{vw:.2f}%", ha="center", fontsize=8, color="coral")
+    ax.text(h, ew + 0.05, f"{ew:.2f}%", ha="center", fontsize=fs(8), color="steelblue")
+    ax.text(h, vw - 0.15, f"{vw:.2f}%", ha="center", fontsize=fs(8), color="coral")
 
 plt.tight_layout()
 plt.savefig(FIGURES_DIR / "figure3_horizon_evaluation.png", bbox_inches="tight")
@@ -1053,25 +1044,26 @@ ax.bar(x - width / 2, ew_vals, width, label="Equal-Weight", color="steelblue", a
 ax.bar(x + width / 2, vw_vals, width, label="Value-Weight", color="coral", alpha=0.85)
 ax.axhline(0, color="black", linewidth=0.8)
 ax.set_xticks(x)
-ax.set_xticklabels(windows)
-ax.set_ylabel("H-L spread (%)", fontweight="bold")
-ax.set_title("CNN performance around FOMC announcements (2001–2024)", fontweight="bold")
-ax.legend()
+ax.set_xticklabels(windows, fontsize=fs(10))
+ax.set_ylabel("H-L spread (%)", fontweight="bold", fontsize=fs(12))
+ax.set_title("CNN performance around FOMC announcements (2001–2024)", fontweight="bold", fontsize=fs(14))
+ax.legend(fontsize=fs(10))
+ax.tick_params(labelsize=fs(10))
 ax.set_ylim(-0.35, 0.45)
 
 for idx, value in enumerate(ew_vals):
     ypos = value + 0.03 if value > 0 else value - 0.05
-    ax.text(idx - width / 2, ypos, f"{value:.2f}%", ha="center", fontsize=9, fontweight="bold")
+    ax.text(idx - width / 2, ypos, f"{value:.2f}%", ha="center", fontsize=fs(9), fontweight="bold")
     if ew_stars[idx]:
-        ax.text(idx - width / 2, ypos + 0.05, ew_stars[idx], ha="center", fontsize=12, fontweight="bold")
+        ax.text(idx - width / 2, ypos + 0.05, ew_stars[idx], ha="center", fontsize=fs(12), fontweight="bold")
 
 for idx, value in enumerate(vw_vals):
     ypos = value - 0.05 if value < 0 else value + 0.03
-    ax.text(idx + width / 2, ypos, f"{value:.2f}%", ha="center", fontsize=9, fontweight="bold")
+    ax.text(idx + width / 2, ypos, f"{value:.2f}%", ha="center", fontsize=fs(9), fontweight="bold")
     if vw_stars[idx]:
-        ax.text(idx + width / 2, ypos + 0.05, vw_stars[idx], ha="center", fontsize=12, fontweight="bold")
+        ax.text(idx + width / 2, ypos + 0.05, vw_stars[idx], ha="center", fontsize=fs(12), fontweight="bold")
 
-ax.text(0.5, -0.18, "*** p<0.01, ** p<0.05, * p<0.10", transform=ax.transAxes, ha="center", fontsize=9, style="italic")
+ax.text(0.5, -0.18, "*** p<0.01, ** p<0.05, * p<0.10", transform=ax.transAxes, ha="center", fontsize=fs(9), style="italic")
 
 plt.tight_layout()
 plt.savefig(FIGURES_DIR / "figure4_fomc_event_study.png", bbox_inches="tight")
@@ -1079,7 +1071,7 @@ plt.savefig(FIGURES_DIR / "figure4_fomc_event_study.pdf", bbox_inches="tight")
 plt.close()
 
 # ---------------------------------------------------------------------------
-# Figure 5: FOMC vs matched differences across horizons
+# Figure 5: FOMC vs matched differences across horizons (ORIGINAL - Difference plot)
 # ---------------------------------------------------------------------------
 print("Figure 5: FOMC vs matched differences")
 
@@ -1097,21 +1089,69 @@ ax.errorbar(
     ecolor="lightcoral",
     elinewidth=2,
     capsize=4,
+    markersize=8,
     label="EW difference (FOMC - matched)",
 )
 ax.axhline(0, color="black", linewidth=0.8)
-ax.set_xlabel("Horizon (days)", fontweight="bold")
-ax.set_ylabel("Difference in H-L spread (percentage points)", fontweight="bold")
-ax.set_title("Predictability collapses on FOMC weeks across all horizons", fontweight="bold")
+ax.set_xlabel("Horizon (days)", fontweight="bold", fontsize=fs(12))
+ax.set_ylabel("Difference in H-L spread (percentage points)", fontweight="bold", fontsize=fs(12))
+ax.set_title("Predictability collapses on FOMC weeks across all horizons", fontweight="bold", fontsize=fs(14))
 ax.grid(alpha=0.3)
-ax.legend()
+ax.legend(fontsize=fs(11))
+ax.tick_params(labelsize=fs(10))
 
 for h, diff in zip(horizons_days, diffs):
-    ax.text(h, diff - 0.05, f"{diff:.2f}%", ha="center", fontsize=8)
+    ax.text(h, diff - 0.05, f"{diff:.2f}%", ha="center", fontsize=fs(9), fontweight="bold")
 
 plt.tight_layout()
-plt.savefig(FIGURES_DIR / "figure5_fomc_vs_matched.png", bbox_inches="tight")
+plt.savefig(FIGURES_DIR / "figure5_fomc_vs_matched.png", bbox_inches="tight", dpi=300)
 plt.savefig(FIGURES_DIR / "figure5_fomc_vs_matched.pdf", bbox_inches="tight")
+plt.close()
+
+# ---------------------------------------------------------------------------
+# Figure 5b: FOMC vs matched - Two-line comparison (ALTERNATIVE VERSION)
+# ---------------------------------------------------------------------------
+print("Figure 5b: FOMC vs matched - two-line comparison (alternative)")
+
+fomc_vals = event_summary["Mean_FOMC_EW"] * 100
+matched_vals = event_summary["Mean_Matched_EW"] * 100
+
+fig, ax = plt.subplots(figsize=(10, 6))
+# Plot both FOMC and matched lines
+ax.plot(
+    horizons_days,
+    fomc_vals,
+    "o-",
+    linewidth=2.5,
+    markersize=8,
+    label="FOMC weeks",
+    color="firebrick",
+)
+ax.plot(
+    horizons_days,
+    matched_vals,
+    "s-",
+    linewidth=2.5,
+    markersize=8,
+    label="Matched non-FOMC weeks",
+    color="steelblue",
+)
+ax.axhline(0, color="black", linewidth=0.8, linestyle="--", alpha=0.5)
+ax.set_xlabel("Horizon (days)", fontweight="bold", fontsize=fs(12))
+ax.set_ylabel("H-L spread (percentage points)", fontweight="bold", fontsize=fs(12))
+ax.set_title("Predictability collapses on FOMC weeks across all horizons", fontweight="bold", fontsize=fs(14))
+ax.grid(alpha=0.3)
+ax.legend(fontsize=fs(11), loc="best", framealpha=0.9)
+ax.tick_params(labelsize=fs(10))
+
+# Add value labels
+for h, fomc, matched in zip(horizons_days, fomc_vals, matched_vals):
+    ax.text(h, fomc + 0.05, f"{fomc:.2f}%", ha="center", fontsize=fs(8), color="firebrick", fontweight="bold")
+    ax.text(h, matched - 0.08, f"{matched:.2f}%", ha="center", fontsize=fs(8), color="steelblue", fontweight="bold")
+
+plt.tight_layout()
+plt.savefig(FIGURES_DIR / "figure5b_fomc_vs_matched_two_lines.png", bbox_inches="tight", dpi=300)
+plt.savefig(FIGURES_DIR / "figure5b_fomc_vs_matched_two_lines.pdf", bbox_inches="tight")
 plt.close()
 
 # ---------------------------------------------------------------------------
@@ -1124,12 +1164,13 @@ ratios = table7["EW/VW Ratio"].str.replace("x", "", regex=False).astype(float)
 
 fig, ax = plt.subplots(figsize=(9, 5))
 bars = ax.barh(tests, ratios, color="darkslateblue", alpha=0.85)
-ax.set_xlabel("EW / VW multiple", fontweight="bold")
-ax.set_title("Equal-weight spreads dominate across tests", fontweight="bold")
+ax.set_xlabel("EW / VW multiple", fontweight="bold", fontsize=fs(12))
+ax.set_title("Equal-weight spreads dominate across tests", fontweight="bold", fontsize=fs(14))
 ax.axvline(1, color="black", linestyle="--", linewidth=1)
+ax.tick_params(labelsize=fs(10))
 
 for bar, ratio in zip(bars, ratios):
-    ax.text(bar.get_width() + 0.1, bar.get_y() + bar.get_height() / 2, f"{ratio:.2f}x", va="center", fontsize=9)
+    ax.text(bar.get_width() + 0.1, bar.get_y() + bar.get_height() / 2, f"{ratio:.2f}x", va="center", fontsize=fs(9))
 
 plt.tight_layout()
 plt.savefig(FIGURES_DIR / "figure6_ew_vw_ratios.png", bbox_inches="tight")
@@ -1148,16 +1189,17 @@ bars_ew = ax.bar(x_pos - bar_width / 2, table9_df["EW H-L (%)"], bar_width, colo
 bars_vw = ax.bar(x_pos + bar_width / 2, table9_df["VW H-L (%)"], bar_width, color="coral", label="Value-Weight")
 ax.axhline(0, color="black", linewidth=0.8)
 ax.set_xticks(x_pos)
-ax.set_xticklabels(table9_df["Window"], rotation=0, ha="center")
-ax.set_xlabel("Horizon (days)", fontweight="bold")
-ax.set_ylabel("H-L Spread (%)", fontweight="bold")
-ax.set_title("CNN predictability on FOMC days increases with horizon", fontweight="bold")
-ax.legend()
+ax.set_xticklabels(table9_df["Window"], rotation=0, ha="center", fontsize=fs(10))
+ax.set_xlabel("Horizon (days)", fontweight="bold", fontsize=fs(12))
+ax.set_ylabel("H-L Spread (%)", fontweight="bold", fontsize=fs(12))
+ax.set_title("CNN predictability on FOMC days increases with horizon", fontweight="bold", fontsize=fs(14))
+ax.legend(fontsize=fs(10))
 ax.grid(axis="y", alpha=0.3)
+ax.tick_params(labelsize=fs(10))
 
 for rect, p_val in zip(bars_ew, table9_df["EW p-value"]):
     height = rect.get_height()
-    ax.text(rect.get_x() + rect.get_width() / 2, height + np.sign(height) * 0.03, stars(p_val) if not pd.isna(p_val) else "", ha="center", fontsize=12)
+    ax.text(rect.get_x() + rect.get_width() / 2, height + np.sign(height) * 0.03, stars(p_val) if not pd.isna(p_val) else "", ha="center", fontsize=fs(12))
 
 plt.tight_layout()
 plt.savefig(FIGURES_DIR / "figure7_attention_timeline.png", bbox_inches="tight")

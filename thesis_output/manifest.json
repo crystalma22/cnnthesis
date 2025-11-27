@@ -18,6 +18,10 @@
     "figure3_horizon_evaluation.png",
     "figure4_fomc_event_study.png",
     "figure5_fomc_vs_matched.png",
+<<<<<<< Updated upstream
+=======
+    "figure5b_fomc_vs_matched_two_lines.png",
+>>>>>>> Stashed changes
     "figure6_ew_vw_ratios.png",
     "figure7_attention_timeline.png"
   ]
